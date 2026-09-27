@@ -9,7 +9,7 @@ test('history imports deduplicate and power both chart views and freshness',asyn
  await page.goto('/#/progress');await expect(page.locator('h1')).toHaveText('Your progress');
  const file={name:'history.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(fixture))};
  await page.getByLabel('LeetCode history file').setInputFiles(file);
- await expect(page.locator('.history-connect')).toContainText('3 submissions saved');
+ await expect(page.locator('.analytics-dashboard .history-connect')).toContainText('3 submissions saved');
  await page.getByLabel('LeetCode history file').setInputFiles(file);
  await expect(page.locator('.submission-history tbody tr')).toHaveCount(3);
  await expect(page.getByLabel('Submission statistics')).toContainText('1accepted problems');

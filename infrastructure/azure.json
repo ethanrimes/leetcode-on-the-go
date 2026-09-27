@@ -1,0 +1,7 @@
+{
+  "subscriptionId": "9a04b64b-af19-4519-be50-56ec2acbd855",
+  "resourceGroup": "leetcode-on-the-go-rg",
+  "siteName": "leetcode-on-the-go",
+  "location": "westus2",
+  "sku": "Free"
+}

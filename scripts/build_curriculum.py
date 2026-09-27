@@ -2,7 +2,7 @@
 import json
 import shutil
 from pathlib import Path
-from content import foundations, dynamic_programming, graphs, trees, structures, search_strings, greedy_math, advanced
+from content import foundations, dynamic_programming, graphs, trees, structures, search_strings, greedy_math, advanced, specialists, completion
 from content.base import nodes, problems, ROOT
 
 reference=json.loads((ROOT/'packages/content/reference-index.json').read_text())

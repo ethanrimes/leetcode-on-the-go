@@ -7237,6 +7237,1202 @@
           ]
         }
       ]
+    },
+    {
+      "id": "stacks-heaps-range-queries-mutable-range-queries-lazy-segment-tree-range-flips",
+      "parentId": "stacks-heaps-range-queries-mutable-range-queries",
+      "title": "Lazy segment tree range flips",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Specialist",
+      "description": "Many range updates affect an aggregate without touching every element.",
+      "approach": "Store the count of ones per segment and a lazy flip bit. Flipping changes ones to segmentLength−ones; two flips cancel.",
+      "tips": [
+        "Push pending flips before descending into a partially covered segment."
+      ],
+      "why": "Useful when tighter constraints defeat the standard approach. Learn the prerequisites first.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/handling-sum-queries-after-update/",
+        "https://leetcode.cn/circle/discuss/mOr1u6/"
+      ],
+      "references": [
+        {
+          "title": "八、树状数组和线段树 / §8.4 Lazy 线段树（有区间更新）",
+          "url": "https://leetcode.cn/circle/discuss/mOr1u6/",
+          "problemIds": [
+            "2569",
+            "1622",
+            "2502",
+            "2589",
+            "2547",
+            "850",
+            "3454",
+            "3569",
+            "3721",
+            "2916"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stacks-heaps-range-queries-mutable-range-queries-dynamic-sparse-segment-tree",
+      "parentId": "stacks-heaps-range-queries-mutable-range-queries",
+      "title": "Dynamic sparse segment tree",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Specialist",
+      "description": "The coordinate domain is huge but only a few intervals are updated.",
+      "approach": "Allocate segment nodes only when traversed; store a local lazy increment plus the maximum of child contributions.",
+      "tips": [
+        "Half-open bookings [start,end) become inclusive [start,end−1] for the tree."
+      ],
+      "why": "Useful when tighter constraints defeat the standard approach. Learn the prerequisites first.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/my-calendar-iii/",
+        "https://leetcode.cn/circle/discuss/mOr1u6/"
+      ],
+      "references": [
+        {
+          "title": "二、差分 / §2.1 一维差分 / §2.1.2 进阶",
+          "url": "https://leetcode.cn/circle/discuss/mOr1u6/",
+          "problemIds": [
+            "3914",
+            "3453",
+            "2381",
+            "995",
+            "1589",
+            "1526",
+            "1871",
+            "3356",
+            "1943",
+            "3224",
+            "2327",
+            "2251",
+            "2772",
+            "3229",
+            "3529",
+            "798",
+            "3347",
+            "2528",
+            "1674",
+            "3362",
+            "3655",
+            "3017",
+            "2021",
+            "2015",
+            "2237",
+            "3009",
+            "3279",
+            "56",
+            "57",
+            "732",
+            "2406",
+            "253",
+            "759"
+          ]
+        },
+        {
+          "title": "八、树状数组和线段树 / §8.5 动态开点线段树",
+          "url": "https://leetcode.cn/circle/discuss/mOr1u6/",
+          "problemIds": [
+            "699",
+            "715",
+            "729",
+            "731",
+            "732",
+            "2276",
+            "3590"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stacks-heaps-range-queries-mutable-range-queries-sparse-table-idempotent-queries",
+      "parentId": "stacks-heaps-range-queries-mutable-range-queries",
+      "title": "Sparse table idempotent queries",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Specialist",
+      "description": "The array is static and many overlapping min/max queries are needed.",
+      "approach": "Precompute extrema for powers of two. Two possibly overlapping blocks cover each range because max is idempotent.",
+      "tips": [
+        "This overlapping-block trick does not work for sums."
+      ],
+      "why": "Useful when tighter constraints defeat the standard approach. Learn the prerequisites first.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/sliding-window-maximum/",
+        "https://leetcode.cn/circle/discuss/mOr1u6/"
+      ],
+      "references": [
+        {
+          "title": "四、队列 / §4.4 单调队列",
+          "url": "https://leetcode.cn/circle/discuss/mOr1u6/",
+          "problemIds": [
+            "239",
+            "1438",
+            "2762",
+            "3835",
+            "2398",
+            "3589",
+            "862",
+            "1499"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stacks-heaps-range-queries-mutable-range-queries-square-root-decomposition",
+      "parentId": "stacks-heaps-range-queries-mutable-range-queries",
+      "title": "Square-root decomposition",
+      "kind": "pattern",
+      "level": "Intermediate",
+      "priority": "Useful",
+      "description": "Trade simpler implementation for square-root range operations.",
+      "approach": "Keep raw values plus block sums. Consume boundary elements individually and full interior blocks by summary.",
+      "tips": [
+        "Update the block by the assignment delta."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/range-sum-query-mutable/",
+        "https://leetcode.cn/circle/discuss/mOr1u6/"
+      ],
+      "references": [
+        {
+          "title": "八、树状数组和线段树 / §8.1 树状数组",
+          "url": "https://leetcode.cn/circle/discuss/mOr1u6/",
+          "problemIds": [
+            "307",
+            "3072",
+            "3624",
+            "3187",
+            "3777",
+            "1649",
+            "1626",
+            "1409",
+            "2250",
+            "2179",
+            "1395",
+            "2659",
+            "3915",
+            "2653",
+            "3515",
+            "4033",
+            "1505",
+            "3841",
+            "2926",
+            "2736",
+            "3671",
+            "3962",
+            "3382",
+            "3590",
+            "3245",
+            "3027",
+            "1756",
+            "60",
+            "3109",
+            "2519",
+            "2613",
+            "2921",
+            "308"
+          ]
+        },
+        {
+          "title": "十、根号算法 / §10.1 分块",
+          "url": "https://leetcode.cn/circle/discuss/mOr1u6/",
+          "problemIds": [
+            "307",
+            "3943"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "graphs-grids-connectivity-structure-offline-sorted-threshold-connectivity",
+      "parentId": "graphs-grids-connectivity-structure",
+      "title": "Offline sorted-threshold connectivity",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Useful",
+      "description": "Many connectivity queries permit edges only below a changing threshold.",
+      "approach": "Sort edges and queries by limit. Incrementally union newly permitted edges, answering queries in that order and restoring output order.",
+      "tips": [
+        "The threshold is strict: an edge equal to limit is excluded."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/",
+        "https://leetcode.cn/circle/discuss/01LUak/"
+      ],
+      "references": [
+        {
+          "title": "九、其他",
+          "url": "https://leetcode.cn/circle/discuss/01LUak/",
+          "problemIds": [
+            "1042",
+            "1761",
+            "2508",
+            "1579",
+            "2065",
+            "1697",
+            "2242",
+            "2493",
+            "1782",
+            "3666",
+            "2612",
+            "3435",
+            "466",
+            "277",
+            "1724",
+            "2077",
+            "3656"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "strings-tries-matching-palindrome-structure-suffix-array-and-adjacent-lcp",
+      "parentId": "strings-tries-matching-palindrome-structure",
+      "title": "Suffix array and adjacent LCP",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Specialist",
+      "description": "Find the longest repeated substring, allowing overlaps.",
+      "approach": "Sort suffixes by doubling ranked prefixes. The largest common prefix of adjacent suffixes is the longest repeat; compute LCPs using Kasai’s reuse invariant.",
+      "tips": [
+        "Avoid constructing all suffix strings, which uses quadratic space."
+      ],
+      "why": "Useful when tighter constraints defeat the standard approach. Learn the prerequisites first.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/longest-duplicate-substring/",
+        "https://leetcode.cn/circle/discuss/SJFwQI/"
+      ],
+      "references": [
+        {
+          "title": "四、字符串哈希",
+          "url": "https://leetcode.cn/circle/discuss/SJFwQI/",
+          "problemIds": [
+            "2156",
+            "3756",
+            "3213",
+            "28",
+            "187",
+            "1316",
+            "1297",
+            "2261",
+            "3722",
+            "3934",
+            "1367",
+            "1044",
+            "718",
+            "1923",
+            "3292",
+            "3844",
+            "2168",
+            "1554",
+            "1062"
+          ]
+        },
+        {
+          "title": "八、后缀数组/后缀自动机",
+          "url": "https://leetcode.cn/circle/discuss/SJFwQI/",
+          "problemIds": [
+            "1163",
+            "1754",
+            "2904",
+            "3722",
+            "3934",
+            "3213",
+            "1044",
+            "718",
+            "1923",
+            "1408",
+            "3729",
+            "3076",
+            "3844",
+            "3504",
+            "1316",
+            "3388",
+            "2564",
+            "1698",
+            "1062",
+            "3135"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "strings-tries-prefix-indexes-aho-corasick-multi-pattern-matching",
+      "parentId": "strings-tries-prefix-indexes",
+      "title": "Aho–Corasick multi-pattern matching",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Specialist",
+      "description": "Many dictionary words must be matched during one text scan.",
+      "approach": "Build trie failure links to the longest suffix that is also a trie prefix. Each terminal match offers a word-break DP transition.",
+      "tips": [
+        "Failure links must carry terminal outputs from suffix states."
+      ],
+      "why": "Useful when tighter constraints defeat the standard approach. Learn the prerequisites first.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/word-break/",
+        "https://leetcode.cn/circle/discuss/SJFwQI/"
+      ],
+      "references": []
+    },
+    {
+      "id": "strings-tries-matching-palindrome-structure-minimal-cyclic-rotation",
+      "parentId": "strings-tries-matching-palindrome-structure",
+      "title": "Minimal cyclic rotation",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Specialist",
+      "description": "Choose the lexicographically smallest rotation.",
+      "approach": "For k=1 only rotations are reachable: compare two candidate starts and skip dominated starts after a mismatch. With k>1, arbitrary sorting is reachable.",
+      "tips": [
+        "A mismatch eliminates an entire range of starts, making the rotation scan linear."
+      ],
+      "why": "Useful when tighter constraints defeat the standard approach. Learn the prerequisites first.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/orderly-queue/",
+        "https://leetcode.cn/circle/discuss/SJFwQI/"
+      ],
+      "references": [
+        {
+          "title": "五、最小表示法",
+          "url": "https://leetcode.cn/circle/discuss/SJFwQI/",
+          "problemIds": [
+            "1163",
+            "899",
+            "3999",
+            "3403",
+            "1625",
+            "3406",
+            "1708"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bits-math-geometry-geometry-randomness-convex-hull-with-cross-products",
+      "parentId": "bits-math-geometry-geometry-randomness",
+      "title": "Convex hull with cross products",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Specialist",
+      "description": "Find the boundary of a point set.",
+      "approach": "Build lower and upper monotone chains, popping turns that bend inward. Keep collinear boundary points by popping only strictly wrong turns.",
+      "tips": [
+        "The strictness differs when only extreme hull vertices are wanted."
+      ],
+      "why": "Useful when tighter constraints defeat the standard approach. Learn the prerequisites first.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/erect-the-fence/",
+        "https://leetcode.cn/circle/discuss/IYT3ss/"
+      ],
+      "references": [
+        {
+          "title": "五、计算几何 / §5.4 凸包",
+          "url": "https://leetcode.cn/circle/discuss/IYT3ss/",
+          "problemIds": [
+            "587",
+            "812"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bits-math-geometry-number-theory-counting-inclusion-exclusion-with-lcm",
+      "parentId": "bits-math-geometry-number-theory-counting",
+      "title": "Inclusion–exclusion with LCM",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Useful",
+      "description": "Count numbers divisible by at least one of several factors.",
+      "approach": "Add single-factor counts, subtract pair intersections, and add the triple intersection. Binary search the first value whose union count reaches n.",
+      "tips": [
+        "Intersections use LCM, not the product when factors overlap."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/ugly-number-iii/",
+        "https://leetcode.cn/circle/discuss/IYT3ss/"
+      ],
+      "references": [
+        {
+          "title": "二、组合数学 / §2.3 容斥原理",
+          "url": "https://leetcode.cn/circle/discuss/IYT3ss/",
+          "problemIds": [
+            "2652",
+            "878",
+            "1201",
+            "2929",
+            "2930",
+            "2513",
+            "3733",
+            "3116",
+            "3953",
+            "3757",
+            "3130",
+            "920",
+            "3336",
+            "2927"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bits-math-geometry-geometry-randomness-rejection-sampling-without-modulo-bias",
+      "parentId": "bits-math-geometry-geometry-randomness",
+      "title": "Rejection sampling without modulo bias",
+      "kind": "pattern",
+      "level": "Intermediate",
+      "priority": "Useful",
+      "description": "Create a uniform target range from a different uniform source.",
+      "approach": "Two independent rand7 calls create 49 equally likely outcomes. Accept the first 40 and map them into ten equal buckets.",
+      "tips": [
+        "Taking modulo ten across all 49 outcomes is biased."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/implement-rand10-using-rand7/",
+        "https://leetcode.cn/circle/discuss/IYT3ss/"
+      ],
+      "references": [
+        {
+          "title": "六、随机算法 / §6.1 随机数",
+          "url": "https://leetcode.cn/circle/discuss/IYT3ss/",
+          "problemIds": [
+            "398",
+            "382",
+            "384",
+            "380",
+            "381",
+            "528",
+            "470",
+            "710",
+            "478",
+            "497",
+            "519"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bits-math-geometry-geometry-randomness-fisher-yates-shuffle",
+      "parentId": "bits-math-geometry-geometry-randomness",
+      "title": "Fisher–Yates shuffle",
+      "kind": "pattern",
+      "level": "Intermediate",
+      "priority": "Useful",
+      "description": "Generate each permutation with equal probability.",
+      "approach": "At position i from the end, swap with a uniformly chosen position in [0,i]. Fix that position permanently.",
+      "tips": [
+        "Sampling from the full array at every step produces a biased shuffle."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/shuffle-an-array/",
+        "https://leetcode.cn/circle/discuss/IYT3ss/"
+      ],
+      "references": [
+        {
+          "title": "六、随机算法 / §6.1 随机数",
+          "url": "https://leetcode.cn/circle/discuss/IYT3ss/",
+          "problemIds": [
+            "398",
+            "382",
+            "384",
+            "380",
+            "381",
+            "528",
+            "470",
+            "710",
+            "478",
+            "497",
+            "519"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stacks-heaps-range-queries-data-structure-design-random-access-with-swap-delete",
+      "parentId": "stacks-heaps-range-queries-data-structure-design",
+      "title": "Random access with swap-delete",
+      "kind": "pattern",
+      "level": "Intermediate",
+      "priority": "Core",
+      "description": "Support insert, remove, and random selection in expected constant time.",
+      "approach": "Combine an array with value-to-index lookup. Delete by moving the last value into the removed slot and repairing its index.",
+      "tips": [
+        "Update the swapped value’s position before removing the key."
+      ],
+      "why": "A reusable foundation: learn the invariant, then recognize it across different stories.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/insert-delete-getrandom-o1/",
+        "https://leetcode.cn/circle/discuss/mOr1u6/"
+      ],
+      "references": []
+    },
+    {
+      "id": "stacks-heaps-range-queries-data-structure-design-lfu-frequency-buckets",
+      "parentId": "stacks-heaps-range-queries-data-structure-design",
+      "title": "LFU frequency buckets",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Useful",
+      "description": "Evict by access frequency, breaking ties by recency.",
+      "approach": "Keep an ordered bucket for each frequency and track the minimum active frequency. Access moves an item to the next frequency bucket.",
+      "tips": [
+        "Updating an existing value counts as an access; new items start at frequency one."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/lfu-cache/",
+        "https://leetcode.cn/circle/discuss/mOr1u6/"
+      ],
+      "references": [
+        {
+          "title": "编程能力强化训练 / Part B",
+          "url": "https://leetcode.cn/circle/discuss/mOr1u6/",
+          "problemIds": [
+            "146",
+            "460",
+            "432",
+            "1206"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stacks-heaps-range-queries-data-structure-design-lazy-nested-iterator",
+      "parentId": "stacks-heaps-range-queries-data-structure-design",
+      "title": "Lazy nested iterator",
+      "kind": "pattern",
+      "level": "Intermediate",
+      "priority": "Useful",
+      "description": "Flatten nested values without eagerly expanding the whole structure.",
+      "approach": "Keep a stack of iterators. Advance the top iterator; push a child iterator for a nested list and pop exhausted iterators.",
+      "tips": [
+        "hasNext implementations must not consume a value unless they cache it for next."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/flatten-nested-list-iterator/",
+        "https://leetcode.cn/circle/discuss/mOr1u6/"
+      ],
+      "references": []
+    },
+    {
+      "id": "stacks-heaps-range-queries-data-structure-design-circular-buffer-queue",
+      "parentId": "stacks-heaps-range-queries-data-structure-design",
+      "title": "Circular buffer queue",
+      "kind": "pattern",
+      "level": "Foundation",
+      "priority": "Useful",
+      "description": "Reuse a fixed capacity array for FIFO operations.",
+      "approach": "Track a head index and count; the insertion position is (head+count) modulo capacity.",
+      "tips": [
+        "Distinguish full and empty with a count rather than ambiguous equal pointers."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/design-circular-queue/",
+        "https://leetcode.cn/circle/discuss/mOr1u6/"
+      ],
+      "references": [
+        {
+          "title": "四、队列 / §4.2 设计",
+          "url": "https://leetcode.cn/circle/discuss/mOr1u6/",
+          "problemIds": [
+            "1670",
+            "3508",
+            "225",
+            "232",
+            "622",
+            "641"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trees-linked-lists-tree-dynamic-programming-binary-lifting-ancestor-queries",
+      "parentId": "trees-linked-lists-tree-dynamic-programming",
+      "title": "Binary lifting ancestor queries",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Useful",
+      "description": "Answer large ancestor jumps repeatedly on a fixed tree.",
+      "approach": "Precompute each node’s 2^b-th ancestor by composing two 2^(b−1) jumps. Decompose k into binary bits.",
+      "tips": [
+        "Stop if an ancestor is absent or a requested bit exceeds the table."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/kth-ancestor-of-a-tree-node/",
+        "https://leetcode.cn/circle/discuss/K0n2gO/"
+      ],
+      "references": [
+        {
+          "title": "三、一般树 / §3.8 最近公共祖先（LCA）、倍增算法",
+          "url": "https://leetcode.cn/circle/discuss/K0n2gO/",
+          "problemIds": [
+            "1483",
+            "3559",
+            "3841",
+            "3553",
+            "3585",
+            "2846",
+            "2646",
+            "2277",
+            "3973",
+            "3534",
+            "2836",
+            "3464"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bits-math-geometry-number-theory-counting-losing-state-modular-invariant",
+      "parentId": "bits-math-geometry-number-theory-counting",
+      "title": "Losing-state modular invariant",
+      "kind": "pattern",
+      "level": "Foundation",
+      "priority": "Useful",
+      "description": "A small impartial game repeats after a fixed move range.",
+      "approach": "Positions divisible by four are losing when players may remove one to three stones. From any other position move to a multiple of four.",
+      "tips": [
+        "Explain the inductive losing-state argument, not just the modulo trick."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/nim-game/",
+        "https://leetcode.cn/circle/discuss/IYT3ss/"
+      ],
+      "references": [
+        {
+          "title": "四、博弈论",
+          "url": "https://leetcode.cn/circle/discuss/IYT3ss/",
+          "problemIds": [
+            "292",
+            "1025",
+            "3227",
+            "2038",
+            "877",
+            "3828",
+            "486",
+            "1510",
+            "1690",
+            "1686",
+            "1927",
+            "1406",
+            "1140",
+            "1563",
+            "464",
+            "2029",
+            "810",
+            "1872",
+            "913",
+            "1728",
+            "294",
+            "1908",
+            "2005",
+            "2868"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bits-math-geometry-number-theory-counting-multiplicative-combinatorial-counting",
+      "parentId": "bits-math-geometry-number-theory-counting",
+      "title": "Multiplicative combinatorial counting",
+      "kind": "pattern",
+      "level": "Foundation",
+      "priority": "Core",
+      "description": "A path is an ordering of a fixed number of two move types.",
+      "approach": "Choose which positions contain down moves among all moves. The answer is a binomial coefficient.",
+      "tips": [
+        "Count move positions, not grid cells; there are m+n−2 moves."
+      ],
+      "why": "A reusable foundation: learn the invariant, then recognize it across different stories.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/unique-paths/",
+        "https://leetcode.cn/circle/discuss/IYT3ss/"
+      ],
+      "references": [
+        {
+          "title": "二、组合数学 / §2.2 组合计数",
+          "url": "https://leetcode.cn/circle/discuss/IYT3ss/",
+          "problemIds": [
+            "1735",
+            "62",
+            "357",
+            "1175",
+            "1641",
+            "3179",
+            "1359",
+            "2400",
+            "3881",
+            "3558",
+            "4002",
+            "3821",
+            "762",
+            "2514",
+            "3154",
+            "1643",
+            "2842",
+            "1621",
+            "2221",
+            "3463",
+            "3519",
+            "3906",
+            "1569",
+            "3405",
+            "1866",
+            "1467",
+            "3518",
+            "3272",
+            "3317",
+            "3470",
+            "1916",
+            "2338",
+            "3343",
+            "1830",
+            "2954",
+            "3539",
+            "3395",
+            "1575",
+            "3251",
+            "2539",
+            "634",
+            "1692",
+            "3669"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "binary-search-ordered-positions-interactive-monotone-oracle",
+      "parentId": "binary-search-ordered-positions",
+      "title": "Interactive monotone oracle",
+      "kind": "pattern",
+      "level": "Foundation",
+      "priority": "Useful",
+      "description": "An API tells whether a guess is too low or too high.",
+      "approach": "Binary search the hidden value using only the oracle response; preserve a closed interval of possible answers.",
+      "tips": [
+        "The oracle compares your guess to the hidden number, so check its sign convention."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/guess-number-higher-or-lower/",
+        "https://leetcode.cn/circle/discuss/SqopEo/"
+      ],
+      "references": [
+        {
+          "title": "四、其他",
+          "url": "https://leetcode.cn/circle/discuss/SqopEo/",
+          "problemIds": [
+            "69",
+            "278",
+            "374",
+            "162",
+            "1901",
+            "852",
+            "1095",
+            "153",
+            "154",
+            "33",
+            "81",
+            "222",
+            "1539",
+            "3911",
+            "540",
+            "4",
+            "1064",
+            "702",
+            "2936",
+            "1060",
+            "1198",
+            "1428",
+            "1533",
+            "2387",
+            "302"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trees-linked-lists-binary-tree-traversal-reconstruct-from-traversal-boundaries",
+      "parentId": "trees-linked-lists-binary-tree-traversal",
+      "title": "Reconstruct from traversal boundaries",
+      "kind": "pattern",
+      "level": "Intermediate",
+      "priority": "Core",
+      "description": "A traversal identifies roots while another separates their subtrees.",
+      "approach": "Preorder supplies the next root; an inorder index map divides the remaining range into left and right subtrees.",
+      "tips": [
+        "Unique values are required for the index map to identify a single split."
+      ],
+      "why": "A reusable foundation: learn the invariant, then recognize it across different stories.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+        "https://leetcode.cn/circle/discuss/K0n2gO/"
+      ],
+      "references": [
+        {
+          "title": "二、二叉树 / §2.10 创建二叉树",
+          "url": "https://leetcode.cn/circle/discuss/K0n2gO/",
+          "problemIds": [
+            "108",
+            "654",
+            "998",
+            "1008",
+            "1382",
+            "2196",
+            "105",
+            "106",
+            "889",
+            "1028",
+            "536",
+            "1628",
+            "1597"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trees-linked-lists-binary-tree-traversal-serialization-with-null-markers",
+      "parentId": "trees-linked-lists-binary-tree-traversal",
+      "title": "Serialization with null markers",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Core",
+      "description": "Preserve enough information to reconstruct both values and shape.",
+      "approach": "Use preorder with an explicit marker for every absent child; decoding consumes exactly one token per recursive call.",
+      "tips": [
+        "Values alone cannot distinguish different tree shapes."
+      ],
+      "why": "A reusable foundation: learn the invariant, then recognize it across different stories.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+        "https://leetcode.cn/circle/discuss/K0n2gO/"
+      ],
+      "references": [
+        {
+          "title": "二、二叉树 / §2.16 其他",
+          "url": "https://leetcode.cn/circle/discuss/K0n2gO/",
+          "problemIds": [
+            "1261",
+            "1104",
+            "987",
+            "655",
+            "979",
+            "222",
+            "297",
+            "449",
+            "331",
+            "652",
+            "173",
+            "2049",
+            "2673",
+            "2509",
+            "2458",
+            "314",
+            "666",
+            "1586",
+            "2773",
+            "1485",
+            "2445",
+            "431",
+            "2005"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trees-linked-lists-linked-list-pointers-reverse-a-fixed-size-group",
+      "parentId": "trees-linked-lists-linked-list-pointers",
+      "title": "Reverse a fixed-size group",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Useful",
+      "description": "Reverse complete chunks without changing leftover nodes.",
+      "approach": "Find the kth node before mutating. Reverse links up to the following node, reconnect the group, and advance the group predecessor.",
+      "tips": [
+        "Do not reverse a trailing group shorter than k."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/reverse-nodes-in-k-group/",
+        "https://leetcode.cn/circle/discuss/K0n2gO/"
+      ],
+      "references": [
+        {
+          "title": "一、链表 / §1.4 反转链表",
+          "url": "https://leetcode.cn/circle/discuss/K0n2gO/",
+          "problemIds": [
+            "206",
+            "92",
+            "24",
+            "25",
+            "2074"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trees-linked-lists-linked-list-pointers-midpoint-split-and-half-reversal",
+      "parentId": "trees-linked-lists-linked-list-pointers",
+      "title": "Midpoint split and half reversal",
+      "kind": "pattern",
+      "level": "Foundation",
+      "priority": "Useful",
+      "description": "Compare symmetric linked-list values without an auxiliary array.",
+      "approach": "Find the end of the first half using slow/fast pointers, reverse the second half, compare, then restore its links.",
+      "tips": [
+        "Restoring the second half avoids surprising the caller with a mutated list."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/palindrome-linked-list/",
+        "https://leetcode.cn/circle/discuss/K0n2gO/"
+      ],
+      "references": [
+        {
+          "title": "一、链表 / §1.6 快慢指针",
+          "url": "https://leetcode.cn/circle/discuss/K0n2gO/",
+          "problemIds": [
+            "876",
+            "2095",
+            "234",
+            "2130",
+            "143",
+            "141",
+            "142",
+            "457",
+            "2674",
+            "287",
+            "1015",
+            "3790"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backtracking-enumeration-choice-trees-partition-by-valid-segments",
+      "parentId": "backtracking-enumeration-choice-trees",
+      "title": "Partition by valid segments",
+      "kind": "pattern",
+      "level": "Intermediate",
+      "priority": "Core",
+      "description": "Enumerate all ways to split a sequence into valid pieces.",
+      "approach": "Choose the next ending boundary, recurse only when the chosen segment is a palindrome, then undo the segment.",
+      "tips": [
+        "Each branch must advance the start index or recursion will not terminate."
+      ],
+      "why": "A reusable foundation: learn the invariant, then recognize it across different stories.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/palindrome-partitioning/",
+        "https://leetcode.cn/circle/discuss/K0n2gO/"
+      ],
+      "references": [
+        {
+          "title": "四、回溯 / §4.3 划分型回溯",
+          "url": "https://leetcode.cn/circle/discuss/K0n2gO/",
+          "problemIds": [
+            "131",
+            "2698",
+            "1593",
+            "1849",
+            "93",
+            "140",
+            "291"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backtracking-enumeration-constraint-search-minimum-remaining-values-sudoku-search",
+      "parentId": "backtracking-enumeration-constraint-search",
+      "title": "Minimum-remaining-values Sudoku search",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Useful",
+      "description": "Constraint satisfaction benefits from branching on the most restricted variable.",
+      "approach": "Track used digits for each row, column, and box. At every step select the empty cell with fewest available candidates, then try and undo each candidate.",
+      "tips": [
+        "An empty candidate set is an immediate contradiction."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/sudoku-solver/",
+        "https://leetcode.cn/circle/discuss/K0n2gO/"
+      ],
+      "references": [
+        {
+          "title": "四、回溯 / §4.5 排列型回溯",
+          "url": "https://leetcode.cn/circle/discuss/K0n2gO/",
+          "problemIds": [
+            "46",
+            "3799",
+            "3376",
+            "51",
+            "52",
+            "2850",
+            "1718",
+            "1307",
+            "37",
+            "3437",
+            "267"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "two-pointers-windows-opposing-forward-pointers-resolve-water-from-the-lower-boundary",
+      "parentId": "two-pointers-windows-opposing-forward-pointers",
+      "title": "Resolve water from the lower boundary",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Core",
+      "description": "Water at a position is limited by the smaller of two boundary maxima.",
+      "approach": "Track the highest wall reached from each side. Resolve the side with smaller known maximum, since the opposite side already provides enough containment.",
+      "tips": [
+        "Update the side maximum before adding its water contribution."
+      ],
+      "why": "A reusable foundation: learn the invariant, then recognize it across different stories.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/trapping-rain-water/",
+        "https://leetcode.cn/circle/discuss/0viNMK/"
+      ],
+      "references": [
+        {
+          "title": "三、单序列双指针 / §3.2 相向双指针",
+          "url": "https://leetcode.cn/circle/discuss/0viNMK/",
+          "problemIds": [
+            "2697",
+            "125",
+            "3936",
+            "1750",
+            "2105",
+            "977",
+            "658",
+            "1471",
+            "167",
+            "633",
+            "2824",
+            "16",
+            "15",
+            "18",
+            "1577",
+            "3862",
+            "611",
+            "923",
+            "2563",
+            "948",
+            "11",
+            "42",
+            "1616",
+            "1498",
+            "1782",
+            "1099",
+            "360",
+            "2422",
+            "259",
+            "3802",
+            "1861",
+            "3814"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dynamic-programming-grids-multiple-sequences-reconstruct-an-optimal-sequence",
+      "parentId": "dynamic-programming-grids-multiple-sequences",
+      "title": "Reconstruct an optimal sequence",
+      "kind": "pattern",
+      "level": "Advanced",
+      "priority": "Useful",
+      "description": "The problem asks for the actual optimum, not just its value.",
+      "approach": "Build an LCS-length table, then trace back: shared characters are written once; otherwise follow the better predecessor while emitting the skipped character.",
+      "tips": [
+        "Reconstruction tie-breaking can yield different but equally optimal strings."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/shortest-common-supersequence/",
+        "https://leetcode.cn/circle/discuss/tXLS3i/"
+      ],
+      "references": [
+        {
+          "title": "四、经典线性 DP / §4.1 最长公共子序列（LCS） / §4.1.2 进阶",
+          "url": "https://leetcode.cn/circle/discuss/tXLS3i/",
+          "problemIds": [
+            "3290",
+            "115",
+            "3628",
+            "1458",
+            "3836",
+            "3316",
+            "1639",
+            "97",
+            "1092",
+            "44",
+            "10",
+            "2207"
+          ]
+        },
+        {
+          "title": "专题：输出具体方案（打印方案）",
+          "url": "https://leetcode.cn/circle/discuss/tXLS3i/",
+          "problemIds": [
+            "1092",
+            "368",
+            "1363",
+            "1449",
+            "943",
+            "1125",
+            "3533",
+            "3260",
+            "3149",
+            "3441",
+            "3348",
+            "656",
+            "471"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "greedy-intervals-interval-decisions-greedy-interval-covering",
+      "parentId": "greedy-intervals-interval-decisions",
+      "title": "Greedy interval covering",
+      "kind": "pattern",
+      "level": "Intermediate",
+      "priority": "Useful",
+      "description": "Cover a target span with as few available intervals as possible.",
+      "approach": "Among all clips beginning at or before the current covered endpoint, choose the one extending farthest. Repeat from that endpoint.",
+      "tips": [
+        "A gap with no extension makes coverage impossible."
+      ],
+      "why": "Adds a new decision rule to your toolkit; study after the foundational patterns.",
+      "sourceUrls": [
+        "https://leetcode.com/problems/video-stitching/",
+        "https://leetcode.cn/circle/discuss/g6KTKL/"
+      ],
+      "references": [
+        {
+          "title": "二、区间贪心 / §2.4 区间覆盖",
+          "url": "https://leetcode.cn/circle/discuss/g6KTKL/",
+          "problemIds": [
+            "45",
+            "1024",
+            "1326"
+          ]
+        }
+      ]
     }
   ],
   "problems": [
@@ -10295,7 +11491,8 @@
       ],
       "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
       "patternIds": [
-        "dynamic-programming-partitions-intervals-prefix-segmentation"
+        "dynamic-programming-partitions-intervals-prefix-segmentation",
+        "strings-tries-prefix-indexes-aho-corasick-multi-pattern-matching"
       ],
       "solutions": [
         {
@@ -10306,6 +11503,15 @@
           "code": "def solve(s, wordDict):\n    words = set(wordDict); dp = [True]+[False]*len(s)\n    lengths = {len(w) for w in words}\n    for i in range(1, len(s)+1):\n        dp[i] = any(i >= k and dp[i-k] and s[i-k:i] in words for k in lengths)\n    return dp[-1]\n",
           "time": "O(n × number of lengths × maximum word length)",
           "space": "O(n + dictionary size)"
+        },
+        {
+          "patternId": "strings-tries-prefix-indexes-aho-corasick-multi-pattern-matching",
+          "title": "Aho–Corasick multi-pattern matching",
+          "language": "Python",
+          "approach": "Build trie failure links to the longest suffix that is also a trie prefix. Each terminal match offers a word-break DP transition.",
+          "code": "def solve(s,wordDict):\n    from collections import deque\n    children=[{}]; fail=[0]; output=[[]]\n    for word in wordDict:\n        node=0\n        for ch in word:\n            if ch not in children[node]: children[node][ch]=len(children); children.append({}); fail.append(0); output.append([])\n            node=children[node][ch]\n        output[node].append(len(word))\n    q=deque(children[0].values())\n    while q:\n        u=q.popleft()\n        for ch,v in children[u].items():\n            f=fail[u]\n            while f and ch not in children[f]: f=fail[f]\n            fail[v]=children[f].get(ch,0); output[v]+=output[fail[v]]; q.append(v)\n    dp=[True]+[False]*len(s); node=0\n    for i,ch in enumerate(s,1):\n        while node and ch not in children[node]: node=fail[node]\n        node=children[node].get(ch,0)\n        dp[i]=any(dp[i-length] for length in output[node])\n    return dp[-1]\n",
+          "time": "O(trie construction including failure/output expansion + text + matches)",
+          "space": "O(trie nodes + inherited outputs + text)"
         }
       ],
       "starter": "def solve(s, wordDict):\n    # State the invariant before you write the loop.\n    pass\n",
@@ -13635,7 +14841,8 @@
       ],
       "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
       "patternIds": [
-        "stacks-heaps-range-queries-monotone-structures-monotone-deque-window-extrema"
+        "stacks-heaps-range-queries-monotone-structures-monotone-deque-window-extrema",
+        "stacks-heaps-range-queries-mutable-range-queries-sparse-table-idempotent-queries"
       ],
       "solutions": [
         {
@@ -13646,6 +14853,15 @@
           "code": "def solve(nums,k):\n    from collections import deque\n    q=deque(); answer=[]\n    for i,x in enumerate(nums):\n        while q and q[0]<=i-k: q.popleft()\n        while q and nums[q[-1]]<=x: q.pop()\n        q.append(i)\n        if i>=k-1: answer.append(nums[q[0]])\n    return answer\n",
           "time": "O(n)",
           "space": "O(k) excluding output"
+        },
+        {
+          "patternId": "stacks-heaps-range-queries-mutable-range-queries-sparse-table-idempotent-queries",
+          "title": "Sparse table idempotent queries",
+          "language": "Python",
+          "approach": "Precompute extrema for powers of two. Two possibly overlapping blocks cover each range because max is idempotent.",
+          "code": "def solve(nums,k):\n    table=[nums[:]]; width=2\n    while width<=len(nums):\n        prev=table[-1]; half=width//2\n        table.append([max(prev[i],prev[i+half]) for i in range(len(nums)-width+1)])\n        width*=2\n    power=k.bit_length()-1; block=1<<power\n    return [max(table[power][i],table[power][i+k-block]) for i in range(len(nums)-k+1)]\n",
+          "time": "O(n log n) preprocessing, O(1) per query",
+          "space": "O(n log n)"
         }
       ],
       "starter": "def solve(nums,k):\n    # State the invariant before you write the loop.\n    pass\n",
@@ -13992,7 +15208,8 @@
       "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
       "patternIds": [
         "stacks-heaps-range-queries-mutable-range-queries-fenwick-tree-point-updates",
-        "stacks-heaps-range-queries-mutable-range-queries-iterative-segment-tree"
+        "stacks-heaps-range-queries-mutable-range-queries-iterative-segment-tree",
+        "stacks-heaps-range-queries-mutable-range-queries-square-root-decomposition"
       ],
       "solutions": [
         {
@@ -14011,6 +15228,15 @@
           "approach": "Place leaves in the second half of an array and combine parents. Query [left,right) by consuming exposed odd boundaries.",
           "code": "def solve(nums,operations):\n    n=len(nums); tree=[0]*n+nums[:]\n    for i in range(n-1,0,-1): tree[i]=tree[2*i]+tree[2*i+1]\n    answer=[]\n    for op,a,b in operations:\n        if op=='update':\n            i=a+n; tree[i]=b\n            while i>1: i//=2; tree[i]=tree[2*i]+tree[2*i+1]\n        else:\n            left,right=a+n,b+n+1; total=0\n            while left<right:\n                if left%2: total+=tree[left]; left+=1\n                if right%2: right-=1; total+=tree[right]\n                left//=2; right//=2\n            answer.append(total)\n    return answer\n",
           "time": "O(n + q log n)",
+          "space": "O(n)"
+        },
+        {
+          "patternId": "stacks-heaps-range-queries-mutable-range-queries-square-root-decomposition",
+          "title": "Square-root decomposition",
+          "language": "Python",
+          "approach": "Keep raw values plus block sums. Consume boundary elements individually and full interior blocks by summary.",
+          "code": "def solve(nums,operations):\n    from math import isqrt\n    n=len(nums); width=isqrt(n)+1; a=nums[:]; blocks=[0]*((n+width-1)//width)\n    for i,x in enumerate(a): blocks[i//width]+=x\n    out=[]\n    for kind,l,r in operations:\n        if kind=='update': blocks[l//width]+=r-a[l]; a[l]=r; continue\n        total=0\n        while l<=r and l%width: total+=a[l]; l+=1\n        while l+width-1<=r: total+=blocks[l//width]; l+=width\n        while l<=r: total+=a[l]; l+=1\n        out.append(total)\n    return out\n",
+          "time": "O(n + q√n), O(1) per update",
           "space": "O(n)"
         }
       ],
@@ -18111,6 +19337,2115 @@
         "expected": 3
       },
       "sourceUrl": "https://leetcode.com/problems/maximum-number-of-accepted-invitations/"
+    },
+    {
+      "id": "2569",
+      "title": "Handling Sum Queries After Update",
+      "slug": "handling-sum-queries-after-update",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Segment Tree",
+          "slug": "segment-tree"
+        }
+      ],
+      "description": "Queries on binary nums1 and integer nums2: [1,l,r] flips nums1 in [l,r]; [2,p,0] adds p*nums1[i] to every nums2[i]; [3,0,0] reports sum(nums2). Return reports.",
+      "examples": [
+        {
+          "input": "[[1, 0, 1], [0, 0, 0], [[1, 1, 1], [2, 1, 0], [3, 0, 0]]]",
+          "output": "[3]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "stacks-heaps-range-queries-mutable-range-queries-lazy-segment-tree-range-flips"
+      ],
+      "solutions": [
+        {
+          "patternId": "stacks-heaps-range-queries-mutable-range-queries-lazy-segment-tree-range-flips",
+          "title": "Lazy segment tree range flips",
+          "language": "Python",
+          "approach": "Store the count of ones per segment and a lazy flip bit. Flipping changes ones to segmentLength−ones; two flips cancel.",
+          "code": "def solve(nums1,nums2,queries):\n    n=len(nums1); tree=[0]*(4*n); lazy=[False]*(4*n)\n    def build(v,l,r):\n        if l==r: tree[v]=nums1[l]; return\n        m=(l+r)//2; build(v*2,l,m); build(v*2+1,m+1,r); tree[v]=tree[v*2]+tree[v*2+1]\n    def flip(v,l,r): tree[v]=r-l+1-tree[v]; lazy[v]=not lazy[v]\n    def update(v,l,r,a,b):\n        if a<=l and r<=b: flip(v,l,r); return\n        m=(l+r)//2\n        if lazy[v]: flip(v*2,l,m); flip(v*2+1,m+1,r); lazy[v]=False\n        if a<=m: update(v*2,l,m,a,b)\n        if b>m: update(v*2+1,m+1,r,a,b)\n        tree[v]=tree[v*2]+tree[v*2+1]\n    build(1,0,n-1); total=sum(nums2); out=[]\n    for kind,a,b in queries:\n        if kind==1: update(1,0,n-1,a,b)\n        elif kind==2: total+=a*tree[1]\n        else: out.append(total)\n    return out\n",
+          "time": "O(n + q log n)",
+          "space": "O(n)"
+        }
+      ],
+      "starter": "def solve(nums1,nums2,queries):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              0
+            ],
+            [
+              3,
+              0,
+              0
+            ]
+          ]
+        ],
+        "expected": [
+          3
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/handling-sum-queries-after-update/"
+    },
+    {
+      "id": "732",
+      "title": "My Calendar III",
+      "slug": "my-calendar-iii",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Binary Search",
+          "slug": "binary-search"
+        },
+        {
+          "name": "Design",
+          "slug": "design"
+        },
+        {
+          "name": "Segment Tree",
+          "slug": "segment-tree"
+        },
+        {
+          "name": "Prefix Sum",
+          "slug": "prefix-sum"
+        },
+        {
+          "name": "Ordered Set",
+          "slug": "ordered-set"
+        }
+      ],
+      "description": "After each half-open calendar booking, report the maximum number of simultaneous bookings.",
+      "examples": [
+        {
+          "input": "[[[10, 20], [50, 60], [10, 40], [5, 15], [5, 10], [25, 55]]]",
+          "output": "[1, 1, 2, 3, 3, 3]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "stacks-heaps-range-queries-mutable-range-queries-dynamic-sparse-segment-tree"
+      ],
+      "solutions": [
+        {
+          "patternId": "stacks-heaps-range-queries-mutable-range-queries-dynamic-sparse-segment-tree",
+          "title": "Dynamic sparse segment tree",
+          "language": "Python",
+          "approach": "Allocate segment nodes only when traversed; store a local lazy increment plus the maximum of child contributions.",
+          "code": "def solve(bookings):\n    tree={}; lazy={}\n    def add(v,l,r,a,b):\n        if a<=l and r<=b:\n            tree[v]=tree.get(v,0)+1; lazy[v]=lazy.get(v,0)+1; return\n        mid=(l+r)//2\n        if a<=mid: add(v*2,l,mid,a,b)\n        if b>mid: add(v*2+1,mid+1,r,a,b)\n        tree[v]=lazy.get(v,0)+max(tree.get(v*2,0),tree.get(v*2+1,0))\n    out=[]\n    for start,end in bookings: add(1,0,10**9,start,end-1); out.append(tree[1])\n    return out\n",
+          "time": "O(q log coordinateRange)",
+          "space": "O(q log coordinateRange)"
+        }
+      ],
+      "starter": "def solve(bookings):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            [
+              10,
+              20
+            ],
+            [
+              50,
+              60
+            ],
+            [
+              10,
+              40
+            ],
+            [
+              5,
+              15
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              25,
+              55
+            ]
+          ]
+        ],
+        "expected": [
+          1,
+          1,
+          2,
+          3,
+          3,
+          3
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/my-calendar-iii/"
+    },
+    {
+      "id": "1697",
+      "title": "Checking Existence of Edge Length Limited Paths",
+      "slug": "checking-existence-of-edge-length-limited-paths",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Two Pointers",
+          "slug": "two-pointers"
+        },
+        {
+          "name": "Union-Find",
+          "slug": "union-find"
+        },
+        {
+          "name": "Graph Theory",
+          "slug": "graph"
+        },
+        {
+          "name": "Sorting",
+          "slug": "sorting"
+        }
+      ],
+      "description": "For each query [p,q,limit], report whether p and q connect using only edges whose weights are below limit.",
+      "examples": [
+        {
+          "input": "[3, [[0, 1, 2], [1, 2, 4], [2, 0, 8]], [[0, 1, 2], [0, 2, 5]]]",
+          "output": "[false, true]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "graphs-grids-connectivity-structure-offline-sorted-threshold-connectivity"
+      ],
+      "solutions": [
+        {
+          "patternId": "graphs-grids-connectivity-structure-offline-sorted-threshold-connectivity",
+          "title": "Offline sorted-threshold connectivity",
+          "language": "Python",
+          "approach": "Sort edges and queries by limit. Incrementally union newly permitted edges, answering queries in that order and restoring output order.",
+          "code": "def solve(n,edgeList,queries):\n    parent=list(range(n)); size=[1]*n\n    def find(x):\n        while x!=parent[x]: parent[x]=parent[parent[x]]; x=parent[x]\n        return x\n    edges=sorted(edgeList,key=lambda e:e[2]); cursor=0; out=[False]*len(queries)\n    for i,(a,b,limit) in sorted(enumerate(queries),key=lambda q:q[1][2]):\n        while cursor<len(edges) and edges[cursor][2]<limit:\n            u,v,_=edges[cursor]; u,v=find(u),find(v)\n            if u!=v:\n                if size[u]<size[v]: u,v=v,u\n                parent[v]=u; size[u]+=size[v]\n            cursor+=1\n        out[i]=find(a)==find(b)\n    return out\n",
+          "time": "O(E log E + Q log Q + (E+Q) α(V))",
+          "space": "O(V+E+Q)"
+        }
+      ],
+      "starter": "def solve(n,edgeList,queries):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          3,
+          [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              2,
+              0,
+              8
+            ]
+          ],
+          [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              0,
+              2,
+              5
+            ]
+          ]
+        ],
+        "expected": [
+          false,
+          true
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/"
+    },
+    {
+      "id": "1044",
+      "title": "Longest Duplicate Substring",
+      "slug": "longest-duplicate-substring",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "String",
+          "slug": "string"
+        },
+        {
+          "name": "Binary Search",
+          "slug": "binary-search"
+        },
+        {
+          "name": "Sliding Window",
+          "slug": "sliding-window"
+        },
+        {
+          "name": "Rolling Hash",
+          "slug": "rolling-hash"
+        },
+        {
+          "name": "Suffix Array",
+          "slug": "suffix-array"
+        },
+        {
+          "name": "Hash Function",
+          "slug": "hash-function"
+        },
+        {
+          "name": "Suffix Automaton",
+          "slug": "suffix-automaton"
+        },
+        {
+          "name": "Suffix Tree",
+          "slug": "suffix-tree"
+        },
+        {
+          "name": "Z Algorithm",
+          "slug": "z-algorithm"
+        },
+        {
+          "name": "Boyer–Moore String-Search Algorithm",
+          "slug": "boyer-moore-string-search-algorithm"
+        }
+      ],
+      "description": "Return a longest substring appearing at least twice in s. Occurrences may overlap; return empty when none repeats.",
+      "examples": [
+        {
+          "input": "[\"banana\"]",
+          "output": "\"ana\"",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "strings-tries-matching-palindrome-structure-suffix-array-and-adjacent-lcp"
+      ],
+      "solutions": [
+        {
+          "patternId": "strings-tries-matching-palindrome-structure-suffix-array-and-adjacent-lcp",
+          "title": "Suffix array and adjacent LCP",
+          "language": "Python",
+          "approach": "Sort suffixes by doubling ranked prefixes. The largest common prefix of adjacent suffixes is the longest repeat; compute LCPs using Kasai’s reuse invariant.",
+          "code": "def solve(s):\n    n=len(s); sa=list(range(n)); rank=list(map(ord,s)); k=1\n    while k<n:\n        key=lambda i:(rank[i],rank[i+k] if i+k<n else -1)\n        sa.sort(key=key); new=[0]*n\n        for j in range(1,n): new[sa[j]]=new[sa[j-1]]+(key(sa[j-1])!=key(sa[j]))\n        rank=new\n        if rank[sa[-1]]==n-1: break\n        k*=2\n    position=[0]*n\n    for i,start in enumerate(sa): position[start]=i\n    length=best=start=0\n    for i in range(n):\n        r=position[i]\n        if r==0: length=0; continue\n        j=sa[r-1]\n        while i+length<n and j+length<n and s[i+length]==s[j+length]: length+=1\n        if length>best: best,start=length,i\n        length=max(0,length-1)\n    return s[start:start+best]\n",
+          "time": "O(n log² n)",
+          "space": "O(n)"
+        }
+      ],
+      "starter": "def solve(s):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          "banana"
+        ],
+        "expected": "ana"
+      },
+      "sourceUrl": "https://leetcode.com/problems/longest-duplicate-substring/"
+    },
+    {
+      "id": "899",
+      "title": "Orderly Queue",
+      "slug": "orderly-queue",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Math",
+          "slug": "math"
+        },
+        {
+          "name": "String",
+          "slug": "string"
+        },
+        {
+          "name": "Sorting",
+          "slug": "sorting"
+        },
+        {
+          "name": "Lexicographically Minimal String Rotation",
+          "slug": "lexicographically-minimal-string-rotation"
+        }
+      ],
+      "description": "Repeatedly move one of the first k characters of s to its end. Return the lexicographically smallest reachable string.",
+      "examples": [
+        {
+          "input": "[\"cba\", 1]",
+          "output": "\"acb\"",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "strings-tries-matching-palindrome-structure-minimal-cyclic-rotation"
+      ],
+      "solutions": [
+        {
+          "patternId": "strings-tries-matching-palindrome-structure-minimal-cyclic-rotation",
+          "title": "Minimal cyclic rotation",
+          "language": "Python",
+          "approach": "For k=1 only rotations are reachable: compare two candidate starts and skip dominated starts after a mismatch. With k>1, arbitrary sorting is reachable.",
+          "code": "def solve(s,k):\n    if k>1: return ''.join(sorted(s))\n    n=len(s); doubled=s+s; i,j,offset=0,1,0\n    while i<n and j<n and offset<n:\n        a,b=doubled[i+offset],doubled[j+offset]\n        if a==b: offset+=1; continue\n        if a>b:\n            i+=offset+1\n            if i==j: i+=1\n        else:\n            j+=offset+1\n            if i==j: j+=1\n        offset=0\n    start=min(i,j)\n    return doubled[start:start+n]\n",
+          "time": "O(n) for k=1; O(n log n) otherwise",
+          "space": "O(n)"
+        }
+      ],
+      "starter": "def solve(s,k):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          "cba",
+          1
+        ],
+        "expected": "acb"
+      },
+      "sourceUrl": "https://leetcode.com/problems/orderly-queue/"
+    },
+    {
+      "id": "587",
+      "title": "Erect the Fence",
+      "slug": "erect-the-fence",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Math",
+          "slug": "math"
+        },
+        {
+          "name": "Geometry",
+          "slug": "geometry"
+        },
+        {
+          "name": "Convex Hull",
+          "slug": "convex-hull"
+        },
+        {
+          "name": "Polygons",
+          "slug": "polygons"
+        }
+      ],
+      "description": "Return every tree point lying on the boundary of the smallest enclosing fence, including collinear boundary points. Order is irrelevant.",
+      "examples": [
+        {
+          "input": "[[[1, 1], [2, 2], [2, 0], [2, 4], [3, 3], [4, 2]]]",
+          "output": "[[1, 1], [2, 0], [2, 4], [3, 3], [4, 2]]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "bits-math-geometry-geometry-randomness-convex-hull-with-cross-products"
+      ],
+      "solutions": [
+        {
+          "patternId": "bits-math-geometry-geometry-randomness-convex-hull-with-cross-products",
+          "title": "Convex hull with cross products",
+          "language": "Python",
+          "approach": "Build lower and upper monotone chains, popping turns that bend inward. Keep collinear boundary points by popping only strictly wrong turns.",
+          "code": "def solve(trees):\n    points=sorted(map(tuple,trees))\n    def cross(a,b,c): return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])\n    def half(seq):\n        out=[]\n        for p in seq:\n            while len(out)>=2 and cross(out[-2],out[-1],p)<0: out.pop()\n            out.append(p)\n        return out\n    return [list(p) for p in sorted(set(half(points)+half(points[::-1])))]\n",
+          "time": "O(n log n)",
+          "space": "O(n)"
+        }
+      ],
+      "starter": "def solve(trees):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              4,
+              2
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/erect-the-fence/"
+    },
+    {
+      "id": "1201",
+      "title": "Ugly Number III",
+      "slug": "ugly-number-iii",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Math",
+          "slug": "math"
+        },
+        {
+          "name": "Binary Search",
+          "slug": "binary-search"
+        },
+        {
+          "name": "Combinatorics",
+          "slug": "combinatorics"
+        },
+        {
+          "name": "Number Theory",
+          "slug": "number-theory"
+        },
+        {
+          "name": "Least Common Multiple",
+          "slug": "least-common-multiple"
+        },
+        {
+          "name": "Euclidean Algorithm",
+          "slug": "euclidean-algorithm"
+        },
+        {
+          "name": "Greatest Common Divisor",
+          "slug": "greatest-common-divisor"
+        },
+        {
+          "name": "Inclusion-Exclusion Principle",
+          "slug": "inclusion-exclusion-principle"
+        }
+      ],
+      "description": "Return the nth positive integer divisible by at least one of a, b, or c.",
+      "examples": [
+        {
+          "input": "[3, 2, 3, 5]",
+          "output": "4",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "bits-math-geometry-number-theory-counting-inclusion-exclusion-with-lcm"
+      ],
+      "solutions": [
+        {
+          "patternId": "bits-math-geometry-number-theory-counting-inclusion-exclusion-with-lcm",
+          "title": "Inclusion–exclusion with LCM",
+          "language": "Python",
+          "approach": "Add single-factor counts, subtract pair intersections, and add the triple intersection. Binary search the first value whose union count reaches n.",
+          "code": "def solve(n,a,b,c):\n    from math import lcm\n    ab,ac,bc,abc=lcm(a,b),lcm(a,c),lcm(b,c),lcm(a,b,c)\n    left,right=1,n*min(a,b,c)\n    while left<right:\n        x=(left+right)//2\n        count=x//a+x//b+x//c-x//ab-x//ac-x//bc+x//abc\n        if count>=n: right=x\n        else: left=x+1\n    return left\n",
+          "time": "O(log(n × min(a,b,c))) arithmetic operations",
+          "space": "O(1)"
+        }
+      ],
+      "starter": "def solve(n,a,b,c):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          3,
+          2,
+          3,
+          5
+        ],
+        "expected": 4
+      },
+      "sourceUrl": "https://leetcode.com/problems/ugly-number-iii/"
+    },
+    {
+      "id": "470",
+      "title": "Implement Rand10() Using Rand7()",
+      "slug": "implement-rand10-using-rand7",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Math",
+          "slug": "math"
+        },
+        {
+          "name": "Rejection Sampling",
+          "slug": "rejection-sampling"
+        },
+        {
+          "name": "Randomized",
+          "slug": "randomized"
+        },
+        {
+          "name": "Probability and Statistics",
+          "slug": "probability-and-statistics"
+        }
+      ],
+      "description": "Implement rand10 using a uniform rand7 source. This standalone study version simulates rand7 with random.randint; on LeetCode use the supplied rand7.",
+      "examples": [
+        {
+          "input": "[]",
+          "output": "1",
+          "note": "A random integer from 1 through 10; 1 is one possible outcome."
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "bits-math-geometry-geometry-randomness-rejection-sampling-without-modulo-bias"
+      ],
+      "solutions": [
+        {
+          "patternId": "bits-math-geometry-geometry-randomness-rejection-sampling-without-modulo-bias",
+          "title": "Rejection sampling without modulo bias",
+          "language": "Python",
+          "approach": "Two independent rand7 calls create 49 equally likely outcomes. Accept the first 40 and map them into ten equal buckets.",
+          "code": "def solve():\n    import random\n    def rand7(): return random.randint(1,7)\n    while True:\n        value=(rand7()-1)*7+rand7()-1\n        if value<40: return value%10+1\n",
+          "time": "O(1) expected; unbounded worst-case retries",
+          "space": "O(1)"
+        }
+      ],
+      "starter": "def solve():\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [],
+        "expected": 1,
+        "comparison": "rand10"
+      },
+      "sourceUrl": "https://leetcode.com/problems/implement-rand10-using-rand7/"
+    },
+    {
+      "id": "384",
+      "title": "Shuffle an Array",
+      "slug": "shuffle-an-array",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Math",
+          "slug": "math"
+        },
+        {
+          "name": "Design",
+          "slug": "design"
+        },
+        {
+          "name": "Randomized",
+          "slug": "randomized"
+        }
+      ],
+      "description": "Return a uniformly shuffled copy of nums. A reset operation would return the preserved original array.",
+      "examples": [
+        {
+          "input": "[[1, 2, 3]]",
+          "output": "[1, 2, 3]",
+          "note": "Any permutation is valid; the sample shows one possible outcome."
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "bits-math-geometry-geometry-randomness-fisher-yates-shuffle"
+      ],
+      "solutions": [
+        {
+          "patternId": "bits-math-geometry-geometry-randomness-fisher-yates-shuffle",
+          "title": "Fisher–Yates shuffle",
+          "language": "Python",
+          "approach": "At position i from the end, swap with a uniformly chosen position in [0,i]. Fix that position permanently.",
+          "code": "def solve(nums):\n    import random\n    out=nums[:]\n    for i in range(len(out)-1,0,-1):\n        j=random.randrange(i+1); out[i],out[j]=out[j],out[i]\n    return out\n",
+          "time": "O(n)",
+          "space": "O(n)"
+        }
+      ],
+      "starter": "def solve(nums):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": [
+          1,
+          2,
+          3
+        ],
+        "comparison": "permutation"
+      },
+      "sourceUrl": "https://leetcode.com/problems/shuffle-an-array/"
+    },
+    {
+      "id": "380",
+      "title": "Insert Delete GetRandom O(1)",
+      "slug": "insert-delete-getrandom-o1",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Hash Table",
+          "slug": "hash-table"
+        },
+        {
+          "name": "Math",
+          "slug": "math"
+        },
+        {
+          "name": "Design",
+          "slug": "design"
+        },
+        {
+          "name": "Randomized",
+          "slug": "randomized"
+        }
+      ],
+      "description": "Simulate insert/remove/getRandom. Insert and remove return success booleans; getRandom chooses uniformly from current values and is never called on an empty set.",
+      "examples": [
+        {
+          "input": "[[[\"insert\", 1], [\"insert\", 2], [\"remove\", 1], [\"getRandom\"]]]",
+          "output": "[true, true, true, 2]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "stacks-heaps-range-queries-data-structure-design-random-access-with-swap-delete"
+      ],
+      "solutions": [
+        {
+          "patternId": "stacks-heaps-range-queries-data-structure-design-random-access-with-swap-delete",
+          "title": "Random access with swap-delete",
+          "language": "Python",
+          "approach": "Combine an array with value-to-index lookup. Delete by moving the last value into the removed slot and repairing its index.",
+          "code": "def solve(operations):\n    import random\n    values=[]; index={}; out=[]\n    for op in operations:\n        if op[0]=='getRandom': out.append(random.choice(values)); continue\n        x=op[1]\n        if op[0]=='insert':\n            if x in index: out.append(False)\n            else: index[x]=len(values); values.append(x); out.append(True)\n        else:\n            if x not in index: out.append(False)\n            else:\n                i=index[x]; last=values[-1]; values[i]=last; index[last]=i\n                values.pop(); del index[x]; out.append(True)\n    return out\n",
+          "time": "O(1) expected per operation",
+          "space": "O(number of stored values)"
+        }
+      ],
+      "starter": "def solve(operations):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            [
+              "insert",
+              1
+            ],
+            [
+              "insert",
+              2
+            ],
+            [
+              "remove",
+              1
+            ],
+            [
+              "getRandom"
+            ]
+          ]
+        ],
+        "expected": [
+          true,
+          true,
+          true,
+          2
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/insert-delete-getrandom-o1/"
+    },
+    {
+      "id": "460",
+      "title": "LFU Cache",
+      "slug": "lfu-cache",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Hash Table",
+          "slug": "hash-table"
+        },
+        {
+          "name": "Linked List",
+          "slug": "linked-list"
+        },
+        {
+          "name": "Design",
+          "slug": "design"
+        },
+        {
+          "name": "Doubly-Linked List",
+          "slug": "doubly-linked-list"
+        }
+      ],
+      "description": "Simulate LFU cache put/get operations. When full, evict the least-frequent key, preferring the least recently used among ties. Return get results.",
+      "examples": [
+        {
+          "input": "[2, [[\"put\", 1, 1], [\"put\", 2, 2], [\"get\", 1], [\"put\", 3, 3], [\"get\", 2], [\"get\", 3]]]",
+          "output": "[1, -1, 3]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "stacks-heaps-range-queries-data-structure-design-lfu-frequency-buckets"
+      ],
+      "solutions": [
+        {
+          "patternId": "stacks-heaps-range-queries-data-structure-design-lfu-frequency-buckets",
+          "title": "LFU frequency buckets",
+          "language": "Python",
+          "approach": "Keep an ordered bucket for each frequency and track the minimum active frequency. Access moves an item to the next frequency bucket.",
+          "code": "def solve(capacity,operations):\n    from collections import defaultdict,OrderedDict\n    values={}; frequency={}; buckets=defaultdict(OrderedDict); minimum=0; out=[]\n    def touch(key):\n        nonlocal minimum\n        f=frequency[key]; del buckets[f][key]\n        if not buckets[f]:\n            del buckets[f]\n            if f==minimum: minimum+=1\n        frequency[key]=f+1; buckets[f+1][key]=None\n    for op in operations:\n        key=op[1]\n        if op[0]=='get':\n            out.append(values.get(key,-1))\n            if key in values: touch(key)\n        elif capacity:\n            if key in values: values[key]=op[2]; touch(key); continue\n            if len(values)==capacity:\n                old,_=buckets[minimum].popitem(last=False); del values[old]; del frequency[old]\n                if not buckets[minimum]: del buckets[minimum]\n            values[key]=op[2]; frequency[key]=1; buckets[1][key]=None; minimum=1\n    return out\n",
+          "time": "O(1) expected per operation",
+          "space": "O(capacity)"
+        }
+      ],
+      "starter": "def solve(capacity,operations):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          2,
+          [
+            [
+              "put",
+              1,
+              1
+            ],
+            [
+              "put",
+              2,
+              2
+            ],
+            [
+              "get",
+              1
+            ],
+            [
+              "put",
+              3,
+              3
+            ],
+            [
+              "get",
+              2
+            ],
+            [
+              "get",
+              3
+            ]
+          ]
+        ],
+        "expected": [
+          1,
+          -1,
+          3
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/lfu-cache/"
+    },
+    {
+      "id": "341",
+      "title": "Flatten Nested List Iterator",
+      "slug": "flatten-nested-list-iterator",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Stack",
+          "slug": "stack"
+        },
+        {
+          "name": "Tree",
+          "slug": "tree"
+        },
+        {
+          "name": "Depth-First Search",
+          "slug": "depth-first-search"
+        },
+        {
+          "name": "Design",
+          "slug": "design"
+        },
+        {
+          "name": "Queue",
+          "slug": "queue"
+        },
+        {
+          "name": "Iterator",
+          "slug": "iterator"
+        }
+      ],
+      "description": "Flatten an arbitrarily nested list of integers in left-to-right order. This study wrapper collects the outputs of a lazy generator.",
+      "examples": [
+        {
+          "input": "[[[1, 1], 2, [1, [3]]]]",
+          "output": "[1, 1, 2, 1, 3]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "stacks-heaps-range-queries-data-structure-design-lazy-nested-iterator"
+      ],
+      "solutions": [
+        {
+          "patternId": "stacks-heaps-range-queries-data-structure-design-lazy-nested-iterator",
+          "title": "Lazy nested iterator",
+          "language": "Python",
+          "approach": "Keep a stack of iterators. Advance the top iterator; push a child iterator for a nested list and pop exhausted iterators.",
+          "code": "def solve(nestedList):\n    def flattened():\n        stack=[iter(nestedList)]\n        while stack:\n            try: value=next(stack[-1])\n            except StopIteration: stack.pop(); continue\n            if isinstance(value,int): yield value\n            else: stack.append(iter(value))\n    return list(flattened())\n",
+          "time": "O(total nested entries)",
+          "space": "O(nesting depth) auxiliary, excluding output"
+        }
+      ],
+      "starter": "def solve(nestedList):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            [
+              1,
+              1
+            ],
+            2,
+            [
+              1,
+              [
+                3
+              ]
+            ]
+          ]
+        ],
+        "expected": [
+          1,
+          1,
+          2,
+          1,
+          3
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/flatten-nested-list-iterator/"
+    },
+    {
+      "id": "622",
+      "title": "Design Circular Queue",
+      "slug": "design-circular-queue",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Linked List",
+          "slug": "linked-list"
+        },
+        {
+          "name": "Design",
+          "slug": "design"
+        },
+        {
+          "name": "Queue",
+          "slug": "queue"
+        }
+      ],
+      "description": "Simulate enQueue(value), deQueue, Front, Rear, isEmpty, and isFull for a fixed-size circular queue. Return each operation result.",
+      "examples": [
+        {
+          "input": "[2, [[\"enQueue\", 1], [\"enQueue\", 2], [\"enQueue\", 3], [\"Rear\"], [\"deQueue\"], [\"Front\"]]]",
+          "output": "[true, true, false, 2, true, 2]",
+          "note": ""
+        }
+      ],
+      "constraints": "Capacity k is positive.",
+      "patternIds": [
+        "stacks-heaps-range-queries-data-structure-design-circular-buffer-queue"
+      ],
+      "solutions": [
+        {
+          "patternId": "stacks-heaps-range-queries-data-structure-design-circular-buffer-queue",
+          "title": "Circular buffer queue",
+          "language": "Python",
+          "approach": "Track a head index and count; the insertion position is (head+count) modulo capacity.",
+          "code": "def solve(k,operations):\n    values=[0]*k; head=count=0; out=[]\n    for op in operations:\n        kind=op[0]\n        if kind=='enQueue':\n            out.append(count<k)\n            if count<k: values[(head+count)%k]=op[1]; count+=1\n        elif kind=='deQueue':\n            out.append(count>0)\n            if count: head=(head+1)%k; count-=1\n        elif kind=='Front': out.append(values[head] if count else -1)\n        elif kind=='Rear': out.append(values[(head+count-1)%k] if count else -1)\n        elif kind=='isEmpty': out.append(count==0)\n        else: out.append(count==k)\n    return out\n",
+          "time": "O(1) per operation",
+          "space": "O(k)"
+        }
+      ],
+      "starter": "def solve(k,operations):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          2,
+          [
+            [
+              "enQueue",
+              1
+            ],
+            [
+              "enQueue",
+              2
+            ],
+            [
+              "enQueue",
+              3
+            ],
+            [
+              "Rear"
+            ],
+            [
+              "deQueue"
+            ],
+            [
+              "Front"
+            ]
+          ]
+        ],
+        "expected": [
+          true,
+          true,
+          false,
+          2,
+          true,
+          2
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/design-circular-queue/"
+    },
+    {
+      "id": "1483",
+      "title": "Kth Ancestor of a Tree Node",
+      "slug": "kth-ancestor-of-a-tree-node",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Binary Search",
+          "slug": "binary-search"
+        },
+        {
+          "name": "Dynamic Programming",
+          "slug": "dynamic-programming"
+        },
+        {
+          "name": "Bit Manipulation",
+          "slug": "bit-manipulation"
+        },
+        {
+          "name": "Tree",
+          "slug": "tree"
+        },
+        {
+          "name": "Depth-First Search",
+          "slug": "depth-first-search"
+        },
+        {
+          "name": "Breadth-First Search",
+          "slug": "breadth-first-search"
+        },
+        {
+          "name": "Design",
+          "slug": "design"
+        },
+        {
+          "name": "Binary Lifting",
+          "slug": "binary-lifting"
+        }
+      ],
+      "description": "Given a parent array with root parent −1 and queries [node,k], return each node’s kth ancestor, or −1.",
+      "examples": [
+        {
+          "input": "[[-1, 0, 0, 1, 1, 2, 2], [[3, 1], [5, 2], [6, 3]]]",
+          "output": "[1, 0, -1]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "trees-linked-lists-tree-dynamic-programming-binary-lifting-ancestor-queries"
+      ],
+      "solutions": [
+        {
+          "patternId": "trees-linked-lists-tree-dynamic-programming-binary-lifting-ancestor-queries",
+          "title": "Binary lifting ancestor queries",
+          "language": "Python",
+          "approach": "Precompute each node’s 2^b-th ancestor by composing two 2^(b−1) jumps. Decompose k into binary bits.",
+          "code": "def solve(parent,queries):\n    n=len(parent); levels=max(1,n.bit_length()); up=[parent[:]]\n    for b in range(1,levels): up.append([up[b-1][up[b-1][v]] if up[b-1][v]>=0 else -1 for v in range(n)])\n    out=[]\n    for node,k in queries:\n        bit=0\n        while k and node!=-1:\n            if bit>=levels: node=-1; break\n            if k&1: node=up[bit][node]\n            k>>=1; bit+=1\n        out.append(node)\n    return out\n",
+          "time": "O(n log n + q log k)",
+          "space": "O(n log n)"
+        }
+      ],
+      "starter": "def solve(parent,queries):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            -1,
+            0,
+            0,
+            1,
+            1,
+            2,
+            2
+          ],
+          [
+            [
+              3,
+              1
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              6,
+              3
+            ]
+          ]
+        ],
+        "expected": [
+          1,
+          0,
+          -1
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/kth-ancestor-of-a-tree-node/"
+    },
+    {
+      "id": "292",
+      "title": "Nim Game",
+      "slug": "nim-game",
+      "difficulty": "Easy",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Math",
+          "slug": "math"
+        },
+        {
+          "name": "Brainteaser",
+          "slug": "brainteaser"
+        },
+        {
+          "name": "Minimax",
+          "slug": "minimax-algorithm"
+        },
+        {
+          "name": "Game Theory",
+          "slug": "game-theory"
+        },
+        {
+          "name": "Nim Game",
+          "slug": "nim-game"
+        },
+        {
+          "name": "Impartial Game",
+          "slug": "impartial-game"
+        }
+      ],
+      "description": "Two optimal players remove 1, 2, or 3 stones per turn from a pile of n. The player taking the last stone wins. Does the first player win?",
+      "examples": [
+        {
+          "input": "[8]",
+          "output": "false",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "bits-math-geometry-number-theory-counting-losing-state-modular-invariant"
+      ],
+      "solutions": [
+        {
+          "patternId": "bits-math-geometry-number-theory-counting-losing-state-modular-invariant",
+          "title": "Losing-state modular invariant",
+          "language": "Python",
+          "approach": "Positions divisible by four are losing when players may remove one to three stones. From any other position move to a multiple of four.",
+          "code": "def solve(n):\n    return n%4!=0\n",
+          "time": "O(1)",
+          "space": "O(1)"
+        }
+      ],
+      "starter": "def solve(n):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          8
+        ],
+        "expected": false
+      },
+      "sourceUrl": "https://leetcode.com/problems/nim-game/"
+    },
+    {
+      "id": "62",
+      "title": "Unique Paths",
+      "slug": "unique-paths",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Math",
+          "slug": "math"
+        },
+        {
+          "name": "Dynamic Programming",
+          "slug": "dynamic-programming"
+        },
+        {
+          "name": "Combinatorics",
+          "slug": "combinatorics"
+        }
+      ],
+      "description": "Count paths from top-left to bottom-right of an m×n grid using only down and right moves.",
+      "examples": [
+        {
+          "input": "[3, 7]",
+          "output": "28",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "bits-math-geometry-number-theory-counting-multiplicative-combinatorial-counting"
+      ],
+      "solutions": [
+        {
+          "patternId": "bits-math-geometry-number-theory-counting-multiplicative-combinatorial-counting",
+          "title": "Multiplicative combinatorial counting",
+          "language": "Python",
+          "approach": "Choose which positions contain down moves among all moves. The answer is a binomial coefficient.",
+          "code": "def solve(m,n):\n    from math import comb\n    return comb(m+n-2,m-1)\n",
+          "time": "O(min(m,n)) multiplicative steps conceptually; big-integer costs apply",
+          "space": "O(1) integer objects"
+        }
+      ],
+      "starter": "def solve(m,n):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          3,
+          7
+        ],
+        "expected": 28
+      },
+      "sourceUrl": "https://leetcode.com/problems/unique-paths/"
+    },
+    {
+      "id": "374",
+      "title": "Guess Number Higher or Lower",
+      "slug": "guess-number-higher-or-lower",
+      "difficulty": "Easy",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Binary Search",
+          "slug": "binary-search"
+        },
+        {
+          "name": "Interactive",
+          "slug": "interactive"
+        }
+      ],
+      "description": "Find a hidden integer in 1..n. The platform oracle returns −1 for a guess too high, +1 for too low, and 0 for correct. Study input includes the hidden value to simulate the oracle.",
+      "examples": [
+        {
+          "input": "[10, 6]",
+          "output": "6",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "binary-search-ordered-positions-interactive-monotone-oracle"
+      ],
+      "solutions": [
+        {
+          "patternId": "binary-search-ordered-positions-interactive-monotone-oracle",
+          "title": "Interactive monotone oracle",
+          "language": "Python",
+          "approach": "Binary search the hidden value using only the oracle response; preserve a closed interval of possible answers.",
+          "code": "def solve(n,hidden):\n    def guess(value): return (hidden>value)-(hidden<value)\n    left,right=1,n\n    while left<=right:\n        mid=(left+right)//2; response=guess(mid)\n        if response==0: return mid\n        if response>0: left=mid+1\n        else: right=mid-1\n",
+          "time": "O(log n) oracle calls",
+          "space": "O(1)"
+        }
+      ],
+      "starter": "def solve(n,hidden):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          10,
+          6
+        ],
+        "expected": 6
+      },
+      "sourceUrl": "https://leetcode.com/problems/guess-number-higher-or-lower/"
+    },
+    {
+      "id": "105",
+      "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+      "slug": "construct-binary-tree-from-preorder-and-inorder-traversal",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Hash Table",
+          "slug": "hash-table"
+        },
+        {
+          "name": "Divide and Conquer",
+          "slug": "divide-and-conquer"
+        },
+        {
+          "name": "Tree",
+          "slug": "tree"
+        },
+        {
+          "name": "Binary Tree",
+          "slug": "binary-tree"
+        }
+      ],
+      "description": "Rebuild the unique binary tree from preorder and inorder traversals of distinct values. The example result displays level-order values.",
+      "examples": [
+        {
+          "input": "[[3, 9, 20, 15, 7], [9, 3, 15, 20, 7]]",
+          "output": "[3, 9, 20, null, null, 15, 7]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "trees-linked-lists-binary-tree-traversal-reconstruct-from-traversal-boundaries"
+      ],
+      "solutions": [
+        {
+          "patternId": "trees-linked-lists-binary-tree-traversal-reconstruct-from-traversal-boundaries",
+          "title": "Reconstruct from traversal boundaries",
+          "language": "Python",
+          "approach": "Preorder supplies the next root; an inorder index map divides the remaining range into left and right subtrees.",
+          "code": "class TreeNode:\n    def __init__(self,val,left=None,right=None): self.val=val; self.left=left; self.right=right\n\ndef solve(preorder,inorder):\n    positions={x:i for i,x in enumerate(inorder)}; cursor=0\n    def build(left,right):\n        nonlocal cursor\n        if left>=right: return None\n        value=preorder[cursor]; cursor+=1; mid=positions[value]\n        return TreeNode(value,build(left,mid),build(mid+1,right))\n    return build(0,len(inorder))\n",
+          "time": "O(n)",
+          "space": "O(n)"
+        }
+      ],
+      "starter": "def solve(preorder,inorder):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            3,
+            9,
+            20,
+            15,
+            7
+          ],
+          [
+            9,
+            3,
+            15,
+            20,
+            7
+          ]
+        ],
+        "expected": [
+          3,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ],
+        "adapter": "tree-output"
+      },
+      "sourceUrl": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
+    },
+    {
+      "id": "297",
+      "title": "Serialize and Deserialize Binary Tree",
+      "slug": "serialize-and-deserialize-binary-tree",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "String",
+          "slug": "string"
+        },
+        {
+          "name": "Tree",
+          "slug": "tree"
+        },
+        {
+          "name": "Depth-First Search",
+          "slug": "depth-first-search"
+        },
+        {
+          "name": "Breadth-First Search",
+          "slug": "breadth-first-search"
+        },
+        {
+          "name": "Design",
+          "slug": "design"
+        },
+        {
+          "name": "Binary Tree",
+          "slug": "binary-tree"
+        }
+      ],
+      "description": "Serialize a binary tree and deserialize it without losing shape or values. The study wrapper round-trips the tree and returns its preorder serialization.",
+      "examples": [
+        {
+          "input": "[[1, 2, 3, null, null, 4, 5]]",
+          "output": "\"1,2,#,#,3,4,#,#,5,#,#\"",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "trees-linked-lists-binary-tree-traversal-serialization-with-null-markers"
+      ],
+      "solutions": [
+        {
+          "patternId": "trees-linked-lists-binary-tree-traversal-serialization-with-null-markers",
+          "title": "Serialization with null markers",
+          "language": "Python",
+          "approach": "Use preorder with an explicit marker for every absent child; decoding consumes exactly one token per recursive call.",
+          "code": "class TreeNode:\n    def __init__(self,val,left=None,right=None): self.val=val; self.left=left; self.right=right\n\ndef serialize(root):\n    tokens=[]\n    def visit(node):\n        if node is None: tokens.append('#'); return\n        tokens.append(str(node.val)); visit(node.left); visit(node.right)\n    visit(root)\n    return ','.join(tokens)\n\ndef deserialize(text):\n    tokens=iter(text.split(','))\n    def read():\n        token=next(tokens)\n        if token=='#': return None\n        return TreeNode(int(token),read(),read())\n    return read()\n\ndef solve(root):\n    return serialize(deserialize(serialize(root)))\n",
+          "time": "O(n)",
+          "space": "O(n)"
+        }
+      ],
+      "starter": "def solve(root):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            null,
+            null,
+            4,
+            5
+          ]
+        ],
+        "expected": "1,2,#,#,3,4,#,#,5,#,#",
+        "adapter": "tree"
+      },
+      "sourceUrl": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/"
+    },
+    {
+      "id": "25",
+      "title": "Reverse Nodes in k-Group",
+      "slug": "reverse-nodes-in-k-group",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Linked List",
+          "slug": "linked-list"
+        },
+        {
+          "name": "Recursion",
+          "slug": "recursion"
+        }
+      ],
+      "description": "Reverse each consecutive group of k nodes in a singly linked list. Leave a short final group unchanged.",
+      "examples": [
+        {
+          "input": "[[1, 2, 3, 4, 5], 2]",
+          "output": "[2, 1, 4, 3, 5]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "trees-linked-lists-linked-list-pointers-reverse-a-fixed-size-group"
+      ],
+      "solutions": [
+        {
+          "patternId": "trees-linked-lists-linked-list-pointers-reverse-a-fixed-size-group",
+          "title": "Reverse a fixed-size group",
+          "language": "Python",
+          "approach": "Find the kth node before mutating. Reverse links up to the following node, reconnect the group, and advance the group predecessor.",
+          "code": "def solve(head,k):\n    class Dummy:\n        def __init__(self,nxt): self.next=nxt\n    dummy=before=Dummy(head)\n    while True:\n        kth=before\n        for _ in range(k):\n            kth=kth.next\n            if kth is None: return dummy.next\n        after=kth.next; old_first=before.next; previous=after; current=old_first\n        while current is not after:\n            nxt=current.next; current.next=previous; previous=current; current=nxt\n        before.next=kth; before=old_first\n",
+          "time": "O(n)",
+          "space": "O(1)"
+        }
+      ],
+      "starter": "def solve(head,k):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          2
+        ],
+        "expected": [
+          2,
+          1,
+          4,
+          3,
+          5
+        ],
+        "adapter": "linked"
+      },
+      "sourceUrl": "https://leetcode.com/problems/reverse-nodes-in-k-group/"
+    },
+    {
+      "id": "234",
+      "title": "Palindrome Linked List",
+      "slug": "palindrome-linked-list",
+      "difficulty": "Easy",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Linked List",
+          "slug": "linked-list"
+        },
+        {
+          "name": "Two Pointers",
+          "slug": "two-pointers"
+        },
+        {
+          "name": "Stack",
+          "slug": "stack"
+        },
+        {
+          "name": "Recursion",
+          "slug": "recursion"
+        }
+      ],
+      "description": "Determine whether linked-list values form a palindrome, using constant auxiliary space.",
+      "examples": [
+        {
+          "input": "[[1, 2, 2, 1]]",
+          "output": "true",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "trees-linked-lists-linked-list-pointers-midpoint-split-and-half-reversal"
+      ],
+      "solutions": [
+        {
+          "patternId": "trees-linked-lists-linked-list-pointers-midpoint-split-and-half-reversal",
+          "title": "Midpoint split and half reversal",
+          "language": "Python",
+          "approach": "Find the end of the first half using slow/fast pointers, reverse the second half, compare, then restore its links.",
+          "code": "def solve(head):\n    if head is None: return True\n    slow=fast=head\n    while fast.next and fast.next.next: slow=slow.next; fast=fast.next.next\n    def reverse(node):\n        previous=None\n        while node: nxt=node.next; node.next=previous; previous=node; node=nxt\n        return previous\n    second=reverse(slow.next); a,b=head,second; valid=True\n    while b:\n        if a.val!=b.val: valid=False\n        a=a.next; b=b.next\n    slow.next=reverse(second)\n    return valid\n",
+          "time": "O(n)",
+          "space": "O(1)"
+        }
+      ],
+      "starter": "def solve(head):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            1,
+            2,
+            2,
+            1
+          ]
+        ],
+        "expected": true,
+        "adapter": "linked-bool"
+      },
+      "sourceUrl": "https://leetcode.com/problems/palindrome-linked-list/"
+    },
+    {
+      "id": "131",
+      "title": "Palindrome Partitioning",
+      "slug": "palindrome-partitioning",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "String",
+          "slug": "string"
+        },
+        {
+          "name": "Dynamic Programming",
+          "slug": "dynamic-programming"
+        },
+        {
+          "name": "Backtracking",
+          "slug": "backtracking"
+        }
+      ],
+      "description": "Return every partition of s into contiguous palindromic substrings.",
+      "examples": [
+        {
+          "input": "[\"aab\"]",
+          "output": "[[\"a\", \"a\", \"b\"], [\"aa\", \"b\"]]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "backtracking-enumeration-choice-trees-partition-by-valid-segments"
+      ],
+      "solutions": [
+        {
+          "patternId": "backtracking-enumeration-choice-trees-partition-by-valid-segments",
+          "title": "Partition by valid segments",
+          "language": "Python",
+          "approach": "Choose the next ending boundary, recurse only when the chosen segment is a palindrome, then undo the segment.",
+          "code": "def solve(s):\n    out=[]; path=[]\n    def dfs(start):\n        if start==len(s): out.append(path[:]); return\n        for end in range(start+1,len(s)+1):\n            part=s[start:end]\n            if part==part[::-1]: path.append(part); dfs(end); path.pop()\n    dfs(0)\n    return out\n",
+          "time": "O(n² 2ⁿ) conservative bound with slice checks",
+          "space": "O(n) recursion excluding output and slices"
+        }
+      ],
+      "starter": "def solve(s):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          "aab"
+        ],
+        "expected": [
+          [
+            "a",
+            "a",
+            "b"
+          ],
+          [
+            "aa",
+            "b"
+          ]
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/palindrome-partitioning/"
+    },
+    {
+      "id": "37",
+      "title": "Sudoku Solver",
+      "slug": "sudoku-solver",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Hash Table",
+          "slug": "hash-table"
+        },
+        {
+          "name": "Backtracking",
+          "slug": "backtracking"
+        },
+        {
+          "name": "Matrix",
+          "slug": "matrix"
+        },
+        {
+          "name": "Algorithm X",
+          "slug": "algorithm-x"
+        },
+        {
+          "name": "Dancing Links",
+          "slug": "dancing-links"
+        }
+      ],
+      "description": "Fill a valid 9×9 Sudoku board containing digits \"1\"..\"9\" and \".\" blanks. A unique solution exists. Return the solved board for study.",
+      "examples": [
+        {
+          "input": "[[[\"5\", \"3\", \"4\", \"6\", \"7\", \"8\", \"9\", \"1\", \".\"], [\"6\", \"7\", \"2\", \"1\", \"9\", \"5\", \"3\", \"4\", \"8\"], [\"1\", \"9\", \"8\", \"3\", \"4\", \"2\", \"5\", \"6\", \"7\"], [\"8\", \"5\", \"9\", \"7\", \"6\", \"1\", \"4\", \"2\", \"3\"], [\"4\", \"2\", \"6\", \"8\", \"5\", \"3\", \"7\", \"9\", \"1\"], [\"7\", \"1\", \"3\", \"9\", \"2\", \"4\", \"8\", \"5\", \"6\"], [\"9\", \"6\", \"1\", \"5\", \"3\", \"7\", \"2\", \"8\", \"4\"], [\"2\", \"8\", \"7\", \"4\", \"1\", \"9\", \"6\", \"3\", \"5\"], [\"3\", \"4\", \"5\", \"2\", \"8\", \"6\", \"1\", \"7\", \"9\"]]]",
+          "output": "[[\"5\", \"3\", \"4\", \"6\", \"7\", \"8\", \"9\", \"1\", \"2\"], [\"6\", \"7\", \"2\", \"1\", \"9\", \"5\", \"3\", \"4\", \"8\"], [\"1\", \"9\", \"8\", \"3\", \"4\", \"2\", \"5\", \"6\", \"7\"], [\"8\", \"5\", \"9\", \"7\", \"6\", \"1\", \"4\", \"2\", \"3\"], [\"4\", \"2\", \"6\", \"8\", \"5\", \"3\", \"7\", \"9\", \"1\"], [\"7\", \"1\", \"3\", \"9\", \"2\", \"4\", \"8\", \"5\", \"6\"], [\"9\", \"6\", \"1\", \"5\", \"3\", \"7\", \"2\", \"8\", \"4\"], [\"2\", \"8\", \"7\", \"4\", \"1\", \"9\", \"6\", \"3\", \"5\"], [\"3\", \"4\", \"5\", \"2\", \"8\", \"6\", \"1\", \"7\", \"9\"]]",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "backtracking-enumeration-constraint-search-minimum-remaining-values-sudoku-search"
+      ],
+      "solutions": [
+        {
+          "patternId": "backtracking-enumeration-constraint-search-minimum-remaining-values-sudoku-search",
+          "title": "Minimum-remaining-values Sudoku search",
+          "language": "Python",
+          "approach": "Track used digits for each row, column, and box. At every step select the empty cell with fewest available candidates, then try and undo each candidate.",
+          "code": "def solve(board):\n    rows=[set() for _ in range(9)]; cols=[set() for _ in range(9)]; boxes=[set() for _ in range(9)]; empty=[]; digits=set('123456789')\n    for r in range(9):\n        for c in range(9):\n            ch=board[r][c]\n            if ch=='.': empty.append((r,c))\n            else: rows[r].add(ch); cols[c].add(ch); boxes[r//3*3+c//3].add(ch)\n    def choices(cell):\n        r,c=cell; return digits-rows[r]-cols[c]-boxes[r//3*3+c//3]\n    def dfs(i):\n        if i==len(empty): return True\n        j=min(range(i,len(empty)),key=lambda j:len(choices(empty[j])))\n        empty[i],empty[j]=empty[j],empty[i]; r,c=empty[i]; b=r//3*3+c//3\n        for ch in choices((r,c)):\n            board[r][c]=ch; rows[r].add(ch); cols[c].add(ch); boxes[b].add(ch)\n            if dfs(i+1): return True\n            rows[r].remove(ch); cols[c].remove(ch); boxes[b].remove(ch); board[r][c]='.'\n        empty[i],empty[j]=empty[j],empty[i]\n        return False\n    dfs(0)\n    return board\n",
+          "time": "O(9ᴱ × E) upper bound for E empty cells",
+          "space": "O(E + 81)"
+        }
+      ],
+      "starter": "def solve(board):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            [
+              "5",
+              "3",
+              "4",
+              "6",
+              "7",
+              "8",
+              "9",
+              "1",
+              "."
+            ],
+            [
+              "6",
+              "7",
+              "2",
+              "1",
+              "9",
+              "5",
+              "3",
+              "4",
+              "8"
+            ],
+            [
+              "1",
+              "9",
+              "8",
+              "3",
+              "4",
+              "2",
+              "5",
+              "6",
+              "7"
+            ],
+            [
+              "8",
+              "5",
+              "9",
+              "7",
+              "6",
+              "1",
+              "4",
+              "2",
+              "3"
+            ],
+            [
+              "4",
+              "2",
+              "6",
+              "8",
+              "5",
+              "3",
+              "7",
+              "9",
+              "1"
+            ],
+            [
+              "7",
+              "1",
+              "3",
+              "9",
+              "2",
+              "4",
+              "8",
+              "5",
+              "6"
+            ],
+            [
+              "9",
+              "6",
+              "1",
+              "5",
+              "3",
+              "7",
+              "2",
+              "8",
+              "4"
+            ],
+            [
+              "2",
+              "8",
+              "7",
+              "4",
+              "1",
+              "9",
+              "6",
+              "3",
+              "5"
+            ],
+            [
+              "3",
+              "4",
+              "5",
+              "2",
+              "8",
+              "6",
+              "1",
+              "7",
+              "9"
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            "5",
+            "3",
+            "4",
+            "6",
+            "7",
+            "8",
+            "9",
+            "1",
+            "2"
+          ],
+          [
+            "6",
+            "7",
+            "2",
+            "1",
+            "9",
+            "5",
+            "3",
+            "4",
+            "8"
+          ],
+          [
+            "1",
+            "9",
+            "8",
+            "3",
+            "4",
+            "2",
+            "5",
+            "6",
+            "7"
+          ],
+          [
+            "8",
+            "5",
+            "9",
+            "7",
+            "6",
+            "1",
+            "4",
+            "2",
+            "3"
+          ],
+          [
+            "4",
+            "2",
+            "6",
+            "8",
+            "5",
+            "3",
+            "7",
+            "9",
+            "1"
+          ],
+          [
+            "7",
+            "1",
+            "3",
+            "9",
+            "2",
+            "4",
+            "8",
+            "5",
+            "6"
+          ],
+          [
+            "9",
+            "6",
+            "1",
+            "5",
+            "3",
+            "7",
+            "2",
+            "8",
+            "4"
+          ],
+          [
+            "2",
+            "8",
+            "7",
+            "4",
+            "1",
+            "9",
+            "6",
+            "3",
+            "5"
+          ],
+          [
+            "3",
+            "4",
+            "5",
+            "2",
+            "8",
+            "6",
+            "1",
+            "7",
+            "9"
+          ]
+        ]
+      },
+      "sourceUrl": "https://leetcode.com/problems/sudoku-solver/"
+    },
+    {
+      "id": "42",
+      "title": "Trapping Rain Water",
+      "slug": "trapping-rain-water",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Two Pointers",
+          "slug": "two-pointers"
+        },
+        {
+          "name": "Dynamic Programming",
+          "slug": "dynamic-programming"
+        },
+        {
+          "name": "Stack",
+          "slug": "stack"
+        },
+        {
+          "name": "Monotonic Stack",
+          "slug": "monotonic-stack"
+        }
+      ],
+      "description": "Given nonnegative bar heights of width one, return the total trapped rainwater.",
+      "examples": [
+        {
+          "input": "[[0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]]",
+          "output": "6",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "two-pointers-windows-opposing-forward-pointers-resolve-water-from-the-lower-boundary"
+      ],
+      "solutions": [
+        {
+          "patternId": "two-pointers-windows-opposing-forward-pointers-resolve-water-from-the-lower-boundary",
+          "title": "Resolve water from the lower boundary",
+          "language": "Python",
+          "approach": "Track the highest wall reached from each side. Resolve the side with smaller known maximum, since the opposite side already provides enough containment.",
+          "code": "def solve(height):\n    left,right=0,len(height)-1; left_max=right_max=water=0\n    while left<=right:\n        if left_max<=right_max:\n            left_max=max(left_max,height[left]); water+=left_max-height[left]; left+=1\n        else:\n            right_max=max(right_max,height[right]); water+=right_max-height[right]; right-=1\n    return water\n",
+          "time": "O(n)",
+          "space": "O(1)"
+        }
+      ],
+      "starter": "def solve(height):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            1,
+            3,
+            2,
+            1,
+            2,
+            1
+          ]
+        ],
+        "expected": 6
+      },
+      "sourceUrl": "https://leetcode.com/problems/trapping-rain-water/"
+    },
+    {
+      "id": "1092",
+      "title": "Shortest Common Supersequence ",
+      "slug": "shortest-common-supersequence",
+      "difficulty": "Hard",
+      "premium": false,
+      "tags": [
+        {
+          "name": "String",
+          "slug": "string"
+        },
+        {
+          "name": "Dynamic Programming",
+          "slug": "dynamic-programming"
+        },
+        {
+          "name": "Longest Common Subsequence",
+          "slug": "longest-common-subsequence"
+        }
+      ],
+      "description": "Return a shortest string containing both str1 and str2 as subsequences. Any shortest answer is valid.",
+      "examples": [
+        {
+          "input": "[\"abac\", \"cab\"]",
+          "output": "\"cabac\"",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "dynamic-programming-grids-multiple-sequences-reconstruct-an-optimal-sequence"
+      ],
+      "solutions": [
+        {
+          "patternId": "dynamic-programming-grids-multiple-sequences-reconstruct-an-optimal-sequence",
+          "title": "Reconstruct an optimal sequence",
+          "language": "Python",
+          "approach": "Build an LCS-length table, then trace back: shared characters are written once; otherwise follow the better predecessor while emitting the skipped character.",
+          "code": "def solve(a,b):\n    m,n=len(a),len(b); dp=[[0]*(n+1) for _ in range(m+1)]\n    for i in range(1,m+1):\n        for j in range(1,n+1): dp[i][j]=1+dp[i-1][j-1] if a[i-1]==b[j-1] else max(dp[i-1][j],dp[i][j-1])\n    i,j=m,n; out=[]\n    while i and j:\n        if a[i-1]==b[j-1]: out.append(a[i-1]); i-=1; j-=1\n        elif dp[i-1][j]>=dp[i][j-1]: out.append(a[i-1]); i-=1\n        else: out.append(b[j-1]); j-=1\n    return a[:i]+b[:j]+''.join(reversed(out))\n",
+          "time": "O(mn)",
+          "space": "O(mn)"
+        }
+      ],
+      "starter": "def solve(a,b):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          "abac",
+          "cab"
+        ],
+        "expected": "cabac"
+      },
+      "sourceUrl": "https://leetcode.com/problems/shortest-common-supersequence/"
+    },
+    {
+      "id": "1024",
+      "title": "Video Stitching",
+      "slug": "video-stitching",
+      "difficulty": "Medium",
+      "premium": false,
+      "tags": [
+        {
+          "name": "Array",
+          "slug": "array"
+        },
+        {
+          "name": "Dynamic Programming",
+          "slug": "dynamic-programming"
+        },
+        {
+          "name": "Greedy",
+          "slug": "greedy"
+        }
+      ],
+      "description": "Select the fewest video clips [start,end] whose union covers [0,time]. Clips may be trimmed. Return −1 when coverage is impossible.",
+      "examples": [
+        {
+          "input": "[[[0, 2], [4, 6], [8, 10], [1, 9], [1, 5], [5, 9]], 10]",
+          "output": "3",
+          "note": ""
+        }
+      ],
+      "constraints": "Use the problem-specific input contract described above. See LeetCode for the complete official constraints.",
+      "patternIds": [
+        "greedy-intervals-interval-decisions-greedy-interval-covering"
+      ],
+      "solutions": [
+        {
+          "patternId": "greedy-intervals-interval-decisions-greedy-interval-covering",
+          "title": "Greedy interval covering",
+          "language": "Python",
+          "approach": "Among all clips beginning at or before the current covered endpoint, choose the one extending farthest. Repeat from that endpoint.",
+          "code": "def solve(clips,time):\n    clips=sorted(clips); current=cursor=count=0\n    while current<time:\n        farthest=current\n        while cursor<len(clips) and clips[cursor][0]<=current:\n            farthest=max(farthest,clips[cursor][1]); cursor+=1\n        if farthest==current: return -1\n        current=farthest; count+=1\n    return count\n",
+          "time": "O(n log n)",
+          "space": "O(n)"
+        }
+      ],
+      "starter": "def solve(clips,time):\n    # State the invariant before you write the loop.\n    pass\n",
+      "test": {
+        "args": [
+          [
+            [
+              0,
+              2
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              8,
+              10
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              5,
+              9
+            ]
+          ],
+          10
+        ],
+        "expected": 3
+      },
+      "sourceUrl": "https://leetcode.com/problems/video-stitching/"
     }
   ]
 }

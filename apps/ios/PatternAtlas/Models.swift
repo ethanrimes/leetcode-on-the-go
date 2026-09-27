@@ -76,12 +76,17 @@ struct PatternNode: Codable, Identifiable, Hashable {
     let priority: String
     let description: String
     let approach: String
+    let pseudocode: TechniquePseudocode?
     let tips: [String]
     let why: String
     let sourceUrls: [String]
     let references: [ReferenceSection]
     let problemIds: [String]?
     let sourceTitle: String?
+}
+struct TechniquePseudocode: Codable, Hashable {
+    let code: String
+    let example: String?
 }
 struct ReferenceSection: Codable, Hashable {
     let title: String

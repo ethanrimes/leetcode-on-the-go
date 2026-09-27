@@ -12,7 +12,7 @@ problems = {}
 def slug(text):
     return re.sub(r'[^a-z0-9]+', '-', text.lower()).strip('-')
 
-def category(path, description, approach, tips, topic, level='Intermediate', priority='Core'):
+def category(path, description, approach, tips, topic, level='Intermediate', priority='Core', pseudocode='', pseudocode_example=''):
     parts = path.split(' / ')
     key = slug(path)
     nodes.append(dict(id=key, parentId=slug(' / '.join(parts[:-1])) if len(parts)>1 else None,
@@ -20,9 +20,11 @@ def category(path, description, approach, tips, topic, level='Intermediate', pri
         description=description, approach=approach, tips=tips,
         why='Master these building blocks before combining them with other techniques.' if priority=='Core' else 'Learn this family after the core patterns to handle more specialized constraints.',
         sourceUrls=[f'https://leetcode.com/tag/{topic}/']))
+    if pseudocode:
+        nodes[-1]['pseudocode'] = dict(code=textwrap.dedent(pseudocode).strip(), example=textwrap.dedent(pseudocode_example).strip())
     return key
 
-def card(path, title, number, level, priority, cue, insight, pitfall, description, args, expected, code, time, space, constraints='', example_note=''):
+def card(path, title, number, level, priority, cue, insight, pitfall, description, args, expected, code, time, space, constraints='', example_note='', pseudocode='', pseudocode_example=''):
     parent = slug(path)
     assert any(n['id']==parent for n in nodes), path
     key = slug(path+' / '+title)
@@ -30,6 +32,8 @@ def card(path, title, number, level, priority, cue, insight, pitfall, descriptio
         description=cue, approach=insight, tips=[pitfall],
         why={'Core':'A reusable foundation: learn the invariant, then recognize it across different stories.', 'Useful':'Adds a new decision rule to your toolkit; study after the foundational patterns.', 'Specialist':'Useful when tighter constraints defeat the standard approach. Learn the prerequisites first.'}[priority],
         sourceUrls=[f'https://leetcode.com/problems/{catalog[str(number)]["slug"]}/']))
+    if pseudocode:
+        nodes[-1]['pseudocode'] = dict(code=textwrap.dedent(pseudocode).strip(), example=textwrap.dedent(pseudocode_example).strip())
     code=textwrap.dedent(code).strip()+'\n'
     signature=next(line for line in code.splitlines() if line.startswith('def solve('))
     solution=dict(patternId=key,title=title,language='Python',approach=insight,code=code,time=time,space=space)

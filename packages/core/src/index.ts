@@ -5,6 +5,7 @@ export interface ReferenceSection { title: string; url: string; problemIds: stri
 export interface CurriculumNode {
   id: string; parentId: string | null; title: string; kind: 'category' | 'pattern' | 'collection';
   problemIds?: string[]; sourceTitle?: string;
+  pseudocode?: {code: string; example?: string};
   level: Level; priority: 'Core' | 'Useful' | 'Specialist'; description: string;
   approach: string; tips: string[]; why: string; sourceUrls: string[]; references: ReferenceSection[];
 }

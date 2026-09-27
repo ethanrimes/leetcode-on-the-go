@@ -1,22 +1,26 @@
-import AppKit
+import CoreGraphics
+import ImageIO
+import UniformTypeIdentifiers
 import Foundation
 
 let size = 1024
-let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: size, pixelsHigh: size, bitsPerSample: 8, samplesPerPixel: 3, hasAlpha: false, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
-NSGraphicsContext.saveGraphicsState()
-NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
-NSColor(calibratedRed: 0.09, green: 0.19, blue: 0.15, alpha: 1).setFill()
-NSBezierPath(rect: NSRect(x: 0, y: 0, width: size, height: size)).fill()
-NSColor(calibratedRed: 0.83, green: 0.93, blue: 0.67, alpha: 1).setStroke()
+let context = CGContext(data: nil, width: size, height: size, bitsPerComponent: 8, bytesPerRow: size * 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)!
+context.setFillColor(CGColor(red: 0.09, green: 0.11, blue: 0.15, alpha: 1))
+context.fill(CGRect(x: 0, y: 0, width: size, height: size))
+context.setStrokeColor(CGColor(red: 0.60, green: 0.72, blue: 1.0, alpha: 1))
+context.setLineWidth(35)
+context.setLineJoin(.round)
+context.setLineCap(.round)
 for offset in [0.0, -115.0, -230.0] {
-    let path = NSBezierPath()
-    path.lineWidth = 35; path.lineJoinStyle = .round; path.lineCapStyle = .round
-    path.move(to: NSPoint(x: 250, y: 610 + offset))
-    path.line(to: NSPoint(x: 512, y: 740 + offset))
-    path.line(to: NSPoint(x: 774, y: 610 + offset))
-    path.line(to: NSPoint(x: 512, y: 480 + offset))
-    path.close(); path.stroke()
+    context.move(to: CGPoint(x: 250, y: 610 + offset))
+    context.addLine(to: CGPoint(x: 512, y: 740 + offset))
+    context.addLine(to: CGPoint(x: 774, y: 610 + offset))
+    context.addLine(to: CGPoint(x: 512, y: 480 + offset))
+    context.closePath()
+    context.strokePath()
 }
-NSGraphicsContext.restoreGraphicsState()
-let destination = CommandLine.arguments[1]
-try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: destination))
+let image = context.makeImage()!
+let url = URL(fileURLWithPath: CommandLine.arguments[1])
+let destination = CGImageDestinationCreateWithURL(url as CFURL, UTType.png.identifier as CFString, 1, nil)!
+CGImageDestinationAddImage(destination, image, nil)
+precondition(CGImageDestinationFinalize(destination))

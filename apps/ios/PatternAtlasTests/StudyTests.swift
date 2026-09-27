@@ -48,4 +48,20 @@ final class StudyTests: XCTestCase {
         XCTAssertEqual(store.progress.drafts["1"], "local")
         XCTAssertEqual(store.progress.drafts["2"], "new")
     }
+    @MainActor func testExpandedCollectionsSortingAndAttribution() throws {
+        let store = StudyStore(defaults: try XCTUnwrap(UserDefaults(suiteName: "PatternAtlas.ContentTests")))
+        let data = try XCTUnwrap(store.curriculum)
+        XCTAssertGreaterThan(data.problems.count, 2800)
+        XCTAssertGreaterThan(data.catalog.count, 4000)
+        let entries = data.entries(for: "practice-0viNMK-0")
+        XCTAssertTrue(entries.contains { $0.id == "643" })
+        XCTAssertFalse(entries.contains { $0.id == "1" })
+        let sorted = ProblemOrder.numberDescending.sorted(entries)
+        let ids = sorted.compactMap { Int($0.id) }
+        XCTAssertEqual(ids, ids.sorted(by: >))
+        let card = try XCTUnwrap(data.problems.first { $0.id == "13" })
+        XCTAssertEqual(card.origin, "community")
+        XCTAssertEqual(card.solutions.first?.attribution?.license, "MIT")
+        XCTAssertTrue(card.solutions.first?.code.contains("romanToInt") == true)
+    }
 }

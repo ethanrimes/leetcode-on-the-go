@@ -4,7 +4,8 @@ Reviewed 2026-09-27. This document distinguishes worked lessons from source refe
 
 ## Published curriculum
 
-- 249 hierarchy nodes: 49 categories (including 12 topic roots) and 200 individual patterns; 193 unique worked problems.
+- 704 hierarchy nodes, including 12 topic roots, 200 authored patterns, and 313 source-guide practice collections.
+- 2,909 unique problems with local solutions: 193 authored lessons and 2,716 additional community cards. See [PROBLEM_LIBRARY.md](PROBLEM_LIBRARY.md) for collection membership and source provenance.
 - 200 independently authored Python implementations, each checked against its example.
 - 4,068 factual problem references from LeetCode’s algorithms catalog snapshot.
 - 3,629 catalog entries matched current official topic metadata; unmatched entries remain searchable without invented tags.
@@ -19,13 +20,13 @@ Examples of important distinctions preserved: fixed versus variable windows; lon
 
 ### Remaining specialist extensions
 
-The three references are living resources, not a finite universal definition of every algorithmic pattern. This edition does **not** claim literal exhaustiveness. Further contest-focused lessons remain for persistent/rollback structures, Mo’s algorithm, splay trees, heavy-light and centroid decomposition, virtual trees, tree knapsack, convex-hull-trick and WQS DP, general max-flow/min-cost-flow, suffix automata, XOR linear bases, Möbius inversion, FFT/NTT/FWT, and generating functions. Related source sections remain indexed rather than being presented as completed lessons.
+The three references are living resources, not a finite universal definition of every algorithmic pattern. This edition does **not** claim literal exhaustiveness. Further contest-focused lessons remain for persistent/rollback structures, Mo’s algorithm, splay trees, heavy-light and centroid decomposition, virtual trees, tree knapsack, convex-hull-trick and WQS DP, general max-flow/min-cost-flow, suffix automata, XOR linear bases, Möbius inversion, FFT/NTT/FWT, and generating functions. Related source sections are now browsable practice collections, and many include attributed community implementations. They remain distinct from fully authored pattern lessons.
 
 SQL/database, shell, concurrency, and language-specific API exercises are separate tracks outside this algorithm-focused edition. These boundaries are visible in both apps.
 
 ## Official LeetCode tags
 
-Every official tag is accounted for below. “Represented” identifies worked examples carrying the official tag; manual mappings identify aliases or techniques intentionally used by our own implementation.
+The following original authored-lesson audit accounts for every official tag. Community additions do not silently change these authored-coverage claims. “Represented” identifies worked examples carrying the official tag; manual mappings identify aliases or techniques intentionally used by our own implementation.
 
 | Official tag | Coverage | Worked anchor IDs or technique |
 |---|---|---|

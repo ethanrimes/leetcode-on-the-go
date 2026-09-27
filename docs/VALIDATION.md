@@ -5,20 +5,21 @@ Verified on 2026-09-27. These results describe observed checks, not a guarantee 
 | Check | Observed result |
 | --- | --- |
 | Production web build | Passed TypeScript and Vite production compilation |
-| Curriculum integrity | 249 nodes: 49 categories (including 12 roots), 200 worked leaf patterns, 193 unique problems; references, hierarchy, and bundled web/iOS parity passed |
+| Curriculum integrity | 704 nodes: 12 roots, 200 authored patterns, 313 source practice collections, 2,909 problems with solutions; references, hierarchy, and bundled web/iOS parity passed |
+| Community integrity | 2,716 additional cards passed Python syntax, source SHA-256, attribution, and membership checks; imported code was not executed |
 | Authored solution examples | All 200 pattern examples passed |
 | Seeded algorithm checks | 1,355 differential/property checks passed, covering prefix counting, subarray/window methods, monotonic structures, string algorithms, range queries, lazy propagation, SCCs, and LFU eviction |
-| Shared study logic | 5 tests passed for scheduling, filtered queues, and backup validation/merge |
-| Local browser flows | 12 Playwright tests passed across desktop and mobile viewports |
-| Deployed browser flows | The same 12 Playwright tests passed against the Azure production URL |
-| Native iOS | 5 tests passed on iPhone 17 Pro Simulator, iOS 26.1: 4 model/storage/scheduling tests and 1 UI test exercising reveal and recall rating |
+| Shared study logic | 7 tests passed for scheduling, filtered queues, backup validation/merge, collection membership, and sorting |
+| Local browser flows | 16 Playwright tests passed across desktop and mobile viewports |
+| Deployed browser flows | The same 16 Playwright tests passed against the Azure production URL |
+| Native iOS | 7 tests passed on iPhone 17 Pro Simulator, iOS 26.1: 5 model/content/storage/scheduling tests and 2 UI tests exercising authored review and community search/reveal/attribution |
 | Azure content | HTTPS returned 200; hosted curriculum matched the repository content byte for byte |
 
 Live deployment: [Pattern Atlas](https://blue-sea-0c03ac51e.3.azurestaticapps.net).
 
-The browser flows exercise four-level category navigation, solution reveal, draft persistence after reload, bookmarks, recall ratings, hidden answers in review, catalog search, official execution links, backup validation/merge, responsive navigation, and horizontal overflow. Native tests include decoding the bundled curriculum, persistence, and the portable backup format.
+The browser flows exercise four-level category navigation, solution reveal, draft persistence after reload, bookmarks, recall ratings, hidden answers in review, catalog search, official execution links, backup validation/merge, responsive navigation, and horizontal overflow. Native tests include decoding the expanded offline curriculum, numeric sorting, community attribution, persistence, and the portable backup format.
 
-Visual inspection covered the desktop and mobile web layout and the native simulator home screen. The web editor is loaded separately from the initial page, and font files are served locally.
+Visual inspection covered the desktop and mobile web layout and the native simulator home screen. The web editor is loaded separately from the initial page, and the Graphite theme uses system fonts.
 
 ## Reproduce
 

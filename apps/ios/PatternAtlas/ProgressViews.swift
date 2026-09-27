@@ -66,9 +66,10 @@ struct CurriculumNotesView: View {
         List {
             Section("The study loop") { Text("Recognize the pattern, state its invariant, draft a solution, reveal the explanation, and rate your recall. Pattern levels describe learning complexity; LeetCode difficulty describes the problem.").font(.subheadline).lineSpacing(5) }
             Section("Source audit") {
-                Text("The curriculum draws on all 12 EndlessCheng guide outlines, labuladong’s full algorithm directory and learning plans, and official LeetCode topic tags. The summaries, explanations, and code are independently authored.").font(.caption).lineSpacing(4)
+                Text("The curriculum draws on all 12 EndlessCheng guide outlines, labuladong’s full algorithm directory and learning plans, and official LeetCode topic tags. The core lessons are independently authored. Additional Python implementations are imported from walkccc under MIT, with attribution and source links on every solution.").font(.caption).lineSpacing(4)
                 Link("EndlessCheng’s algorithm directory", destination: URL(string: "https://github.com/EndlessCheng/codeforces-go")!)
                 Link("labuladong’s learning plan", destination: URL(string: "https://labuladong.online/en/algo/intro/quick-learning-plan/")!)
+                Link("Community solutions · walkccc · MIT", destination: URL(string: "https://github.com/walkccc/LeetCode")!)
                 Link("LeetCode problem catalog", destination: URL(string: "https://leetcode.com/problemset/")!)
             }
             Section("Coverage") {

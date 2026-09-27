@@ -12,6 +12,7 @@
 		39E8B51A940CCD2113DAE81C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40AA065A7ED0D5F9F425C12C /* Assets.xcassets */; };
 		4A955EC5102E39E657AD05F8 /* curriculum.json in Resources */ = {isa = PBXBuildFile; fileRef = FE5CA659726FAC6E32BB48E4 /* curriculum.json */; };
 		5772C721B1A1052AAB3A1351 /* ProgressViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */; };
+		5AEDAA1A89AB1D189E3BF200 /* walkccc-MIT.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3AB5E78449629874580A1B84 /* walkccc-MIT.txt */; };
 		6973CDB566319FE4BB5F8960 /* StudyViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0214829F5B5F573090F439CA /* StudyViews.swift */; };
 		98EC99393D70B111C5FE4530 /* LibraryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */; };
 		BFBB2B8680E8C434C7FEE3E0 /* PatternAtlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD385A1BF167A49418CC3E8 /* PatternAtlasApp.swift */; };
@@ -41,6 +42,7 @@
 		10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViews.swift; sourceTree = "<group>"; };
 		224B98FF28FF46558D8846F5 /* PatternAtlasTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PatternAtlasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37539AE4596B6529C8A95FF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3AB5E78449629874580A1B84 /* walkccc-MIT.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "walkccc-MIT.txt"; sourceTree = "<group>"; };
 		40AA065A7ED0D5F9F425C12C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6259CEED717D04BC7B76D3AB /* StudyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyTests.swift; sourceTree = "<group>"; };
 		6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyFlowTests.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				FE5CA659726FAC6E32BB48E4 /* curriculum.json */,
+				3AB5E78449629874580A1B84 /* walkccc-MIT.txt */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -210,6 +213,7 @@
 			files = (
 				39E8B51A940CCD2113DAE81C /* Assets.xcassets in Resources */,
 				4A955EC5102E39E657AD05F8 /* curriculum.json in Resources */,
+				5AEDAA1A89AB1D189E3BF200 /* walkccc-MIT.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

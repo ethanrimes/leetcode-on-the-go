@@ -3,7 +3,8 @@ export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 export type Rating = 'again' | 'hard' | 'good' | 'easy';
 export interface ReferenceSection { title: string; url: string; problemIds: string[] }
 export interface CurriculumNode {
-  id: string; parentId: string | null; title: string; kind: 'category' | 'pattern';
+  id: string; parentId: string | null; title: string; kind: 'category' | 'pattern' | 'collection';
+  problemIds?: string[]; sourceTitle?: string;
   level: Level; priority: 'Core' | 'Useful' | 'Specialist'; description: string;
   approach: string; tips: string[]; why: string; sourceUrls: string[]; references: ReferenceSection[];
 }
@@ -12,13 +13,15 @@ export interface CatalogProblem {
   tags?: {name: string; slug: string}[];
 }
 export interface Solution {
+  attribution?: {author: string; license: string; url: string; commit: string; sha256: string};
   patternId: string; title: string; language: string; approach: string; code: string; time: string; space: string;
 }
 export interface Problem extends CatalogProblem {
+  origin?: 'authored' | 'community'; collectionIds?: string[];
   description: string; examples: {input: string; output: string; note: string}[]; constraints: string;
   patternIds: string[]; solutions: Solution[]; starter: string; sourceUrl: string;
 }
-export interface Curriculum {version: number; updatedAt: string; language: string; nodes: CurriculumNode[]; problems: Problem[]}
+export interface Curriculum {catalog?: CatalogProblem[]; stats?: {authoredProblems:number;communityProblems:number;sourceCollections:number}; version: number; updatedAt: string; language: string; nodes: CurriculumNode[]; problems: Problem[]}
 export interface Review {
   repetitions: number; lapses: number; interval: number; due: string; lastReviewed: string; rating: Rating;
 }
@@ -62,12 +65,12 @@ export function breadcrumbs(nodes: CurriculumNode[], id: string): CurriculumNode
   return result;
 }
 export const problemsFor = (data: Curriculum, id: string) => {
-  const ids = descendants(data.nodes, id); return data.problems.filter(p => p.patternIds.some(pattern => ids.has(pattern)));
+  const ids = descendants(data.nodes, id); return data.problems.filter(p => [...p.patternIds,...(p.collectionIds??[])].some(pattern => ids.has(pattern)));
 };
 export function studyQueue(data: Curriculum, progress: Progress, options: {nodeId?: string; limit?: number; now?: Date} = {}) {
   const now = (options.now ?? new Date()).getTime();
   const ids = options.nodeId ? descendants(data.nodes, options.nodeId) : undefined;
-  return data.problems.flatMap(problem => problem.patternIds.filter(id => !ids || ids.has(id)).map(patternId => ({problem, patternId, key: cardKey(problem.id, patternId)})))
+  return data.problems.flatMap(problem => problem.patternIds.filter(id => !ids || ids.has(id) || problem.collectionIds?.some(collection=>ids.has(collection))).map(patternId => ({problem, patternId, key: cardKey(problem.id, patternId)})))
     .filter(c => !progress.cards[c.key] || Date.parse(progress.cards[c.key].due) <= now)
     .sort((a,b) => {
       const x=progress.cards[a.key], y=progress.cards[b.key];
@@ -100,4 +103,28 @@ export function parseProgress(raw: string): Progress {
     result.activity[day]=count;
   }
   return result;
+}
+
+export type ProblemOrder = 'difficulty' | 'difficulty-desc' | 'number' | 'number-desc' | 'title';
+export const problemOrders: {value:ProblemOrder; label:string}[] = [
+  {value:'difficulty',label:'Difficulty: easy to hard'}, {value:'difficulty-desc',label:'Difficulty: hard to easy'},
+  {value:'number',label:'Problem number: ascending'}, {value:'number-desc',label:'Problem number: descending'},
+  {value:'title',label:'Title: A–Z'},
+];
+export function sortProblems<T extends CatalogProblem>(problems: readonly T[], order: ProblemOrder): T[] {
+  const rank={Easy:0,Medium:1,Hard:2};
+  const number=(a:T,b:T)=>a.id.localeCompare(b.id,'en',{numeric:true});
+  return [...problems].sort((a,b)=>{
+    if(order==='title') return a.title.localeCompare(b.title,'en')||number(a,b);
+    if(order==='number'||order==='number-desc') return number(a,b)*(order==='number-desc'?-1:1);
+    return (rank[a.difficulty]-rank[b.difficulty])*(order==='difficulty-desc'?-1:1)||number(a,b);
+  });
+}
+/** Source membership is explicit. Related source sections are not exact-pattern claims. */
+export function libraryEntriesFor(data: Curriculum, nodeId?: string): CatalogProblem[] {
+  if(!nodeId) return data.catalog??data.problems;
+  const scope=descendants(data.nodes,nodeId);
+  const ids=new Set(problemsFor(data,nodeId).map(p=>p.id));
+  for(const node of data.nodes) if(scope.has(node.id)) for(const id of node.problemIds??[]) ids.add(id);
+  return (data.catalog??data.problems).filter(p=>ids.has(p.id));
 }

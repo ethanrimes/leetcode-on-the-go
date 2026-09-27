@@ -5,7 +5,7 @@ struct LibraryView: View {
     @State private var search = ""
     @State private var level = "All levels"
     var filtered: [PatternNode] {
-        data.patterns.filter { (level == "All levels" || $0.level == level) && (search.isEmpty || "\($0.title) \($0.description) \($0.id)".localizedCaseInsensitiveContains(search)) }
+        data.nodes.filter { $0.kind != "category" && (level == "All levels" || $0.level == level) && (search.isEmpty || "\($0.title) \($0.description) \($0.id)".localizedCaseInsensitiveContains(search)) }
     }
     var body: some View {
         List {
@@ -37,7 +37,6 @@ struct NodeDetailView: View {
     let data: Curriculum
     let node: PatternNode
     @State private var review = false
-    @State private var difficulty = "All"
     var body: some View {
         List {
             Section {
@@ -63,15 +62,8 @@ struct NodeDetailView: View {
             }
             Section {
                 Button { review = true } label: { Label("Study this topic", systemImage: "square.stack.3d.up").font(.subheadline.weight(.semibold)) }.accessibilityIdentifier("studyTopic")
-                Picker("Problem difficulty", selection: $difficulty) { ForEach(["All", "Easy", "Medium", "Hard"], id: \.self) { Text($0) } }
             }
-            Section("Worked problems") {
-                let problems = data.problems(for: node.id).filter { difficulty == "All" || $0.difficulty == difficulty }
-                ForEach(problems) { problem in
-                    NavigationLink { ProblemDetailView(data: data, problem: problem, initialPattern: node.kind == "pattern" ? node.id : nil) } label: { ProblemRow(problem: problem) }
-                }
-                if problems.isEmpty { Text("No worked problems at this difficulty. Try another filter.").font(.caption).foregroundStyle(.secondary) }
-            }
+            ProblemCollectionSection(data: data, nodeId: node.id)
             Section("Reference reading") {
                 ForEach(Array(node.sourceUrls.enumerated()), id: \.element) { index, raw in
                     if let url = URL(string: raw) { Link(index == 0 ? "LeetCode reference ↗" : "EndlessCheng guide ↗", destination: url).font(.caption) }
@@ -99,18 +91,66 @@ struct ProblemRow: View {
 struct ProblemLibraryView: View {
     let data: Curriculum
     @State private var query = ""
-    @State private var difficulty = "All"
-    var results: [StudyProblem] {
-        data.problems.filter { (difficulty == "All" || $0.difficulty == difficulty) && (query.isEmpty || $0.title.localizedCaseInsensitiveContains(query) || $0.id == query || $0.solutions.contains { $0.title.localizedCaseInsensitiveContains(query) }) }
-    }
     var body: some View {
         List {
-            Section { Picker("Difficulty", selection: $difficulty) { ForEach(["All", "Easy", "Medium", "Hard"], id: \.self) { Text($0) } } }
-            Section("\(results.count) worked study cards") {
-                ForEach(results) { problem in NavigationLink { ProblemDetailView(data: data, problem: problem) } label: { ProblemRow(problem: problem) } }
+            ProblemCollectionSection(data: data, query: query)
+            Section { Text("\(data.problems.count.formatted()) problems with offline Python solutions. Official statements and reference-only entries open on LeetCode.").font(.caption).foregroundStyle(.secondary) }
+        }.navigationTitle("Problem index").searchable(text: $query, prompt: "Title or exact problem number")
+    }
+}
+
+struct ProblemCollectionSection: View {
+    let data: Curriculum
+    var nodeId: String? = nil
+    var query = ""
+    @State private var search = ""
+    @State private var difficulty = "All"
+    @State private var availability = "All problems"
+    @State private var limit = 50
+    @AppStorage private var orderRaw: String
+    init(data: Curriculum, nodeId: String? = nil, query: String = "") {
+        self.data = data; self.nodeId = nodeId; self.query = query
+        self._orderRaw = AppStorage(wrappedValue: ProblemOrder.difficulty.rawValue, "pattern-atlas.sort.\(nodeId ?? "all")")
+    }
+    var body: some View {
+        let worked = Dictionary(uniqueKeysWithValues: data.problems.map { ($0.id, $0) })
+        let text = (nodeId == nil ? query : search).trimmingCharacters(in: .whitespacesAndNewlines)
+        let entries = data.entries(for: nodeId).filter { p in
+            let card = worked[p.id]
+            let matchesText = text.isEmpty || (text.allSatisfy(\.isNumber) ? p.id == text : p.title.localizedCaseInsensitiveContains(text) || (p.tags ?? []).contains { $0.name.localizedCaseInsensitiveContains(text) })
+            let available = availability == "All problems" || (availability == "With solutions" ? card != nil : availability == "Authored lessons" ? card?.origin == "authored" : card == nil)
+            return matchesText && available && (difficulty == "All" || p.difficulty == difficulty)
+        }
+        let results = (ProblemOrder(rawValue: orderRaw) ?? .difficulty).sorted(entries)
+        Section("Problem filters") {
+            if nodeId != nil { TextField("Search title or number", text: $search).accessibilityIdentifier("collectionSearch") }
+            Picker("Difficulty", selection: $difficulty) { ForEach(["All", "Easy", "Medium", "Hard"], id: \.self) { Text($0) } }
+            Picker("Content", selection: $availability) { ForEach(["All problems", "With solutions", "Authored lessons", "Reference only"], id: \.self) { Text($0) } }
+            Picker("Sort problems", selection: $orderRaw) { ForEach(ProblemOrder.allCases, id: \.rawValue) { Text($0.label).tag($0.rawValue) } }.accessibilityIdentifier("sortProblems")
+        }
+        Section("\(results.count.formatted()) problems · \(results.filter { worked[$0.id] != nil }.count.formatted()) with solutions") {
+            if let nodeId, data.node(nodeId)?.kind == "pattern" {
+                Text("Authored lessons demonstrate this pattern. Related practice comes from the guide’s surrounding sections and may use neighboring techniques.").font(.caption).foregroundStyle(.secondary)
             }
-            if results.isEmpty { ContentUnavailableView.search(text: query) }
-            Section { Text("All worked cards are available offline. The complete LeetCode reference catalog is available in the web app.").font(.caption).foregroundStyle(.secondary) }
-        }.navigationTitle("Problems").searchable(text: $query, prompt: "Title, number, or pattern")
+            ForEach(Array(results.prefix(limit))) { p in
+                if let card = worked[p.id] {
+                    NavigationLink { ProblemDetailView(data: data, problem: card, initialPattern: card.patternIds.contains(nodeId ?? "") ? nodeId : nil) } label: { CatalogProblemRow(problem: p, kind: card.origin == "community" ? "Community solution" : "Authored lesson") }
+                } else if let url = URL(string: "https://leetcode.com/problems/\(p.slug)/") {
+                    Link(destination: url) { CatalogProblemRow(problem: p, kind: p.premium ? "Premium reference ↗" : "Reference only ↗") }
+                }
+            }
+            if results.isEmpty { Text("No matching problems. Try another filter.").font(.caption).foregroundStyle(.secondary) }
+            if results.count > limit { Button("Show 50 more · \(limit) of \(results.count)") { limit += 50 }.font(.caption) }
+        }
+    }
+}
+struct CatalogProblemRow: View {
+    let problem: CatalogProblem
+    let kind: String
+    var body: some View {
+        VStack(alignment: .leading, spacing: 9) {
+            Text("\(problem.id). \(problem.title)").font(.subheadline.weight(.medium)).foregroundStyle(.primary)
+            HStack { LevelBadge(text: problem.difficulty); Text(kind).font(.caption2).foregroundStyle(.secondary) }
+        }.padding(.vertical, 5)
     }
 }

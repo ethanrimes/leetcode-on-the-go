@@ -16,10 +16,13 @@
 		5772C721B1A1052AAB3A1351 /* ProgressViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */; };
 		5AEDAA1A89AB1D189E3BF200 /* walkccc-MIT.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3AB5E78449629874580A1B84 /* walkccc-MIT.txt */; };
 		6973CDB566319FE4BB5F8960 /* StudyViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0214829F5B5F573090F439CA /* StudyViews.swift */; };
+		93009669CAA75CBB8A351354 /* Diagnostic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79155EC7190FEEE3C7134819 /* Diagnostic.swift */; };
 		98EC99393D70B111C5FE4530 /* LibraryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */; };
 		9C8678711416D91F33ABE3B3 /* AnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98350982262ED217E6A2069 /* AnalyticsTests.swift */; };
 		BFBB2B8680E8C434C7FEE3E0 /* PatternAtlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD385A1BF167A49418CC3E8 /* PatternAtlasApp.swift */; };
+		CC3F979FFD582F5A3ACB8146 /* DiagnosticViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11045352F76555FF2A6A052E /* DiagnosticViews.swift */; };
 		D1E9362C74A0B7B41F169BBF /* StudyFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */; };
+		E0FA855E68C5A44AF728BAF2 /* DiagnosticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C9DA44D07891E9D746960E /* DiagnosticTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,12 +46,15 @@
 		0214829F5B5F573090F439CA /* StudyViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViews.swift; sourceTree = "<group>"; };
 		062415641DAC6603F8B3532E /* PatternAtlas.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PatternAtlas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViews.swift; sourceTree = "<group>"; };
+		11045352F76555FF2A6A052E /* DiagnosticViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticViews.swift; sourceTree = "<group>"; };
 		224B98FF28FF46558D8846F5 /* PatternAtlasTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PatternAtlasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37539AE4596B6529C8A95FF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3AB5E78449629874580A1B84 /* walkccc-MIT.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "walkccc-MIT.txt"; sourceTree = "<group>"; };
 		40AA065A7ED0D5F9F425C12C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6259CEED717D04BC7B76D3AB /* StudyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyTests.swift; sourceTree = "<group>"; };
+		68C9DA44D07891E9D746960E /* DiagnosticTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticTests.swift; sourceTree = "<group>"; };
 		6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyFlowTests.swift; sourceTree = "<group>"; };
+		79155EC7190FEEE3C7134819 /* Diagnostic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostic.swift; sourceTree = "<group>"; };
 		BBCB01B56C40189D1FA6C631 /* AnalyticsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViews.swift; sourceTree = "<group>"; };
 		C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViews.swift; sourceTree = "<group>"; };
 		D6C928AD370D9AD8086BCDF2 /* PatternAtlasUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PatternAtlasUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				F98350982262ED217E6A2069 /* AnalyticsTests.swift */,
+				68C9DA44D07891E9D746960E /* DiagnosticTests.swift */,
 				6259CEED717D04BC7B76D3AB /* StudyTests.swift */,
 			);
 			path = PatternAtlasTests;
@@ -112,6 +119,8 @@
 				DC08EC211325CCEA2554B665 /* Analytics.swift */,
 				BBCB01B56C40189D1FA6C631 /* AnalyticsViews.swift */,
 				40AA065A7ED0D5F9F425C12C /* Assets.xcassets */,
+				79155EC7190FEEE3C7134819 /* Diagnostic.swift */,
+				11045352F76555FF2A6A052E /* DiagnosticViews.swift */,
 				37539AE4596B6529C8A95FF4 /* Info.plist */,
 				C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */,
 				F69F9CCF4D8C30D48554ECD0 /* Models.swift */,
@@ -243,6 +252,8 @@
 			files = (
 				517855E0B1B3D16A3BAB1847 /* Analytics.swift in Sources */,
 				4D028B285B25169C59A4D871 /* AnalyticsViews.swift in Sources */,
+				93009669CAA75CBB8A351354 /* Diagnostic.swift in Sources */,
+				CC3F979FFD582F5A3ACB8146 /* DiagnosticViews.swift in Sources */,
 				98EC99393D70B111C5FE4530 /* LibraryViews.swift in Sources */,
 				35C4AE1B1FBB8D2B07C8EFC1 /* Models.swift in Sources */,
 				BFBB2B8680E8C434C7FEE3E0 /* PatternAtlasApp.swift in Sources */,
@@ -256,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C8678711416D91F33ABE3B3 /* AnalyticsTests.swift in Sources */,
+				E0FA855E68C5A44AF728BAF2 /* DiagnosticTests.swift in Sources */,
 				2964B5DFE55DE01B4CA90C21 /* StudyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

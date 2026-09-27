@@ -158,6 +158,7 @@ func dateFromISO(_ string: String) -> Date? {
 }
 func cardKey(_ problem: String, _ pattern: String) -> String { "\(problem):\(pattern)" }
 struct StudyProgress: Codable {
+    var familiarity: Familiarity?
     var leetcode: LeetCodeHistory?
     var visits: PageVisits?
     var version = 1
@@ -172,7 +173,7 @@ struct StudyProgress: Codable {
               value.cards.values.allSatisfy({ $0.repetitions >= 0 && $0.lapses >= 0 && $0.interval >= 0 && $0.interval.isFinite && dateFromISO($0.due) != nil && dateFromISO($0.lastReviewed) != nil }),
               value.drafts.values.allSatisfy({ $0.count <= 200_000 }),
               value.activity.allSatisfy({ $0.key.range(of: #"^\d{4}-\d{2}-\d{2}$"#, options: .regularExpression) != nil && $0.value >= 0 }) else { throw StudyError.invalidBackup }
-        guard value.leetcode?.valid ?? true, validVisits(value.visits ?? [:]) else { throw StudyError.invalidBackup }
+        guard validFamiliarity(value.familiarity ?? [:]), value.leetcode?.valid ?? true, validVisits(value.visits ?? [:]) else { throw StudyError.invalidBackup }
         return value
     }
 }
@@ -241,6 +242,7 @@ struct ReviewCard: Identifiable {
         for (key, draft) in incoming.drafts where progress.drafts[key] == nil { progress.drafts[key] = draft }
         progress.bookmarks = Array(Set(progress.bookmarks + incoming.bookmarks)).sorted()
         for (day, count) in incoming.activity { progress.activity[day] = max(progress.activity[day] ?? 0, count) }
+        progress.familiarity = mergeFamiliarity(progress.familiarity ?? [:], incoming.familiarity ?? [:])
         progress.leetcode = history
         progress.visits = mergeVisits(progress.visits ?? [:], incoming.visits ?? [:])
         save(); message = "Backup merged. Existing local drafts were kept."

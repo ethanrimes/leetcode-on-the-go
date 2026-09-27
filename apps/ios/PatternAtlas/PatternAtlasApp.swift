@@ -80,6 +80,7 @@ struct HomeView: View {
                     }.accessibilityIdentifier("startReview")
                     Label("10 cards · at your own pace", systemImage: "clock").font(.caption2).foregroundStyle(.white.opacity(0.55))
                 }.padding(23).background(AtlasStyle.forest, in: RoundedRectangle(cornerRadius: 6))
+                NavigationLink { DiagnosticSetupView(data: data) } label: { Label("Diagnostic test · open solutions & flag familiarity", systemImage: "checklist").font(.subheadline) }
                 HStack(spacing: 0) {
                     StatView(value: "\(data.patterns.count)", label: "Patterns")
                     Divider().frame(height: 30)

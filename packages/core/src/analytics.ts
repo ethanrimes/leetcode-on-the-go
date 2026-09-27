@@ -1,3 +1,4 @@
+import {mergeFamiliarity} from './diagnostic';
 import {descendants, type Curriculum, type CurriculumNode, type Progress} from './index';
 
 export interface Submission {id:string; slug:string; title:string; timestamp:string; status:string; language:string}
@@ -74,7 +75,7 @@ export function mergeProgress(current:Progress,incoming:Progress):Progress {
   const leetcode=incoming.leetcode?mergeHistory(current.leetcode,incoming.leetcode):current.leetcode;
   const cards={...current.cards};for(const [key,review]of Object.entries(incoming.cards))if(!cards[key]||Date.parse(review.lastReviewed)>Date.parse(cards[key].lastReviewed))cards[key]=review;
   const activity={...current.activity};for(const [day,count]of Object.entries(incoming.activity))activity[day]=Math.max(activity[day]??0,count);
-  return {version:1,cards,drafts:{...incoming.drafts,...current.drafts},bookmarks:[...new Set([...current.bookmarks,...incoming.bookmarks])],activity,leetcode,visits:mergeVisits(current.visits,incoming.visits)};
+  return {version:1,cards,drafts:{...incoming.drafts,...current.drafts},bookmarks:[...new Set([...current.bookmarks,...incoming.bookmarks])],activity,leetcode,familiarity:mergeFamiliarity(current.familiarity,incoming.familiarity),visits:mergeVisits(current.visits,incoming.visits)};
 }
 export const accepted=(s:Submission)=>s.status.toLowerCase()==='accepted';
 export interface NodeStats {node:CurriculumNode;total:number;solved:number;attempted:number;unseen:number;visits:number;fresh:number;practiced:number;lastPracticed?:string;due:number}

@@ -13,6 +13,8 @@ npm run history:login
 npm run history:update -- --days 0
 # Later, refresh the last 30 days and merge into the same private file:
 npm run history:update
+# Import automatically and open your dedicated study browser:
+npm run history:open
 # Optional: also deliver the import to an installed iOS Simulator app:
 npm run history:update -- --simulator YOUR_SIMULATOR_UDID
 ```
@@ -20,6 +22,8 @@ npm run history:update -- --simulator YOUR_SIMULATOR_UDID
 The login command opens a separate browser for a one-time LeetCode sign-in. It waits up to ten minutes, verifies the signed-in account, saves its isolated browser session under `.local/leetcode-browser/`, and closes the browser. Subsequent exports run headlessly, without interacting with your Chrome/Comet windows. If LeetCode expires the session or presents a challenge, complete it with `history:login` and retry. The tool stops on authentication/challenge failures; it does not circumvent them.
 
 `history:update` merges new records into **`.local/leetcode-history.json`**, retains the previous file as `.local/leetcode-history.previous.json`, and keeps older submissions during recent or partial exports. An account mismatch stops the merge. Use `--days 0` after a gap longer than 30 days. `--from path.json` merges an existing export without contacting LeetCode. A valid partial export is useful and is clearly identified as partial.
+
+`history:open` opens the deployed web app in a dedicated persistent Chromium profile, imports the cumulative file through the app's normal import control, and verifies it survives a reload. The visible browser stays open until you close it. Close that browser before running the command again. `npm run history:open -- --headless` applies and verifies an import without showing a window. Study drafts and progress remain in git-ignored `.local/atlas-browser/`, separate from the LeetCode sign-in session and from your regular Comet/Chrome profiles. The import stays in browser storage; it is not published to Azure.
 
 `--through YYYY-MM-DD` includes submissions through the end of that day in the computer's local time zone. It defaults to today and rejects future dates. `--out path.json` chooses the output file. By default, private exports and the browser session stay in git-ignored `.local/`, with restrictive filesystem permissions. Do not commit that directory. The session is sensitive even though exported history contains no credentials.
 

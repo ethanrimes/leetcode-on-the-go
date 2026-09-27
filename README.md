@@ -57,7 +57,7 @@ Third-party licenses and dependency attribution are in [THIRD_PARTY.md](docs/THI
 
 ## Import your LeetCode history
 
-Run `npm run history:login` once to sign in in an isolated browser (it closes after saving the session), then `npm run history:update -- --days 0` for the initial import. Repeat `npm run history:update` for headless 30-day updates. The cumulative file is `.local/leetcode-history.json`; import it from Your progress on web or open it in the iOS app. `--simulator UDID` also delivers it to an installed native simulator app. Both apps merge repeated imports without duplicates. `--through YYYY-MM-DD` sets a submission cutoff.
+Run `npm run history:login` once to sign in in an isolated browser (it closes after saving the session), then `npm run history:update -- --days 0` for the initial import. Repeat `npm run history:update` for headless 30-day updates. Run `npm run history:open` to import automatically into a dedicated persistent study browser that stays open, or use `npm run history:open -- --headless` for an unattended import. The cumulative file is `.local/leetcode-history.json`; you can also import it from Your progress in your regular web browser or open it in the iOS app. `--simulator UDID` also delivers it to an installed native simulator app. Both apps merge repeated imports without duplicates. `--through YYYY-MM-DD` sets a submission cutoff.
 
 The exporter captures both available dated submissions and a current completed-problem snapshot. This lets accepted coverage include older completions even when LeetCode limits detailed history. Missing dates remain unknown and do not inflate freshness or diagnostic ratings. Personal exports and sessions are never bundled into the public app.
 

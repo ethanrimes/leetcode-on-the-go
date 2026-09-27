@@ -1,0 +1,302 @@
+[
+  {
+    "name": "Array",
+    "slug": "array"
+  },
+  {
+    "name": "Hash Table",
+    "slug": "hash-table"
+  },
+  {
+    "name": "Linked List",
+    "slug": "linked-list"
+  },
+  {
+    "name": "Math",
+    "slug": "math"
+  },
+  {
+    "name": "Two Pointers",
+    "slug": "two-pointers"
+  },
+  {
+    "name": "String",
+    "slug": "string"
+  },
+  {
+    "name": "Binary Search",
+    "slug": "binary-search"
+  },
+  {
+    "name": "Divide and Conquer",
+    "slug": "divide-and-conquer"
+  },
+  {
+    "name": "Dynamic Programming",
+    "slug": "dynamic-programming"
+  },
+  {
+    "name": "Backtracking",
+    "slug": "backtracking"
+  },
+  {
+    "name": "Stack",
+    "slug": "stack"
+  },
+  {
+    "name": "Heap",
+    "slug": "heap"
+  },
+  {
+    "name": "Greedy",
+    "slug": "greedy"
+  },
+  {
+    "name": "Bit Manipulation",
+    "slug": "bit-manipulation"
+  },
+  {
+    "name": "Tree",
+    "slug": "tree"
+  },
+  {
+    "name": "Depth-First Search",
+    "slug": "depth-first-search"
+  },
+  {
+    "name": "Breadth-First Search",
+    "slug": "breadth-first-search"
+  },
+  {
+    "name": "Union-Find",
+    "slug": "union-find"
+  },
+  {
+    "name": "Graph Theory",
+    "slug": "graph"
+  },
+  {
+    "name": "Design",
+    "slug": "design"
+  },
+  {
+    "name": "Topological Sort",
+    "slug": "topological-sort"
+  },
+  {
+    "name": "Trie",
+    "slug": "trie"
+  },
+  {
+    "name": "Binary Indexed Tree",
+    "slug": "binary-indexed-tree"
+  },
+  {
+    "name": "Segment Tree",
+    "slug": "segment-tree"
+  },
+  {
+    "name": "Binary Search Tree",
+    "slug": "binary-search-tree"
+  },
+  {
+    "name": "Recursion",
+    "slug": "recursion"
+  },
+  {
+    "name": "Brainteaser",
+    "slug": "brainteaser"
+  },
+  {
+    "name": "Memoization",
+    "slug": "memoization"
+  },
+  {
+    "name": "Queue",
+    "slug": "queue"
+  },
+  {
+    "name": "Minimax",
+    "slug": "minimax-algorithm"
+  },
+  {
+    "name": "Reservoir Sampling",
+    "slug": "reservoir-sampling"
+  },
+  {
+    "name": "Ordered Map",
+    "slug": "ordered-map"
+  },
+  {
+    "name": "Geometry",
+    "slug": "geometry"
+  },
+  {
+    "name": "Rejection Sampling",
+    "slug": "rejection-sampling"
+  },
+  {
+    "name": "Sliding Window",
+    "slug": "sliding-window"
+  },
+  {
+    "name": "Sweep Line",
+    "slug": "sweep-line"
+  },
+  {
+    "name": "Rolling Hash",
+    "slug": "rolling-hash"
+  },
+  {
+    "name": "Suffix Array",
+    "slug": "suffix-array"
+  },
+  {
+    "name": "Meet in the Middle",
+    "slug": "meet-in-the-middle"
+  },
+  {
+    "name": "Database",
+    "slug": "database"
+  },
+  {
+    "name": "Shell",
+    "slug": "shell"
+  },
+  {
+    "name": "Concurrency",
+    "slug": "concurrency"
+  },
+  {
+    "name": "Sorting",
+    "slug": "sorting"
+  },
+  {
+    "name": "Heap (Priority Queue)",
+    "slug": "heap-priority-queue"
+  },
+  {
+    "name": "Merge Sort",
+    "slug": "merge-sort"
+  },
+  {
+    "name": "String Matching",
+    "slug": "string-matching"
+  },
+  {
+    "name": "Matrix",
+    "slug": "matrix"
+  },
+  {
+    "name": "Monotonic Stack",
+    "slug": "monotonic-stack"
+  },
+  {
+    "name": "Simulation",
+    "slug": "simulation"
+  },
+  {
+    "name": "Combinatorics",
+    "slug": "combinatorics"
+  },
+  {
+    "name": "Binary Tree",
+    "slug": "binary-tree"
+  },
+  {
+    "name": "Doubly-Linked List",
+    "slug": "doubly-linked-list"
+  },
+  {
+    "name": "Interactive",
+    "slug": "interactive"
+  },
+  {
+    "name": "Bucket Sort",
+    "slug": "bucket-sort"
+  },
+  {
+    "name": "Radix Sort",
+    "slug": "radix-sort"
+  },
+  {
+    "name": "Counting",
+    "slug": "counting"
+  },
+  {
+    "name": "Data Stream",
+    "slug": "data-stream"
+  },
+  {
+    "name": "Iterator",
+    "slug": "iterator"
+  },
+  {
+    "name": "Hash Function",
+    "slug": "hash-function"
+  },
+  {
+    "name": "Enumeration",
+    "slug": "enumeration"
+  },
+  {
+    "name": "Number Theory",
+    "slug": "number-theory"
+  },
+  {
+    "name": "Prefix Sum",
+    "slug": "prefix-sum"
+  },
+  {
+    "name": "Quickselect",
+    "slug": "quickselect"
+  },
+  {
+    "name": "Ordered Set",
+    "slug": "ordered-set"
+  },
+  {
+    "name": "Monotonic Queue",
+    "slug": "monotonic-queue"
+  },
+  {
+    "name": "Counting Sort",
+    "slug": "counting-sort"
+  },
+  {
+    "name": "Game Theory",
+    "slug": "game-theory"
+  },
+  {
+    "name": "Eulerian Circuit",
+    "slug": "eulerian-circuit"
+  },
+  {
+    "name": "Randomized",
+    "slug": "randomized"
+  },
+  {
+    "name": "Shortest Path",
+    "slug": "shortest-path"
+  },
+  {
+    "name": "Bitmask",
+    "slug": "bitmask"
+  },
+  {
+    "name": "Probability and Statistics",
+    "slug": "probability-and-statistics"
+  },
+  {
+    "name": "Minimum Spanning Tree",
+    "slug": "minimum-spanning-tree"
+  },
+  {
+    "name": "Biconnected Component",
+    "slug": "biconnected-component"
+  },
+  {
+    "name": "Strongly Connected Component",
+    "slug": "strongly-connected-component"
+  }
+]

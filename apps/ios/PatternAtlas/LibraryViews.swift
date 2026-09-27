@@ -48,6 +48,22 @@ struct NodeDetailView: View {
             }
             Section("The general approach") {
                 Text(node.approach).font(.subheadline).lineSpacing(5).padding(.vertical, 5)
+                if let pseudocode = node.pseudocode {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Eyebrow(text: "Pseudocode")
+                        ScrollView(.horizontal) {
+                            Text(pseudocode.code).font(.system(.caption, design: .monospaced))
+                                .lineSpacing(5).textSelection(.enabled).padding(16)
+                        }.foregroundStyle(Color(red: 0.84, green: 0.89, blue: 0.98))
+                            .background(AtlasStyle.forest, in: RoundedRectangle(cornerRadius: 6))
+                            .accessibilityIdentifier("approachPseudocode")
+                        if let example = pseudocode.example, !example.isEmpty {
+                            Eyebrow(text: "Trace an example")
+                            Text(example).font(.system(.caption, design: .monospaced))
+                                .lineSpacing(5).textSelection(.enabled)
+                        }
+                    }.padding(.vertical, 8)
+                }
                 ForEach(node.tips, id: \.self) { tip in Label { Text(tip).font(.caption).lineSpacing(4) } icon: { Image(systemName: "lightbulb").foregroundStyle(AtlasStyle.green) } }
             }
             Section("Why learn this?") { Text(node.why).font(.caption).foregroundStyle(.secondary).lineSpacing(4) }

@@ -86759,6 +86759,10 @@
         "https://leetcode.com/problems/group-anagrams/",
         "https://leetcode.cn/circle/discuss/mOr1u6/"
       ],
+      "pseudocode": {
+        "code": "groups ← empty map\n\nfor each word in words:\n    letters ← sort(characters(word))\n    signature ← join(letters)\n\n    if signature is not in groups:\n        groups[signature] ← empty list\n\n    append word to groups[signature]\n\nreturn all lists stored in groups",
+        "example": "\"eat\" → \"aet\" → [\"eat\"]\n\"tea\" → \"aet\" → [\"eat\", \"tea\"]\n\"abb\" → \"abb\" → [\"abb\"]\n\"ab\"  → \"ab\"  → [\"ab\"]\n\nSame signature → same group.\nRepeated letters stay in the signature."
+      },
       "references": [],
       "problemIds": []
     },

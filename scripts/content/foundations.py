@@ -17,7 +17,28 @@ def solve(strs):
         key = ''.join(sorted(s))
         groups.setdefault(key, []).append(s)
     return list(groups.values())
-''','O(n k log k), k = longest string','O(nk)')
+''','O(n k log k), k = longest string','O(nk)', pseudocode='''
+groups ← empty map
+
+for each word in words:
+    letters ← sort(characters(word))
+    signature ← join(letters)
+
+    if signature is not in groups:
+        groups[signature] ← empty list
+
+    append word to groups[signature]
+
+return all lists stored in groups
+''', pseudocode_example='''
+"eat" → "aet" → ["eat"]
+"tea" → "aet" → ["eat", "tea"]
+"abb" → "abb" → ["abb"]
+"ab"  → "ab"  → ["ab"]
+
+Same signature → same group.
+Repeated letters stay in the signature.
+''')
 C('Arrays & hashing / Lookup & counting','Sequence boundary detection',128,'Intermediate','Core','Find a consecutive run in unsorted data.','Only grow a run from x when x−1 is absent. Each distinct value is visited within one run.','Starting a walk from every value produces quadratic work.','Return the length of the longest run of consecutive integer values; input order does not matter.',[[9,1,4,3,2]],4,'''
 def solve(nums):
     values = set(nums)

@@ -15,19 +15,26 @@ enum AtlasStyle {
     static let paper = Color(uiColor: .systemGroupedBackground)
 }
 struct AppRootView: View {
+    @State private var selectedTab = 0
     @Environment(StudyStore.self) private var store
     var body: some View {
         Group {
             if let data = store.curriculum {
-                TabView {
-                    NavigationStack { HomeView(data: data) }.tabItem { Label("Today", systemImage: "square.grid.2x2") }
-                    NavigationStack { LibraryView(data: data) }.tabItem { Label("Library", systemImage: "point.3.connected.trianglepath.dotted") }
-                    NavigationStack { ProblemLibraryView(data: data) }.tabItem { Label("Problems", systemImage: "chevron.left.forwardslash.chevron.right") }
-                    NavigationStack { ProgressViewScreen(data: data) }.tabItem { Label("Progress", systemImage: "chart.bar.xaxis") }
+                TabView(selection: $selectedTab) {
+                    NavigationStack { HomeView(data: data) }.tabItem { Label("Today", systemImage: "square.grid.2x2") }.tag(0)
+                    NavigationStack { LibraryView(data: data) }.tabItem { Label("Library", systemImage: "point.3.connected.trianglepath.dotted") }.tag(1)
+                    NavigationStack { ProblemLibraryView(data: data) }.tabItem { Label("Problems", systemImage: "chevron.left.forwardslash.chevron.right") }.tag(2)
+                    NavigationStack { ProgressViewScreen(data: data) }.tabItem { Label("Progress", systemImage: "chart.bar.xaxis") }.tag(3)
                 }
             } else {
                 ContentUnavailableView("Library unavailable", systemImage: "books.vertical", description: Text(store.loadError ?? "Please reinstall the app to restore the bundled curriculum."))
             }
+        }
+        .onOpenURL { url in
+            do {
+                try store.importHistoryURL(url)
+                selectedTab = 3
+            } catch { store.message = error.localizedDescription }
         }
         .alert("Pattern Atlas", isPresented: Binding(get: { store.message != nil }, set: { if !$0 { store.message = nil } })) {
             Button("OK") { store.message = nil }

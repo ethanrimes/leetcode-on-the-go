@@ -8,6 +8,21 @@ const packet:SubmissionExport={format:'pattern-atlas-leetcode',version:1,account
   {id:'3',slug:'valid-anagram',title:'Valid Anagram',timestamp:'2026-07-01T00:00:00.000Z',status:'Wrong Answer',language:'python3'}
 ]};
 const history=()=>parseSubmissionExport(JSON.stringify(packet));
+test('completion snapshots fill all-time coverage without inventing dated practice',()=>{
+ const history=parseSubmissionExport(JSON.stringify({...packet,complete:false,completions:{observedAt:now.toISOString(),slugs:['two-sum','group-anagrams','group-anagrams']}}));
+ assert.equal(history.completions?.slugs.length,2);
+ const progress={...emptyProgress(),leetcode:history};
+ const stats=analytics(data,progress,{depth:1,now:+now});
+ assert.equal(stats.solved,2);assert.equal(stats.submissions.length,3);
+ const other=stats.tiles.find(s=>s.node.id==='other')!;assert.equal(other.solved,1);assert.equal(other.fresh,0);assert.equal(other.practiced,0);assert.equal(other.lastPracticed,undefined);
+ assert.equal(analytics(data,progress,{depth:1,since:+now-30*86400000,now:+now}).solved,0);
+ const older={...history,exportedAt:'2025-01-01T00:00:00Z',completions:{observedAt:'2025-01-01T00:00:00Z',slugs:['two-sum']}};
+ assert.equal(mergeHistory(history,older).completions?.slugs.length,2);
+ assert.equal(mergeHistory(history,{...history,completions:undefined}).completions?.slugs.length,2);
+ assert.equal(parseProgress(JSON.stringify(progress)).leetcode?.completions?.slugs.length,2);
+ assert.throws(()=>parseSubmissionExport(JSON.stringify({...packet,completions:{observedAt:'bad',slugs:[]}})));
+ assert.throws(()=>parseSubmissionExport(JSON.stringify({...packet,completions:{observedAt:now.toISOString(),slugs:['../bad']}})));
+});
 const node=(id:string,parentId:string|null,problemIds:string[]=[]):CurriculumNode=>({id,parentId,problemIds,title:id,kind:parentId?'pattern':'category',level:'Foundation',priority:'Core',description:'',approach:'',tips:[],why:'',sourceUrls:[],references:[]});
 const data:Curriculum={version:1,updatedAt:'',language:'python',problems:[],nodes:[node('root',null),node('one','root',['1','242']),node('two','root',['1']),node('other',null,['49'])],catalog:[{id:'1',title:'Two Sum',slug:'two-sum',difficulty:'Easy',premium:false},{id:'242',title:'Valid Anagram',slug:'valid-anagram',difficulty:'Easy',premium:false},{id:'49',title:'Group Anagrams',slug:'group-anagrams',difficulty:'Medium',premium:false}]};
 test('submission updates merge once, preserve accepted evidence, reject mixed accounts',()=>{

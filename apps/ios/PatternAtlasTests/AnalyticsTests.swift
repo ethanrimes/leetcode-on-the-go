@@ -2,6 +2,35 @@ import XCTest
 @testable import PatternAtlas
 
 final class AnalyticsTests: XCTestCase {
+    @MainActor func testCompletionSnapshotAndNativeImportURL() throws {
+        let suite = "Atlas.Completions.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { defaults.removePersistentDomain(forName: suite); try? FileManager.default.removeItem(at: directory) }
+        let store = StudyStore(defaults: defaults), data = try XCTUnwrap(store.curriculum)
+        store.setDraft("keep", for: "49")
+        let snapshot = CompletionSnapshot(observedAt: iso(now), slugs: ["two-sum", "group-anagrams"])
+        let packet = SubmissionExport(completions: snapshot, format: "pattern-atlas-leetcode", version: 1, account: "demo", exportedAt: iso(now), complete: false, submissions: [])
+        let file = directory.appendingPathComponent("LeetCode History.json")
+        try JSONEncoder().encode(packet).write(to: file)
+        try store.importHistoryURL(URL(string: "patternatlas://import-history")!, documents: directory)
+        try store.importHistoryURL(file)
+        let engine = CurriculumAnalytics(data)
+        XCTAssertEqual(engine.snapshot(store.progress, filter: AnalyticsFilter(), now: now).solved, 2)
+        XCTAssertEqual(engine.snapshot(store.progress, filter: AnalyticsFilter(period: 30), now: now).solved, 0)
+        XCTAssertTrue(engine.snapshot(store.progress, filter: AnalyticsFilter(), now: now).tiles.allSatisfy { $0.fresh == 0 && $0.practiced == 0 })
+        XCTAssertEqual(store.progress.leetcode?.submissions.count, 0)
+        XCTAssertEqual(store.progress.drafts["49"], "keep")
+        XCTAssertNil(store.progress.familiarity)
+        let reloaded = StudyStore(defaults: defaults)
+        XCTAssertEqual(reloaded.progress.leetcode?.completions?.slugs.count, 2)
+        try store.importHistory(exportData())
+        XCTAssertEqual(store.progress.leetcode?.completions?.slugs.count, 2)
+        XCTAssertThrowsError(try store.importHistoryURL(URL(string: "https://example.com/history.json")!))
+        XCTAssertThrowsError(try store.importHistoryURL(URL(string: "patternatlas://import-history?file=other")!, documents: directory))
+        XCTAssertFalse(CompletionSnapshot(observedAt: "bad", slugs: []).valid)
+    }
     private let now = dateFromISO("2026-09-27T12:00:00.000Z")!
     private func exportData(account: String = "demo") throws -> Data {
         let entries = [

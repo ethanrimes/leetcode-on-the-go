@@ -16,6 +16,17 @@ struct ProgressViewScreen: View {
     @State private var document = BackupDocument()
     var body: some View {
         List {
+            if let history = store.progress.leetcode {
+                Section("Your LeetCode progress") {
+                    let solved = Set((history.completions?.slugs ?? []) + history.submissions.values.filter(\.accepted).map(\.slug))
+                    HStack {
+                        StatView(value: "\(solved.count)", label: "Completed")
+                        StatView(value: "\(history.submissions.count)", label: "Submissions")
+                    }.padding(.vertical, 12)
+                    Text(history.account).font(.caption).foregroundStyle(.secondary)
+                    NavigationLink("Coverage & freshness") { List { AnalyticsDashboardSections(data: data) }.navigationTitle("LeetCode progress").trackPage("/progress/leetcode") }
+                }
+            }
             Section {
                 HStack {
                     StatView(value: "\(store.progress.cards.count)", label: "Reviewed")

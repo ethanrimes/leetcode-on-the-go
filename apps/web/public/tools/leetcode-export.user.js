@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pattern Atlas · LeetCode history export
 // @namespace    https://github.com/ethanrimes/leetcode-on-the-go
-// @version      1.0.0
+// @version      1.1.0
 // @description  Download your submission metadata for Pattern Atlas. No code, cookies, or tokens are exported.
 // @match        https://leetcode.com/progress/*
 // @match        https://leetcode.com/submissions/*
@@ -35,13 +35,14 @@
   }
   async function run(days) {
     if(running)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(through.value)||through.value>through.max){status.textContent='Choose a date no later than today.';return;}const throughDate=new Date(through.value+'T23:59:59.999');const until=throughDate.getTime()/1000;running=true;cancelled=false;full.disabled=true;recent.disabled=true;stop.textContent='Stop & save partial history';
-    const records=new Map();let account='',complete=false,failure='',offset=0,lastkey='';
+    const records=new Map();let account='',complete=false,failure='',offset=0,lastkey='',completions;
     const cutoff=days?until-days*86400:0;const seen=new Set();
     const exportedAt=new Date().toISOString();
     try {
       status.textContent='Checking your signed-in account…';
       const profile=await readJSON('/api/problems/all/');account=profile.user_name;
       if(typeof account!=='string'||!account.trim())throw new Error('Sign in to LeetCode before exporting.');
+      if(through.value===through.max&&Array.isArray(profile.stat_status_pairs))completions={observedAt:exportedAt,slugs:[...new Set(profile.stat_status_pairs.filter(p=>p.status==='ac').map(p=>p.stat.question__title_slug))].sort()};
       for(let page=0;page<10000;page++) {
         if(cancelled)break;
         const params=new URLSearchParams({offset:String(offset),limit:'20',lastkey});
@@ -61,12 +62,12 @@
         if(seen.size===before)throw new Error('Pagination stopped advancing. Saved only the records read so far.');
         offset+=data.submissions_dump.length;lastkey=String(data.last_key??'');
         if(page===9999)throw new Error('Safety page limit reached. This export is partial.');
-        await delay(700);
+        await delay(1500);
       }
     } catch(error) {failure=error instanceof Error?error.message:String(error);}
     finally {running=false;full.disabled=false;recent.disabled=false;stop.textContent='Close';}
-    if(!account||(!records.size&&!complete)) {status.textContent=failure||'Stopped before any submissions were read.';return;}
-    const result={format:'pattern-atlas-leetcode',version:1,account,exportedAt,complete,through:through.value,submissions:[...records.values()].sort((a,b)=>b.timestamp.localeCompare(a.timestamp))};
+    if(!account||(!records.size&&!complete&&!completions)) {status.textContent=failure||'Stopped before any submissions were read.';return;}
+    const result={format:'pattern-atlas-leetcode',version:1,account,exportedAt,complete,through:through.value,completions,submissions:[...records.values()].sort((a,b)=>b.timestamp.localeCompare(a.timestamp))};
     const url=URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'}));
     const download=document.createElement('a');download.href=url;download.download=`leetcode-history-${exportedAt.slice(0,10)}${complete?'':'-partial'}.json`;download.textContent='Download JSON again';download.style.color='#a8c5ff';box.append(download);download.click();
     // Keep the object URL valid for the visible retry-download link.

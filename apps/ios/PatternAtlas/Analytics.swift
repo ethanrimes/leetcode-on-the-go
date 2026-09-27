@@ -14,18 +14,25 @@ struct LeetCodeSubmission: Codable, Identifiable {
         dateFromISO(timestamp) != nil && !status.isEmpty && [title, status, language].allSatisfy { $0.count <= 500 }
     }
 }
+struct CompletionSnapshot: Codable {
+    let observedAt: String
+    let slugs: [String]
+    var valid: Bool { dateFromISO(observedAt) != nil && slugs.count <= 100_000 && slugs.allSatisfy { $0.count <= 300 && $0.range(of: #"^[a-z0-9]+(?:-[a-z0-9]+)*$"#, options: .regularExpression) != nil } }
+}
 struct LeetCodeHistory: Codable {
+    var completions: CompletionSnapshot? = nil
     var through: String? = nil
     let account: String
     let exportedAt: String
     let complete: Bool
     var submissions: [String: LeetCodeSubmission]
-    var valid: Bool { (through == nil || through!.range(of: #"^\d{4}-\d{2}-\d{2}$"#, options: .regularExpression) != nil) && !account.isEmpty && account.count <= 300 && !["__proto__", "constructor", "prototype"].contains(account) && dateFromISO(exportedAt) != nil && submissions.allSatisfy { $0.key == $0.value.id && $0.value.valid } }
+    var valid: Bool { (completions?.valid ?? true) && (through == nil || through!.range(of: #"^\d{4}-\d{2}-\d{2}$"#, options: .regularExpression) != nil) && !account.isEmpty && account.count <= 300 && !["__proto__", "constructor", "prototype"].contains(account) && dateFromISO(exportedAt) != nil && submissions.allSatisfy { $0.key == $0.value.id && $0.value.valid } }
     func merging(_ incoming: LeetCodeHistory) throws -> LeetCodeHistory {
         guard account.lowercased() == incoming.account.lowercased() else { throw HistoryError.differentAccount }
         let newer = (dateFromISO(incoming.exportedAt) ?? .distantPast) >= (dateFromISO(exportedAt) ?? .distantPast)
         var result = newer ? incoming : self
         result.submissions = submissions.merging(incoming.submissions) { newer ? $1 : $0 }
+        result.completions = [completions, incoming.completions].compactMap { $0 }.max { (dateFromISO($0.observedAt) ?? .distantPast) < (dateFromISO($1.observedAt) ?? .distantPast) }
         return result
     }
     static func decodeExport(_ data: Data) throws -> LeetCodeHistory {
@@ -34,11 +41,12 @@ struct LeetCodeHistory: Codable {
         guard packet.format == "pattern-atlas-leetcode", packet.version == 1 else { throw HistoryError.invalidExport }
         var records: [String: LeetCodeSubmission] = [:]
         for submission in packet.submissions { guard submission.valid else { throw HistoryError.invalidExport }; records[submission.id] = submission }
-        let result = LeetCodeHistory(through: packet.through, account: packet.account, exportedAt: packet.exportedAt, complete: packet.complete, submissions: records)
+        let result = LeetCodeHistory(completions: packet.completions, through: packet.through, account: packet.account, exportedAt: packet.exportedAt, complete: packet.complete, submissions: records)
         guard result.valid else { throw HistoryError.invalidExport }; return result
     }
 }
 struct SubmissionExport: Codable {
+    var completions: CompletionSnapshot? = nil
     var through: String? = nil
     let format: String
     let version: Int
@@ -82,6 +90,19 @@ func totalVisits(_ visits: PageVisits) -> [String: PageVisit] {
     return result
 }
 extension StudyStore {
+    func importHistoryURL(_ url: URL, documents: URL? = nil) throws {
+        let source: URL
+        if url.isFileURL { source = url }
+        else if url.scheme == "patternatlas", url.host == "import-history", url.query == nil, url.path.isEmpty {
+            let folder = try documents ?? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            source = folder.appendingPathComponent("LeetCode History.json")
+        } else { throw HistoryError.invalidExport }
+        let access = source.startAccessingSecurityScopedResource()
+        defer { if access { source.stopAccessingSecurityScopedResource() } }
+        let size = try source.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
+        guard size <= 10_000_000 else { throw HistoryError.invalidExport }
+        try importHistory(Data(contentsOf: source))
+    }
     func importHistory(_ data: Data) throws {
         let incoming = try LeetCodeHistory.decodeExport(data)
         progress.leetcode = try progress.leetcode?.merging(incoming) ?? incoming
@@ -144,7 +165,7 @@ struct CurriculumAnalytics {
         let pages = totalVisits(progress.visits ?? [:])
         let all = Array(progress.leetcode?.submissions.values ?? [:].values)
         let submissions = all.filter { filter.period == 0 || (dateFromISO($0.timestamp) ?? .distantPast) >= now.addingTimeInterval(-Double(filter.period) * 86400) }
-        let solved = Set(submissions.filter(\.accepted).map(\.slug)), attempted = Set(submissions.map(\.slug))
+        let solved = Set(submissions.filter(\.accepted).map(\.slug) + (filter.period == 0 ? progress.leetcode?.completions?.slugs ?? [] : [])), attempted = Set(submissions.map(\.slug))
         let eligible = Dictionary(uniqueKeysWithValues: data.catalog.filter { filter.difficulty.isEmpty || $0.difficulty == filter.difficulty }.map { ($0.id, $0) })
         let bySlug = Dictionary(uniqueKeysWithValues: data.catalog.map { ($0.slug, $0.id) })
         var practice: [String: Date] = [:]; var due = Set<String>()

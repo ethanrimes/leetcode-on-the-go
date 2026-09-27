@@ -16,7 +16,8 @@
     "ios:generate": "npm run content:build && cd apps/ios && xcodegen generate",
     "deploy": "bash infrastructure/deploy.sh",
     "history:login": "node scripts/leetcode-history.mjs --login",
-    "history:export": "node scripts/leetcode-history.mjs"
+    "history:export": "node scripts/leetcode-history.mjs",
+    "history:update": "tsx scripts/update-history.mts"
   },
   "engines": {
     "node": ">=22.12.0"

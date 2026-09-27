@@ -32,7 +32,7 @@ async function readJSON(url) {
    try { return {status:response.status,data:await response.json()}; } catch { return {status:response.status}; }
   },url);
   if((result.status===429||result.status>=500)&&attempt<3){await pause(2000*2**attempt);continue;}
-  if(!result.data)throw new Error(`LeetCode returned HTTP ${result.status} or a sign-in/challenge page. Run npm run history:login, then retry.`);
+  if(!result.data)throw new Error(`LeetCode returned HTTP ${result.status} or a sign-in/challenge page. Pagination stopped; any collected records are kept. Use history:login if your session has expired.`);
   return result.data;
  }
 }
@@ -51,6 +51,8 @@ try {
   const profileData=await readJSON('/api/problems/all/');const account=profileData.user_name;
   if(typeof account!=='string'||!account.trim())throw new Error('No signed-in LeetCode session. Run npm run history:login once, then rerun this command.');
   const exportedAt=new Date().toISOString(),records=new Map(),seen=new Set();let complete=false,offset=0,lastkey='',failure='';
+  // This is current completion evidence, not a dated submission. Omit it for past-date exports.
+  const completions=through===today&&Array.isArray(profileData.stat_status_pairs)?{observedAt:exportedAt,slugs:[...new Set(profileData.stat_status_pairs.filter(p=>p.status==='ac').map(p=>p.stat.question__title_slug))].sort()}:undefined;
   try{
    for(let pageNumber=0;pageNumber<10000;pageNumber++) {
     if(cancelled)break;
@@ -68,12 +70,13 @@ try {
     if(seen.size===before)throw new Error('Pagination stopped advancing. Export marked partial.');
     offset+=result.submissions_dump.length;lastkey=String(result.last_key??'');
     if(pageNumber===9999)throw new Error('Page limit reached. Export marked partial.');
-    await pause(700);
+    await pause(1500);
    }
   }catch(error){failure=error.message;}
-  if(!records.size&&!complete)throw new Error(failure||'Stopped before any records were read.');
+  if(!records.size&&!complete&&!completions)throw new Error(failure||'Stopped before any records were read.');
   await mkdir(path.dirname(output),{recursive:true,mode:0o700});
-  await writeFile(output,JSON.stringify({format:'pattern-atlas-leetcode',version:1,account,exportedAt,complete,through,submissions:[...records.values()].sort((a,b)=>b.timestamp.localeCompare(a.timestamp))},null,2),{mode:0o600});
+  await writeFile(output,JSON.stringify({format:'pattern-atlas-leetcode',version:1,account,exportedAt,complete,through,completions,submissions:[...records.values()].sort((a,b)=>b.timestamp.localeCompare(a.timestamp))},null,2),{mode:0o600});
+  if(completions)console.log(`Saved a current snapshot of ${completions.slugs.length} completed problems (no inferred submission dates).`);
   console.log(`Saved ${records.size} submissions through ${through} to ${output}. ${complete?'Reached the oldest available record.':'Partial update; import preserves older history.'}`);
   if(failure){console.error(failure);process.exitCode=1;}
  }

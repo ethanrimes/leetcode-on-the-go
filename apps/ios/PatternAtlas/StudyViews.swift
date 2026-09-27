@@ -60,7 +60,7 @@ struct ProblemDetailView: View {
                                 Button("Copy draft") { UIPasteboard.general.string = store.draft(for: problem); store.message = "Draft copied." }.font(.caption)
                             }
                         } else {
-                            if problem.solutions.count > 1 {
+                            if problem.solutions.count > 1 && !reviewMode {
                                 Picker("Approach", selection: $selected) { ForEach(problem.solutions.indices, id: \.self) { Text(problem.solutions[$0].title).tag($0) } }.font(.caption)
                                     .onChange(of: selected) { _, _ in rated = nil }
                             }

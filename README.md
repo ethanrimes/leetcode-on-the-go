@@ -2,6 +2,12 @@
 
 A study-first monorepo for recognizing algorithmic patterns, recalling their invariants, drafting solutions, and reviewing canonical implementations.
 
+**Live web app:** https://blue-sea-0c03ac51e.3.azurestaticapps.net
+
+The current curriculum contains **200 worked patterns**, **193 unique problem cards**, **12 topic roots**, and a **4,068-problem reference catalog**. It was audited against the 12 EndlessCheng guide outlines, labuladong’s public algorithm directory and learning plans, and all 75 official LeetCode topic tags. Read the [coverage audit](docs/COVERAGE.md) for the complete hierarchy and the explicitly listed specialist extensions; this is broad algorithm coverage, not a claim of literal exhaustiveness.
+
+Features include recursive topic navigation, pattern and problem difficulty labels, original summaries, recognition cues, pitfalls, a Python editor with automatic local draft saving, multiple solution approaches where included, solution reveal, self-rated spaced review, bookmarks, progress, and portable JSON backups. The iOS app is native SwiftUI and includes the worked curriculum offline.
+
 - `apps/web`: React + TypeScript, responsive browser study workspace.
 - `apps/ios`: native SwiftUI iPhone/iPad app, with an offline curriculum.
 - `packages/content`: versioned curriculum shared by both apps.
@@ -23,6 +29,10 @@ npm run ios:generate
 open apps/ios/PatternAtlas.xcodeproj
 ```
 
+Select the `PatternAtlas` scheme and an iPhone simulator. To install on a physical device, select your Apple development team in Xcode’s Signing & Capabilities settings. No developer signing credentials are checked into this repo.
+
+For Azure deployment, run `npm run deploy` after authenticating the Azure CLI to the configured subscription. The dedicated resource group is `leetcode-on-the-go-rg`; hosting uses Azure Static Web Apps Free. GitHub Actions validates web/content changes before deploying `main`. The deployment token is held in a GitHub secret. See [architecture](docs/ARCHITECTURE.md), [source methodology](docs/SOURCES.md), and [verification evidence](docs/VALIDATION.md).
+
 Study progress and code drafts stay on the current device. Export/import is provided for backups and moving progress between devices. Running code and submitting solutions happen on LeetCode.
 
 ## Curriculum approach
@@ -32,3 +42,5 @@ Organize knowledge as topic → technique family → subfamily → individual pa
 Original summaries, explanations, and code are authored for this project. LeetCode titles, IDs, difficulty, and URLs are reference metadata. No paid editorials or hidden test cases are included. See `docs/SOURCES.md` for reference methodology and coverage boundaries.
 
 This project is independent of LeetCode, EndlessCheng, and labuladong.
+
+Third-party font licenses and dependency attribution are in [THIRD_PARTY.md](docs/THIRD_PARTY.md).

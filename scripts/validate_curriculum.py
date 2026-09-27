@@ -44,7 +44,7 @@ for problem in data['problems']:
         code=solution['code']; ast.parse(code); scope={}; exec(compile(code,'<authored-curriculum>','exec'),scope)
         args=copy.deepcopy(problem['test']['args']); adapter=problem['test'].get('adapter')
         if adapter=='tree': args[0]=tree(args[0])
-        if adapter=='linked': args=[linked(v) if isinstance(v,list) else v for v in args]
+        if adapter in ('linked','linked-bool'): args=[linked(v) if isinstance(v,list) else v for v in args]
         if adapter=='cycle':
             values,pos=args; head=linked(values); chain=[]; node=head
             while node: chain.append(node); node=node.next
@@ -56,8 +56,18 @@ for problem in data['problems']:
                 values=[]
                 while actual: values.append(actual.val); actual=actual.next
                 actual=values
+            if adapter=='tree-output':
+                q=deque([actual]); values=[]
+                while q:
+                    node=q.popleft(); values.append(node.val if node else None)
+                    if node: q.extend([node.left,node.right])
+                while values and values[-1] is None: values.pop()
+                actual=values
             expected=problem['test']['expected']
-            assert actual==expected or (isinstance(actual,float) and isinstance(expected,(int,float)) and math.isclose(actual,expected)), f'{actual!r} != {expected!r}'
+            comparison=problem['test'].get('comparison')
+            if comparison=='rand10': assert isinstance(actual,int) and 1<=actual<=10
+            elif comparison=='permutation': assert sorted(actual)==sorted(expected)
+            else: assert actual==expected or (isinstance(actual,float) and isinstance(expected,(int,float)) and math.isclose(actual,expected)), f'{actual!r} != {expected!r}'
             checked+=1
         except Exception as exc: errors.append(f'{problem["id"]} / {solution["title"]}: {exc}')
 for node in nodes.values():

@@ -10,7 +10,7 @@ The solution library includes **193 authored lessons** and **2,716 additional co
 
 The Graphite design uses charcoal, slate, and blue, compact topic indexes, and sortable problem tables. Every leaf supports difficulty, number, and title ordering, with a saved preference per collection.
 
-Features include recursive topic navigation, pattern and problem difficulty labels, original summaries, recognition cues, pitfalls, a Python editor with automatic local draft saving, multiple solution approaches where included, solution reveal, self-rated spaced review, bookmarks, a progress dashboard with treemaps and stacked bars, practice freshness, refocus suggestions, submission history, page-entry tracking, and portable JSON backups. The iOS app is native SwiftUI and includes the worked curriculum offline.
+Features include recursive topic navigation, pattern and problem difficulty labels, original summaries, recognition cues, pitfalls, a Python editor with automatic local draft saving, multiple solution approaches where included, solution reveal, self-rated spaced review, solution-recognition diagnostics, bookmarks, a progress dashboard with treemaps and stacked bars, practice freshness, refocus suggestions, submission history, page-entry tracking, and portable JSON backups. The iOS app is native SwiftUI and includes the worked curriculum offline.
 
 - `apps/web`: React + TypeScript, responsive browser study workspace.
 - `apps/ios`: native SwiftUI iPhone/iPad app, with an offline curriculum.
@@ -38,6 +38,12 @@ Select the `PatternAtlas` scheme and an iPhone simulator. To install on a physic
 For Azure deployment, run `npm run deploy` after authenticating the Azure CLI to the configured subscription. The dedicated resource group is `leetcode-on-the-go-rg`; hosting uses Azure Static Web Apps Free. GitHub Actions validates web/content changes before deploying `main`. The deployment token is held in a GitHub secret. See [architecture](docs/ARCHITECTURE.md), [source methodology](docs/SOURCES.md), and [verification evidence](docs/VALIDATION.md).
 
 Study progress and code drafts stay on the current device. Export/import is provided for backups and moving progress between devices. Running code and submitting solutions happen on LeetCode.
+
+## Diagnose concept and pattern familiarity
+
+Open **Diagnostic test** on web or **Progress → Start diagnostic test** on iOS. No answer is required: open a solution set, follow the reasoning, and choose **Definitely got it**, **Probably got it**, or **Did not get it**. Choose a category, difficulty, and session length; work through unassessed material or revisit uncertain ratings.
+
+Ratings save immediately and appear in **Your progress → Concept & pattern familiarity** on web and **Progress → Familiarity by concept & pattern** on iOS. The report shows the three ratings and unassessed sets at concept or individual-pattern level. Diagnostics cover all 200 authored patterns by default, with an option to include community solution collections. They measure self-reported familiarity independently of submissions, recall scheduling, and practice freshness. See [the progress guide](docs/PROGRESS.md#diagnostic-familiarity) for attribution and backup behavior.
 
 ## Curriculum approach
 

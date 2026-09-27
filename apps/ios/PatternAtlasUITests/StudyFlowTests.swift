@@ -54,4 +54,30 @@ final class StudyFlowTests: XCTestCase {
         app.buttons["Treemap"].tap()
         XCTAssertTrue(map.exists)
     }
+    func testDiagnosticRevealFlagAndSummary() {
+        let app = XCUIApplication(); app.launch()
+        app.tabBars.buttons["Progress"].tap()
+        let start = app.buttons["startDiagnostic"]
+        for _ in 0..<5 { if start.isHittable { break }; app.swipeUp() }
+        XCTAssertTrue(start.waitForExistence(timeout: 10)); start.tap()
+        let begin = app.buttons["beginDiagnostic"]
+        for _ in 0..<5 { if begin.isHittable { break }; app.swipeUp() }
+        XCTAssertTrue(begin.isHittable); begin.tap()
+        let open = app.buttons["openDiagnosticSolutions"]
+        XCTAssertTrue(open.waitForExistence(timeout: 10))
+        for _ in 0..<5 { if open.isHittable { break }; app.swipeUp() }
+        open.tap()
+        let code = app.descendants(matching: .any)["diagnosticSolutionCode"].firstMatch
+        XCTAssertTrue(code.waitForExistence(timeout: 5))
+        let flag = app.buttons["familiarity_probably"]
+        for _ in 0..<12 { if flag.isHittable { break }; app.swipeUp() }
+        XCTAssertTrue(flag.isHittable); flag.tap()
+        let status = app.staticTexts["familiarityStatus"]
+        for _ in 0..<3 { if status.isHittable { break }; app.swipeUp() }
+        XCTAssertTrue(status.label.contains("Saved: Probably got it"))
+        let screenshot = XCTAttachment(screenshot: app.screenshot()); screenshot.name = "Diagnostic familiarity rating"; screenshot.lifetime = .keepAlways; add(screenshot)
+        app.buttons["finishDiagnostic"].tap()
+        XCTAssertTrue(app.staticTexts["Your familiarity snapshot"].exists || app.staticTexts["YOUR FAMILIARITY SNAPSHOT"].exists)
+        XCTAssertTrue(app.buttons["View familiarity dashboard"].exists)
+    }
 }

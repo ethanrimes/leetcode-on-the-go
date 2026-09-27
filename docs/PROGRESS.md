@@ -47,10 +47,29 @@ Both exporters paginate `/api/submissions/` with a delay between requests, follo
 
 A problem may belong to several patterns and collections. Tile area represents memberships; category/global counts deduplicate IDs within their scope. Summing adjacent tiles can therefore exceed the parent total. Accepted coverage of a pattern does not prove the submitted solution used that technique. Drill down, filter, or use the accessible list/table for small tiles.
 
+## Diagnostic familiarity
+
+The diagnostic presents solution sets without an editor or a required answer. A set contains the implementations for one problem and one explicitly mapped approach. Open the solutions before choosing a rating:
+
+- **Definitely got it**: I understand the approach and could explain it.
+- **Probably got it**: the idea makes sense, but I am unsure of some steps.
+- **Did not get it**: I need to study this approach again.
+- **Unassessed**: no rating exists; this means unknown, not unfamiliar.
+
+Choose a category or pattern, problem difficulty, and 10, 20, 50, or all eligible sets. The default library covers all 200 authored patterns. An optional community library adds source-collection solution sets. Sampling rotates across root concepts and patterns; within those groups, unseen sets precede prior ratings, followed by uncertainty, oldest assessment, difficulty, and problem number. Each started session keeps its selection stable as ratings change. Skip, go back, revise a rating, or finish early to see the selection summary. Ratings save immediately. Returning with **Unassessed only** continues the remaining material; **Probably / did not get it** targets uncertain ratings.
+
+The familiarity dashboard aggregates the three ratings and unassessed counts by the next hierarchy level or by individual pattern/collection. Filter by category, search by name, or show only groups with uncertain ratings and start a focused diagnostic. The latest assessment date records when the self-report was made. There is no inferred mastery score.
+
+A rating applies only to the approach actually shown. It does not automatically credit every pattern or official tag attached to the problem. Community collections are broad practice groupings; their ratings remain separate from exact authored patterns. Parent concepts aggregate the mapped solution sets beneath them, so a problem with different solution approaches can contribute more than one set.
+
+These self-assessments do not change accepted submissions, drafts, recall scheduling, review activity, or practice freshness. Recognition after seeing a solution is different from recalling an approach independently. Page-entry tracking still records diagnostic navigation normally.
+
 ## Portable data
 
-The existing version-1 backup retains `cards`, `drafts`, `bookmarks`, and `activity`, with optional `leetcode` and `visits` fields. Old backups still load. New exports can be shared between current web/native releases. Older releases may ignore the new fields.
+The existing version-1 backup retains `cards`, `drafts`, `bookmarks`, and `activity`, with optional `leetcode`, `visits`, and `familiarity` fields. Old backups still load. New exports can be shared between current web/native releases. Older releases may ignore the new fields.
 
 Imports validate first, preserve existing local drafts, merge reviews by their review date, and reject histories from a different LeetCode account. Visit counters are partitioned by device; repeated imports take the maximum count for each device/page and sum across devices, avoiding duplicate counts. Submission IDs deduplicate repeated/overlapping exports. Unknown catalog slugs remain in the submission log and are counted as unmatched, not assigned to invented patterns.
+
+Familiarity records use `problemId:patternId` keys with a `rating` (`definitely`, `probably`, or `not-yet`) and ISO `assessedAt` timestamp. The newest assessment wins during backup merge. Equal timestamps use the weaker rating so merge order cannot accidentally inflate familiarity. Invalid ratings or timestamps reject the import before local data changes.
 
 All local imports are limited to 10 MB. Browser storage capacity varies; the web app reports persistence failures and offers backup export. Export backups to preserve data before clearing browser storage or removing the app.

@@ -23,6 +23,7 @@ struct ProgressViewScreen: View {
                     StatView(value: "\(store.dueCount)", label: "Due now")
                 }.padding(.vertical, 12)
             }
+            FamiliarityDashboardSection(data: data)
             AnalyticsDashboardSections(data: data)
             Section("Saved for later") {
                 let saved = data.problems.filter { store.progress.bookmarks.contains($0.id) }

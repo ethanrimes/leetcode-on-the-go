@@ -52,3 +52,11 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 - Native app built for iPhone 17 Pro Simulator. Eight unit tests and three UI tests passed; the new UI flow opens the progress dashboard and switches treemap/stacked-bar views. Follow-up model changes were rechecked with the unit suite.
 - Desktop/mobile dashboard screenshots inspected. No horizontal viewport overflow after fixing the hidden import input.
 - Signed-in LeetCode submission response fields were observed in the user's browser. Actual headless export requires the separate browser session's one-time sign-in; anonymous access returned a sign-in/challenge response. Synthetic pagination tests do not establish the completeness of a real account's export.
+
+## Diagnostic familiarity update · 2026-09-27
+
+- Web production build passed. The 22 existing desktop/mobile flows passed; all four new diagnostic flows passed after correcting a scroll effect. The diagnostic checks cover reveal-gated ratings, revising all three flags, reload persistence, exact pattern aggregation, stable sessions, skipping, and reassessment of uncertain ratings.
+- All 17 TypeScript tests passed alongside the curriculum and authored algorithm checks. New tests cover sampling across 12 concepts, exact approach attribution, community collection separation, backup merging, invalid records, and keeping diagnostic ratings independent of practice freshness and recall.
+- Native iOS built and passed 10 model tests and four UI tests on iPhone 17 Pro Simulator. The diagnostic UI test opens solutions, saves “Probably got it,” and opens the summary. The diagnostic model suite was rechecked after isolating its storage fixtures.
+- Visually inspected the diagnostic on desktop/mobile web and native iOS, plus the web familiarity dashboard. Small-phone filter controls use a single column to keep selected labels readable.
+- Diagnostic data remains local with portable backup support. No independent-solving ability or mastery is inferred from solution recognition.

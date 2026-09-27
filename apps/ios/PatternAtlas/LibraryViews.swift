@@ -46,6 +46,7 @@ struct NodeDetailView: View {
                     Text(node.description).font(.subheadline).foregroundStyle(.secondary)
                 }.padding(.vertical, 7)
             }
+            Section { NavigationLink("Assess familiarity with this topic") { DiagnosticSetupView(data: data, nodeId: node.id) } }
             Section("The general approach") {
                 Text(node.approach).font(.subheadline).lineSpacing(5).padding(.vertical, 5)
                 if let pseudocode = node.pseudocode {

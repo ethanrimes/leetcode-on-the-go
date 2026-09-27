@@ -55,7 +55,7 @@ function App(){
   const navigation=[['overview','Overview',LayoutDashboard],['library','Pattern library',Network],['review','Practice deck',Layers3],['catalog','All problems',Code2],['progress','Your progress',TrendingUp]] as const;
   return <div className="app-shell">
     {mobileNav&&<button className="nav-scrim" aria-label="Close navigation" onClick={()=>setMobileNav(false)}/>}
-    <aside className={`sidebar ${mobileNav?'open':''}`}>
+    <aside id="workspace-navigation" onClick={e=>{if((e.target as HTMLElement).closest('a'))setMobileNav(false);}} className={`sidebar ${mobileNav?'open':''}`}>
       <a className="brand" href="#/"><span className="brand-mark"><Layers3 size={23}/></span><span>Pattern Atlas<small>LEETCODE ON THE GO</small></span></a>
       <div className="sidebar-label">YOUR WORKSPACE</div>
       <nav aria-label="Main navigation">{navigation.map(([key,label,Icon])=><a key={key} className={active===key?'active':''} href={key==='overview'?'#/':`#/${key}`}><Icon size={18}/>{label}{key==='review'&&due>0&&<span className="nav-count">{due}</span>}</a>)}</nav>
@@ -64,7 +64,7 @@ function App(){
       <div className="sidebar-bottom"><div className="small-sprout"><Leaf size={18}/><span>Small sessions.<br/><strong>Lasting intuition.</strong></span></div><a href="#/about"><CircleHelp size={16}/> About the curriculum <ArrowUpRight size={14}/></a></div>
     </aside>
     <div className="workspace">
-      <header className="topbar"><div className="topbar-title"><button className="icon-button mobile-menu" aria-label="Open navigation" onClick={()=>setMobileNav(true)}><Menu size={20}/></button><span>Learning workspace</span><ChevronRight size={14}/><strong>{navigation.find(n=>n[0]===active)?.[1]??(active==='problem'?'Problem study':'Curriculum notes')}</strong></div>
+      <header className="topbar"><div className="topbar-title"><button className="icon-button mobile-menu" aria-label="Open navigation" aria-controls="workspace-navigation" aria-expanded={mobileNav} onClick={()=>setMobileNav(true)}><Menu size={20}/></button><span>Learning workspace</span><ChevronRight size={14}/><strong>{navigation.find(n=>n[0]===active)?.[1]??(active==='problem'?'Problem study':'Curriculum notes')}</strong></div>
         <form className="global-search" onSubmit={e=>{e.preventDefault();navigate(`/catalog?q=${encodeURIComponent(search)}`);}}><button type="button" aria-label="Open problem search" className="search-trigger" onClick={()=>navigate('/catalog')}><Search size={17}/></button><input aria-label="Search all problems" placeholder="Find a problem or pattern…" value={search} onChange={e=>setSearch(e.target.value)}/><kbd>↵</kbd></form>
         <span className="local-avatar" title="Your private, local study workspace">You</span>
       </header>

@@ -61,7 +61,7 @@ test('backup import validates and merges without replacing an existing draft',as
 });
 test('layout stays within the viewport and navigation is accessible',async({page},testInfo)=>{
   await page.goto('/');await expect(page.locator('h1')).toContainText('Build intuition');
-  if(testInfo.project.name==='mobile') {await page.getByRole('button',{name:'Open navigation'}).click();await page.getByRole('link',{name:'Pattern library',exact:true}).click();await expect(page.locator('h1')).toHaveText('Pattern library');}
+  if(testInfo.project.name==='mobile') {await page.getByRole('button',{name:'Open navigation'}).click();await page.getByRole('link',{name:'Pattern library',exact:true}).click();await expect(page.locator('h1')).toHaveText('Pattern library');await expect(page.locator('.sidebar')).toBeHidden();}
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
-  await page.screenshot({path:`artifacts/web-${testInfo.project.name}.png`,fullPage:true});
+  await page.screenshot({path:`artifacts/web-${testInfo.project.name}.png`,fullPage:true,animations:'disabled'});
 });

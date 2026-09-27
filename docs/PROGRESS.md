@@ -10,16 +10,20 @@ From the repository:
 npm ci
 npx playwright install chromium
 npm run history:login
-npm run history:export -- --through 2026-09-27
-# Later, refresh the last 30 days (use a full export after longer gaps):
-npm run history:export -- --days 30
+npm run history:update -- --days 0
+# Later, refresh the last 30 days and merge into the same private file:
+npm run history:update
+# Optional: also deliver the import to an installed iOS Simulator app:
+npm run history:update -- --simulator YOUR_SIMULATOR_UDID
 ```
 
-The login command opens a separate browser for a one-time LeetCode sign-in. It waits up to ten minutes, verifies the signed-in account, and saves its isolated browser session under `.local/leetcode-browser/`. Subsequent exports run headlessly, without interacting with your Chrome/Comet windows. If LeetCode expires the session or presents a challenge, complete it with `history:login` and retry. The tool stops on authentication/challenge failures; it does not circumvent them.
+The login command opens a separate browser for a one-time LeetCode sign-in. It waits up to ten minutes, verifies the signed-in account, saves its isolated browser session under `.local/leetcode-browser/`, and closes the browser. Subsequent exports run headlessly, without interacting with your Chrome/Comet windows. If LeetCode expires the session or presents a challenge, complete it with `history:login` and retry. The tool stops on authentication/challenge failures; it does not circumvent them.
+
+`history:update` merges new records into **`.local/leetcode-history.json`**, retains the previous file as `.local/leetcode-history.previous.json`, and keeps older submissions during recent or partial exports. An account mismatch stops the merge. Use `--days 0` after a gap longer than 30 days. `--from path.json` merges an existing export without contacting LeetCode. A valid partial export is useful and is clearly identified as partial.
 
 `--through YYYY-MM-DD` includes submissions through the end of that day in the computer's local time zone. It defaults to today and rejects future dates. `--out path.json` chooses the output file. By default, private exports and the browser session stay in git-ignored `.local/`, with restrictive filesystem permissions. Do not commit that directory. The session is sensitive even though exported history contains no credentials.
 
-On **web**, open Your progress → Import LeetCode history and select the generated JSON. On **iOS**, transfer it with Files/AirDrop and use Progress → Import LeetCode history. Refreshing fetches new records; importing merges them by submission ID. Neither app uploads personal history to Azure or automatically watches the output file.
+On **web**, open Your progress → Import LeetCode history and select `.local/leetcode-history.json` (in the Mac file picker, press ⇧⌘G to enter the full path). On **iOS**, transfer it with Files/AirDrop and open it in Pattern Atlas, or use Progress → Import LeetCode history. The optional simulator flag stages that same JSON in the selected app's Documents folder and opens its import link; it does not erase app data. Neither app uploads personal history to Azure or automatically watches the output file. Physical iPhones still require transferring/importing the file.
 
 ## Browser exporter alternative
 
@@ -32,16 +36,18 @@ On **web**, open Your progress → Import LeetCode history and select the genera
 
 Both exporters paginate `/api/submissions/` with a delay between requests, follow `has_next` and `last_key`, retry rate limits/server errors, detect stalled pagination, and keep partial results after interruption or failure. They use the account's own session on LeetCode. The submission endpoint can include code in its response; only ID, slug, title, timestamp, result, and language are retained in the export. Passwords, cookies, tokens, and code are never written into it.
 
+They also capture the authenticated `/api/problems/all/` completion list as a separate `completions` snapshot (`observedAt` and problem `slugs`) when exporting through today. This fills older accepted-coverage gaps when detailed submissions are unavailable. A snapshot has no submission dates, language, or submission IDs: none are invented. Historical cutoff exports omit the current snapshot because it cannot establish which problems were solved before that date. A cutoff does not delete data already imported by a previous update.
+
 “Reached the oldest available record” means the endpoint reported no next page, not an independent guarantee that LeetCode exposes every historical submission. A partial update preserves older imported records. Use a full export for initial setup and after a long gap. Export timing, date cutoff, deleted records, site retention, catalog scope, and overlapping topic memberships may make app counts differ from LeetCode's summary.
 
 ## Meaning of the dashboard
 
-- **Accepted**: at least one imported Accepted result for the problem in the selected submission period. A later failed attempt does not erase that acceptance.
+- **Accepted**: at least one imported Accepted result in the selected submission period. All-time coverage also includes the completion snapshot. Date-filtered coverage excludes that undated snapshot. A later failed attempt does not erase prior acceptance.
 - **Attempted without acceptance**: submissions exist in that period, but none were accepted.
 - **No recorded attempt**: no imported attempt in that period. With a partial history, this is not proof the problem was never attempted on LeetCode.
 - **Fresh**: at least one submission (any result) or self-rated recall review within the chosen 7/14/30/60/90-day window. This is recent practice, not measured mastery. Freshness always uses all available practice, independently of the submission-period filter.
 - **Needs refresh**: practice exists, but the last practice predates the freshness window.
-- **Never practiced**: no submission or recall review is recorded locally.
+- **No dated practice**: no timestamped submission or recall review is recorded locally. The problem may still be completed according to the snapshot; its practice date is unknown.
 - **Where to refocus**: authored patterns ranked by due review count, then stale practiced problems, then patterns already started, Core priority, and remaining accepted-coverage gaps. Suggestions respect the selected category and problem difficulty.
 - **Entries**: opening or returning to a page increments a per-device counter. Editing, revealing a solution, and changing filters do not. Category chart entries include that category and descendant category/pattern pages. The page-entry table reports each actual page separately, including problem pages. Counts start when this release is used; prior navigation cannot be reconstructed.
 

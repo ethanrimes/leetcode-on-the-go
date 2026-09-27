@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {CodeEditor} from './CodeEditorLoader';
 import {DiagnosticPage, FamiliarityDashboard} from './Diagnostic';
-import {ProgressDashboard} from './ProgressDashboard';
+import {ProgressDashboard,LeetCodeSummary} from './ProgressDashboard';
 import {ProblemBrowser} from './ProblemBrowser';
 
 import {ArrowRight, ArrowUpRight, BookOpen, Bookmark, Check, CheckCheck, ChevronDown, ChevronRight, CircleHelp, Code2, Download, ExternalLink, Eye, Flame, GitBranch, GraduationCap, Layers3, LayoutDashboard, Leaf, ListFilter, Menu, Network, Play, RotateCcw, Search, Settings2, Shuffle, Sparkles, Target, Timer, TrendingUp, Upload, X} from 'lucide-react';
@@ -92,6 +92,7 @@ function App(){
         {active==='catalog'&&<Catalog {...common} catalog={catalog} initialQuery={params.get('q')??''}/>}
         {active==='progress'&&<>
           <p className="eyebrow">PRACTICE / COVERAGE / FRESHNESS</p><h1>Your progress</h1><p className="lead">Find the patterns to revisit and the gaps to work on next.</p>
+          <LeetCodeSummary progress={progress}/>
           <FamiliarityDashboard data={data} progress={progress}/>
           <ProgressDashboard {...common}/>
           <div className="section-heading"><h2>Recall practice</h2></div><section className="stats-row"><div><strong>{reviewed}</strong><span>cards reviewed</span></div><div><strong>{mastered}</strong><span>recalled twice</span></div><div><strong>{due}</strong><span>due for review</span></div></section>

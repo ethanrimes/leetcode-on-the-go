@@ -32,3 +32,5 @@ body{font-size:14px}.sidebar{background:#171b24;color:#b7bfcc;padding-top:28px}.
 @media(max-width:700px){.familiarity-panel,.diagnostic-setup,.diagnostic-card,.diagnostic-summary{padding:17px}.diagnostic-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.diagnostic-totals{grid-template-columns:repeat(2,minmax(0,1fr))}.diagnostic-totals>div:nth-child(2){border-right:0}.diagnostic-totals>div:nth-child(-n+2){border-bottom:1px solid #e2e7ee}.familiarity-controls{flex-direction:column;align-items:stretch;gap:16px}.familiarity-row-footer{align-items:flex-start;flex-direction:column}.diagnostic-ratings{grid-template-columns:1fr}.diagnostic-reveal{align-items:flex-start;flex-direction:column}.diagnostic-session-bar{align-items:flex-start;flex-direction:column}.diagnostic-card pre{font-size:11px;padding:12px}.diagnostic-navigation .button{font-size:12px;padding:12px}.diagnostic-results button{align-items:flex-start;flex-direction:column;gap:8px}}
 
 @media(max-width:480px){.diagnostic-filters{grid-template-columns:1fr}}
+
+.imported-summary{margin:24px 0}

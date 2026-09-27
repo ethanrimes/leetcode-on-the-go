@@ -55,6 +55,9 @@ struct AnalyticsDashboardSections: View {
             if let history = store.progress.leetcode {
                 Label(history.account, systemImage: "person.crop.circle").font(.headline)
                 Text("\(history.submissions.count) submissions · exported \(dateFromISO(history.exportedAt)?.formatted(date: .abbreviated, time: .shortened) ?? history.exportedAt)").font(.caption).foregroundStyle(.secondary)
+                if let snapshot = history.completions {
+                    Text("LeetCode reports \(snapshot.slugs.count) completed problems as of \(dateFromISO(snapshot.observedAt)?.formatted(date: .abbreviated, time: .omitted) ?? snapshot.observedAt). The snapshot contributes to all-time coverage only; unknown submission dates stay unknown.").font(.caption).foregroundStyle(.secondary)
+                }
                 if let through = history.through { Text("Latest export includes submissions through \(through).").font(.caption2).foregroundStyle(.secondary) }
                 Text(history.complete ? "Latest export reached the oldest available record." : "Latest export is partial. Previously imported records are kept.").font(.caption2).foregroundStyle(.secondary)
             } else { Text("Bring your LeetCode history into your study workspace.").font(.subheadline) }
@@ -69,7 +72,7 @@ struct AnalyticsDashboardSections: View {
                 NavigationLink { NodeDetailView(data: data, node: item.node) } label: {
                     VStack(alignment: .leading, spacing: 7) {
                         HStack { Text(item.node.title).font(.subheadline.weight(.medium)); Spacer(); Text("\(Int((Double(item.fresh) / Double(item.total) * 100).rounded()))% fresh").font(.caption.bold()).foregroundStyle(AtlasStyle.green) }
-                        Text("\(item.due) reviews due · \(item.practiced - item.fresh) need refresh · \(item.total - item.practiced) never practiced").font(.caption2).foregroundStyle(.secondary)
+                        Text("\(item.due) reviews due · \(item.practiced - item.fresh) need refresh · \(item.total - item.practiced) no dated practice").font(.caption2).foregroundStyle(.secondary)
                         if let date = item.lastPracticed.flatMap(dateFromISO) { Text("Last practiced \(date.formatted(date: .abbreviated, time: .omitted)) · \(item.solved)/\(item.total) accepted").font(.caption2).foregroundStyle(.secondary) }
                     }.padding(.vertical, 5)
                 }
@@ -97,7 +100,7 @@ struct AnalyticsDashboardSections: View {
             HStack(spacing: 12) {
                 legend(freshness ? "Fresh" : "Accepted", AtlasStyle.green)
                 legend(freshness ? "Needs refresh" : "Attempted", .orange)
-                legend(freshness ? "Never practiced" : "No attempt", .gray.opacity(0.4))
+                legend(freshness ? "No dated practice" : "No attempt", .gray.opacity(0.4))
             }
             if !filter.scope.isEmpty { Button("Back to all topics") { filter.scope = ""; selected = nil } }
             if snapshot.tiles.isEmpty { Text("No categories match these filters.").font(.caption) }

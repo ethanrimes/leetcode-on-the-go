@@ -38,7 +38,7 @@ test('entries increase only on navigation, persist on reload, and preserve old b
 test('exporter paginates and downloads metadata without credentials or source code',async({page})=>{
  await page.route('https://leetcode.com/**',async route=>{
   const url=new URL(route.request().url());
-  if(url.pathname==='/api/problems/all/')return route.fulfill({json:{user_name:'demo-test'}});
+  if(url.pathname==='/api/problems/all/')return route.fulfill({json:{user_name:'demo-test',stat_status_pairs:[{status:'ac',stat:{question__title_slug:'two-sum'}},{status:'ac',stat:{question__title_slug:'group-anagrams'}},{status:null,stat:{question__title_slug:'valid-anagram'}}]}});
   if(url.pathname==='/api/submissions/') {const offset=Number(url.searchParams.get('offset'));return route.fulfill({json:{submissions_dump:offset===0?[{id:101,title_slug:'two-sum',title:'Two Sum',timestamp:1720000000,status_display:'Accepted',lang:'python3',code:'SECRET CODE'}]:[{id:102,title_slug:'valid-anagram',title:'Valid Anagram',timestamp:1710000000,status_display:'Wrong Answer',lang:'python3'}],has_next:offset===0,last_key:'cursor'}});}
   return route.fulfill({contentType:'text/html',body:'<html><body>Signed-in fixture</body></html>'});
  });
@@ -46,5 +46,21 @@ test('exporter paginates and downloads metadata without credentials or source co
  const download=page.waitForEvent('download');await page.getByRole('button',{name:'Export all available history'}).click();
  const file=await download;const stream=await file.createReadStream();const chunks:Buffer[]=[];for await(const c of stream!)chunks.push(c);const result=JSON.parse(Buffer.concat(chunks).toString());
  expect(result.complete).toBe(true);expect(result.submissions).toHaveLength(2);expect(result.submissions[0]).not.toHaveProperty('code');expect(JSON.stringify(result)).not.toContain('SECRET');
+ expect(result.completions.slugs).toEqual(['group-anagrams','two-sum']);
  await expect(page.getByRole('status')).toContainText('oldest record');
+});
+test('undated completions populate all-time coverage without filling diagnostic ratings or freshness',async({page})=>{
+ await page.goto('/#/progress');
+ const packet={...fixture,submissions:[],complete:false,completions:{observedAt:new Date().toISOString(),slugs:['two-sum','group-anagrams']}};
+ await page.getByLabel('LeetCode history file').setInputFiles({name:'history.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(packet))});
+ await expect(page.getByLabel('Submission statistics')).toContainText('2accepted problems');
+ await expect(page.getByLabel('Imported LeetCode progress')).toContainText('2 completed problems');
+ await page.getByRole('link',{name:'View coverage & freshness ↓'}).click();
+ await expect(page).toHaveURL(/#\/progress$/);
+ await expect(page.locator('.completion-note')).toContainText('2 completed problems');
+ await expect(page.getByLabel('Diagnostic familiarity',{exact:true})).toContainText('0 of 200 solution sets assessed');
+ await expect(page.locator('.submission-history tbody tr')).toHaveCount(0);
+ await page.getByLabel('Submission period').selectOption('30');
+ await expect(page.getByLabel('Submission statistics')).toContainText('0accepted problems');
+ await page.reload();await expect(page.getByLabel('Submission statistics')).toContainText('2accepted problems');
 });

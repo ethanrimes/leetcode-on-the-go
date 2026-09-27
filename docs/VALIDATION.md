@@ -60,3 +60,11 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 - Native iOS built and passed 10 model tests and four UI tests on iPhone 17 Pro Simulator. The diagnostic UI test opens solutions, saves “Probably got it,” and opens the summary. The diagnostic model suite was rechecked after isolating its storage fixtures.
 - Visually inspected the diagnostic on desktop/mobile web and native iOS, plus the web familiarity dashboard. Small-phone filter controls use a single column to keep selected labels readable.
 - Diagnostic data remains local with portable backup support. No independent-solving ability or mastery is inferred from solution recognition.
+
+## Authenticated history import update · 2026-09-27
+
+- Verified a real authenticated headless export, including partial-history preservation when LeetCode denied further pagination. The account's current completion list was captured separately; private account data remains in `.local/`.
+- Verified a subsequent 30-day headless update and cumulative merge without losing older submissions. The command keeps a previous-file backup and does not copy personal data into deployable assets.
+- Production web build and all 18 core tests passed. Existing 26 browser flows passed, and the two new desktop/mobile completion-snapshot flows passed after correcting an exact-label test selector. These verify all-time coverage, exclusion from date-filtered coverage, unchanged diagnostic ratings, and persistence.
+- All 15 native tests passed (11 model tests, four UI tests). New model checks cover completion snapshots, missing practice dates, file/deep-link imports, preserved drafts, and invalid import URLs.
+- Current completion snapshots establish accepted coverage, not when a submission occurred. Full historical submission retrieval remains limited by the records LeetCode makes available; physical-device transfer still uses Files/AirDrop.

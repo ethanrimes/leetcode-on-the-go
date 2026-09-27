@@ -2,6 +2,7 @@ import {validateFamiliarity, type Familiarity} from './diagnostic';
 export * from './diagnostic';
 import {validateHistory, validateVisits, type LeetCodeHistory, type Visits} from './analytics';
 export * from './analytics';
+export * from './recommendations';
 export type Level = 'Foundation' | 'Intermediate' | 'Advanced';
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 export type Rating = 'again' | 'hard' | 'good' | 'easy';

@@ -31,6 +31,33 @@ final class AnalyticsTests: XCTestCase {
         XCTAssertThrowsError(try store.importHistoryURL(URL(string: "patternatlas://import-history?file=other")!, documents: directory))
         XCTAssertFalse(CompletionSnapshot(observedAt: "bad", slugs: []).valid)
     }
+    @MainActor func testRecommendationsUseExactSolutionsAndHistoryWithoutInventingDates() throws {
+        let suite = "Atlas.Recommendations.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let store = StudyStore(defaults: defaults), data = try XCTUnwrap(store.curriculum)
+        let problem = try XCTUnwrap(data.problems.first { $0.id == "49" })
+        let pattern = try XCTUnwrap(problem.solutions.first?.patternId)
+        let snapshot = CompletionSnapshot(observedAt: iso(now), slugs: [problem.slug])
+        let packet = SubmissionExport(completions: snapshot, format: "pattern-atlas-leetcode", version: 1, account: "demo", exportedAt: iso(now), complete: false, submissions: [])
+        try store.importHistory(JSONEncoder().encode(packet))
+        let scoped = AnalyticsFilter(scope: pattern)
+        let unknown = practiceRecommendations(data, progress: store.progress, filter: scoped, now: now)
+        XCTAssertEqual(unknown.first?.kind, "Check your recall")
+        XCTAssertTrue(unknown.first?.reason.contains("unavailable") == true)
+        let failed = LeetCodeSubmission(id: "1000", slug: problem.slug, title: problem.title, timestamp: iso(now.addingTimeInterval(-86400)), status: "Wrong Answer", language: "python3")
+        let update = SubmissionExport(format: "pattern-atlas-leetcode", version: 1, account: "demo", exportedAt: iso(now), complete: false, submissions: [failed])
+        try store.importHistory(JSONEncoder().encode(update))
+        let result = practiceRecommendations(data, progress: store.progress, filter: AnalyticsFilter(difficulty: "Medium"), now: now)
+        XCTAssertEqual(result.first?.kind, "Retry a problem"); XCTAssertEqual(result.first?.problem.id, "49")
+        XCTAssertEqual(Set(result.map { $0.problem.id }).count, result.count)
+        XCTAssertTrue(result.allSatisfy { item in item.problem.difficulty == "Medium" && item.problem.solutions.contains { $0.patternId == item.node.id } })
+        XCTAssertGreaterThanOrEqual(Set(result.map(\.rootId)).count, 3)
+        let accepted = LeetCodeSubmission(id: "1001", slug: problem.slug, title: problem.title, timestamp: iso(now), status: "Accepted", language: "python3")
+        let final = SubmissionExport(format: "pattern-atlas-leetcode", version: 1, account: "demo", exportedAt: iso(now), complete: false, submissions: [accepted])
+        try store.importHistory(JSONEncoder().encode(final))
+        XCTAssertTrue(practiceRecommendations(data, progress: store.progress, filter: scoped, now: now).isEmpty)
+    }
     private let now = dateFromISO("2026-09-27T12:00:00.000Z")!
     private func exportData(account: String = "demo") throws -> Data {
         let entries = [

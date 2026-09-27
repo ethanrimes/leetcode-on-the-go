@@ -209,13 +209,14 @@ struct CurriculumAnalytics {
             if (a.node.priority == "Core") != (b.node.priority == "Core") { return a.node.priority == "Core" }
             return Double(a.solved) / Double(a.total) < Double(b.solved) / Double(b.total)
         }
-        return AnalyticsSnapshot(tiles: tiles, focus: Array(focus.prefix(6)), total: problems.count, solved: problems.filter { solved.contains($0.slug) }.count,
+        return AnalyticsSnapshot(recommendations: practiceRecommendations(data, progress: progress, filter: filter, now: now), tiles: tiles, focus: Array(focus.prefix(6)), total: problems.count, solved: problems.filter { solved.contains($0.slug) }.count,
             attempted: problems.filter { attempted.contains($0.slug) && !solved.contains($0.slug) }.count,
             submissions: submissions.filter { (filter.scope.isEmpty && filter.difficulty.isEmpty) || slugs.contains($0.slug) }.sorted { $0.timestamp > $1.timestamp },
             unmapped: all.filter { bySlug[$0.slug] == nil }.count, pages: pages)
     }
 }
 struct AnalyticsSnapshot {
+    let recommendations: [PracticeRecommendation]
     let tiles: [CoverageStats]; let focus: [CoverageStats]; let total: Int; let solved: Int; let attempted: Int
     let submissions: [LeetCodeSubmission]; let unmapped: Int; let pages: [String: PageVisit]
 }

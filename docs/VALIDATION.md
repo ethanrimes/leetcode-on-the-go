@@ -69,3 +69,12 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 - All 15 native tests passed (11 model tests, four UI tests). New model checks cover completion snapshots, missing practice dates, file/deep-link imports, preserved drafts, and invalid import URLs.
 - Imported the actual private history into the native Simulator and verified its completion/submission totals. The dedicated persistent study browser imported the same file on the deployed site, merged repeated imports without duplicates, and retained its summary after a reload. `history:open --headless` completed successfully. The existing Comet window did not respond to keyboard actions during the import attempt; its storage is separate from the verified study-browser profile.
 - Current completion snapshots establish accepted coverage, not when a submission occurred. Full historical submission retrieval remains limited by the records LeetCode makes available; physical-device transfer still uses Files/AirDrop.
+
+## Progress exploration and recommendations · 2026-09-27
+
+- Replaced web system select popups with shared styled menus. Verified desktop/mobile bounds, keyboard navigation, Escape/focus restoration, catalog sorting persistence, and diagnostic filters.
+- Added viewport-constrained treemap hover/focus details, preserving click/tap study links. Visual inspection caught and corrected clipped popup content and pointer-focus interference with taps.
+- Added matching web/iOS recommendations from exact worked-solution mappings, with explicit reasons, direct problem links, duplicate suppression, and topic diversity. Unknown completion dates remain unknown. Tests cover newer successful attempts, review precedence, filters, uncertainty, and future submission exclusion.
+- Web production build, all 21 core tests, and all 34 desktop/mobile browser flows passed. The browser suite ran against the production preview after the existing development server reported an outdated dependency cache.
+- Native build succeeded. Fifteen native tests passed initially; the remaining progress UI test passed after updating its navigation for the imported-history summary and longer recommendation section. All 16 native checks have passing results.
+- Inspected the private account's six recommendations against its imported records and viewed the resulting web layout. Personal exports, screenshots, and sessions remain git-ignored.

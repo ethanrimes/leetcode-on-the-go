@@ -1,3 +1,4 @@
+import {choose} from './select';
 import {test,expect} from '@playwright/test';
 const pattern='arrays-hashing-lookup-counting-frequency-signatures';
 test('diagnostic opens solutions without answering, revises ratings, and reports exact pattern familiarity',async({page},info)=>{
@@ -19,17 +20,17 @@ test('diagnostic opens solutions without answering, revises ratings, and reports
  await expect(page.getByRole('heading',{name:'Your familiarity snapshot'})).toBeVisible();
  await page.getByRole('link',{name:'View familiarity dashboard'}).click();
  const panel=page.getByLabel('Diagnostic familiarity',{exact:true});await expect(panel).toContainText('1 of 200 solution sets assessed');
- await page.getByLabel('Group familiarity by').selectOption('leaves');await page.getByLabel('Find a concept or pattern').fill('Frequency signatures');
+ await choose(page,'Group familiarity by','Individual patterns & collections');await page.getByLabel('Find a concept or pattern').fill('Frequency signatures');
  await expect(panel.locator('.familiarity-row')).toHaveCount(1);await expect(panel.locator('.familiarity-row')).toContainText('1 definitely');
  await page.reload();await expect(panel).toContainText('1 of 200 solution sets assessed');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.goto(`/#/diagnostic?topic=${pattern}`);await expect(page.getByRole('button',{name:'Start diagnostic test',exact:true})).toBeDisabled();
- await page.getByLabel('Diagnostic selection').selectOption('all');await page.getByRole('button',{name:'Start diagnostic test',exact:true}).click();
+ await choose(page,'Diagnostic selection','All · reassess previous ratings');await page.getByRole('button',{name:'Start diagnostic test',exact:true}).click();
  await page.getByRole('button',{name:'Open solution set',exact:true}).click();await page.getByRole('button',{name:/Did not get it/}).click();
  await expect(page.getByRole('status')).toContainText('Saved: Did not get it');
 });
 test('diagnostic keeps its session stable, permits skipping and supports uncertainty-only reassessment',async({page})=>{
- await page.goto('/#/diagnostic');await page.getByLabel('Diagnostic length').selectOption('10');
+ await page.goto('/#/diagnostic');await choose(page,'Diagnostic length','10 solution sets');
  await page.getByRole('button',{name:'Start diagnostic test',exact:true}).click();
  const first=await page.locator('.diagnostic-card h2').textContent();
  await page.getByRole('button',{name:'Open solution set',exact:true}).click();await page.getByRole('button',{name:/Probably got it/}).click();

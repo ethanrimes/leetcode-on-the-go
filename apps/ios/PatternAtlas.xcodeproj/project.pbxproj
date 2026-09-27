@@ -1,0 +1,530 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2964B5DFE55DE01B4CA90C21 /* StudyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6259CEED717D04BC7B76D3AB /* StudyTests.swift */; };
+		35C4AE1B1FBB8D2B07C8EFC1 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69F9CCF4D8C30D48554ECD0 /* Models.swift */; };
+		4A955EC5102E39E657AD05F8 /* curriculum.json in Resources */ = {isa = PBXBuildFile; fileRef = FE5CA659726FAC6E32BB48E4 /* curriculum.json */; };
+		5772C721B1A1052AAB3A1351 /* ProgressViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */; };
+		6973CDB566319FE4BB5F8960 /* StudyViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0214829F5B5F573090F439CA /* StudyViews.swift */; };
+		98EC99393D70B111C5FE4530 /* LibraryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */; };
+		BFBB2B8680E8C434C7FEE3E0 /* PatternAtlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD385A1BF167A49418CC3E8 /* PatternAtlasApp.swift */; };
+		D1E9362C74A0B7B41F169BBF /* StudyFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		98F7029B6CBCE5945D703A76 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3A6E50D5DAB45879CD00264E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D52D90092F7BECA56B0B4D3B;
+			remoteInfo = PatternAtlas;
+		};
+		B1D8678EA845105B53D444DE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3A6E50D5DAB45879CD00264E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D52D90092F7BECA56B0B4D3B;
+			remoteInfo = PatternAtlas;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0214829F5B5F573090F439CA /* StudyViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViews.swift; sourceTree = "<group>"; };
+		062415641DAC6603F8B3532E /* PatternAtlas.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PatternAtlas.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViews.swift; sourceTree = "<group>"; };
+		224B98FF28FF46558D8846F5 /* PatternAtlasTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PatternAtlasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		37539AE4596B6529C8A95FF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6259CEED717D04BC7B76D3AB /* StudyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyTests.swift; sourceTree = "<group>"; };
+		6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyFlowTests.swift; sourceTree = "<group>"; };
+		C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViews.swift; sourceTree = "<group>"; };
+		D6C928AD370D9AD8086BCDF2 /* PatternAtlasUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PatternAtlasUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F69F9CCF4D8C30D48554ECD0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		FAD385A1BF167A49418CC3E8 /* PatternAtlasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternAtlasApp.swift; sourceTree = "<group>"; };
+		FE5CA659726FAC6E32BB48E4 /* curriculum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = curriculum.json; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		45A8F0ACBE46FC44E6E66666 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FE5CA659726FAC6E32BB48E4 /* curriculum.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		5F7C34B5FF1DDBDC3FE77C8F = {
+			isa = PBXGroup;
+			children = (
+				BFFC410E5F77E95BD48C29C3 /* PatternAtlas */,
+				6A9696D733AD36B2880E2E66 /* PatternAtlasTests */,
+				B8FF6BD0FE2FEC6CBD7163BC /* PatternAtlasUITests */,
+				832004F83FF7CC9CBF7C6340 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6A9696D733AD36B2880E2E66 /* PatternAtlasTests */ = {
+			isa = PBXGroup;
+			children = (
+				6259CEED717D04BC7B76D3AB /* StudyTests.swift */,
+			);
+			path = PatternAtlasTests;
+			sourceTree = "<group>";
+		};
+		832004F83FF7CC9CBF7C6340 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				062415641DAC6603F8B3532E /* PatternAtlas.app */,
+				224B98FF28FF46558D8846F5 /* PatternAtlasTests.xctest */,
+				D6C928AD370D9AD8086BCDF2 /* PatternAtlasUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B8FF6BD0FE2FEC6CBD7163BC /* PatternAtlasUITests */ = {
+			isa = PBXGroup;
+			children = (
+				6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */,
+			);
+			path = PatternAtlasUITests;
+			sourceTree = "<group>";
+		};
+		BFFC410E5F77E95BD48C29C3 /* PatternAtlas */ = {
+			isa = PBXGroup;
+			children = (
+				37539AE4596B6529C8A95FF4 /* Info.plist */,
+				C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */,
+				F69F9CCF4D8C30D48554ECD0 /* Models.swift */,
+				FAD385A1BF167A49418CC3E8 /* PatternAtlasApp.swift */,
+				10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */,
+				0214829F5B5F573090F439CA /* StudyViews.swift */,
+				45A8F0ACBE46FC44E6E66666 /* Resources */,
+			);
+			path = PatternAtlas;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		01E54E9BE19D297877560E00 /* PatternAtlasUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF8A9E32F20BDDF9AA3CF66C /* Build configuration list for PBXNativeTarget "PatternAtlasUITests" */;
+			buildPhases = (
+				7B369B714B476E02CE0B56B2 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B80C958F23B7D6E687DB8097 /* PBXTargetDependency */,
+			);
+			name = PatternAtlasUITests;
+			packageProductDependencies = (
+			);
+			productName = PatternAtlasUITests;
+			productReference = D6C928AD370D9AD8086BCDF2 /* PatternAtlasUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		94EE98C2463CFC90D2A98B66 /* PatternAtlasTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B1E0C2E7B919D3C1761974E7 /* Build configuration list for PBXNativeTarget "PatternAtlasTests" */;
+			buildPhases = (
+				CC63EEBCB1779CB430CFF14D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				94719DBCCA8A857425BE4ACF /* PBXTargetDependency */,
+			);
+			name = PatternAtlasTests;
+			packageProductDependencies = (
+			);
+			productName = PatternAtlasTests;
+			productReference = 224B98FF28FF46558D8846F5 /* PatternAtlasTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D52D90092F7BECA56B0B4D3B /* PatternAtlas */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 752790303B329F5D0AB21BE6 /* Build configuration list for PBXNativeTarget "PatternAtlas" */;
+			buildPhases = (
+				C8E1AC1AB486E4DC1CBA2149 /* Sources */,
+				BBEA9F084142C7111563F460 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PatternAtlas;
+			packageProductDependencies = (
+			);
+			productName = PatternAtlas;
+			productReference = 062415641DAC6603F8B3532E /* PatternAtlas.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3A6E50D5DAB45879CD00264E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					01E54E9BE19D297877560E00 = {
+						TestTargetID = D52D90092F7BECA56B0B4D3B;
+					};
+				};
+			};
+			buildConfigurationList = D2C156C7FBCE0B1ABE6F8035 /* Build configuration list for PBXProject "PatternAtlas" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 5F7C34B5FF1DDBDC3FE77C8F;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 832004F83FF7CC9CBF7C6340 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D52D90092F7BECA56B0B4D3B /* PatternAtlas */,
+				94EE98C2463CFC90D2A98B66 /* PatternAtlasTests */,
+				01E54E9BE19D297877560E00 /* PatternAtlasUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BBEA9F084142C7111563F460 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A955EC5102E39E657AD05F8 /* curriculum.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7B369B714B476E02CE0B56B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D1E9362C74A0B7B41F169BBF /* StudyFlowTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C8E1AC1AB486E4DC1CBA2149 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98EC99393D70B111C5FE4530 /* LibraryViews.swift in Sources */,
+				35C4AE1B1FBB8D2B07C8EFC1 /* Models.swift in Sources */,
+				BFBB2B8680E8C434C7FEE3E0 /* PatternAtlasApp.swift in Sources */,
+				5772C721B1A1052AAB3A1351 /* ProgressViews.swift in Sources */,
+				6973CDB566319FE4BB5F8960 /* StudyViews.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC63EEBCB1779CB430CFF14D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2964B5DFE55DE01B4CA90C21 /* StudyTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		94719DBCCA8A857425BE4ACF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D52D90092F7BECA56B0B4D3B /* PatternAtlas */;
+			targetProxy = B1D8678EA845105B53D444DE /* PBXContainerItemProxy */;
+		};
+		B80C958F23B7D6E687DB8097 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D52D90092F7BECA56B0B4D3B /* PatternAtlas */;
+			targetProxy = 98F7029B6CBCE5945D703A76 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4AC9589FC3F28D6F393BC49F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethanrimes.patternatlas.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PatternAtlas;
+			};
+			name = Release;
+		};
+		4EC7A554AB1BC45E178A0111 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PatternAtlas/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethanrimes.patternatlas;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		58EBDE50E085F7EBB6B52494 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PatternAtlas/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethanrimes.patternatlas;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5F4335CAE30129D9D65AAFAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethanrimes.patternatlas.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PatternAtlas;
+			};
+			name = Debug;
+		};
+		7E2A9EF4B193FDBD7CA67443 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethanrimes.patternatlas.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PatternAtlas.app/PatternAtlas";
+			};
+			name = Debug;
+		};
+		8354F1ECFDA72C74BD4CD986 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B5D87444849EAEF4B696AC6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F5ABE3AA914F05851797FD42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethanrimes.patternatlas.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PatternAtlas.app/PatternAtlas";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		752790303B329F5D0AB21BE6 /* Build configuration list for PBXNativeTarget "PatternAtlas" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58EBDE50E085F7EBB6B52494 /* Debug */,
+				4EC7A554AB1BC45E178A0111 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B1E0C2E7B919D3C1761974E7 /* Build configuration list for PBXNativeTarget "PatternAtlasTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7E2A9EF4B193FDBD7CA67443 /* Debug */,
+				F5ABE3AA914F05851797FD42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BF8A9E32F20BDDF9AA3CF66C /* Build configuration list for PBXNativeTarget "PatternAtlasUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5F4335CAE30129D9D65AAFAB /* Debug */,
+				4AC9589FC3F28D6F393BC49F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D2C156C7FBCE0B1ABE6F8035 /* Build configuration list for PBXProject "PatternAtlas" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8354F1ECFDA72C74BD4CD986 /* Debug */,
+				B5D87444849EAEF4B696AC6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3A6E50D5DAB45879CD00264E /* Project object */;
+}

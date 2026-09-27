@@ -11,10 +11,13 @@
 		35C4AE1B1FBB8D2B07C8EFC1 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69F9CCF4D8C30D48554ECD0 /* Models.swift */; };
 		39E8B51A940CCD2113DAE81C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40AA065A7ED0D5F9F425C12C /* Assets.xcassets */; };
 		4A955EC5102E39E657AD05F8 /* curriculum.json in Resources */ = {isa = PBXBuildFile; fileRef = FE5CA659726FAC6E32BB48E4 /* curriculum.json */; };
+		4D028B285B25169C59A4D871 /* AnalyticsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCB01B56C40189D1FA6C631 /* AnalyticsViews.swift */; };
+		517855E0B1B3D16A3BAB1847 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08EC211325CCEA2554B665 /* Analytics.swift */; };
 		5772C721B1A1052AAB3A1351 /* ProgressViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */; };
 		5AEDAA1A89AB1D189E3BF200 /* walkccc-MIT.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3AB5E78449629874580A1B84 /* walkccc-MIT.txt */; };
 		6973CDB566319FE4BB5F8960 /* StudyViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0214829F5B5F573090F439CA /* StudyViews.swift */; };
 		98EC99393D70B111C5FE4530 /* LibraryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */; };
+		9C8678711416D91F33ABE3B3 /* AnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98350982262ED217E6A2069 /* AnalyticsTests.swift */; };
 		BFBB2B8680E8C434C7FEE3E0 /* PatternAtlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD385A1BF167A49418CC3E8 /* PatternAtlasApp.swift */; };
 		D1E9362C74A0B7B41F169BBF /* StudyFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */; };
 /* End PBXBuildFile section */
@@ -46,9 +49,12 @@
 		40AA065A7ED0D5F9F425C12C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6259CEED717D04BC7B76D3AB /* StudyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyTests.swift; sourceTree = "<group>"; };
 		6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyFlowTests.swift; sourceTree = "<group>"; };
+		BBCB01B56C40189D1FA6C631 /* AnalyticsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViews.swift; sourceTree = "<group>"; };
 		C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViews.swift; sourceTree = "<group>"; };
 		D6C928AD370D9AD8086BCDF2 /* PatternAtlasUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PatternAtlasUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC08EC211325CCEA2554B665 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		F69F9CCF4D8C30D48554ECD0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		F98350982262ED217E6A2069 /* AnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsTests.swift; sourceTree = "<group>"; };
 		FAD385A1BF167A49418CC3E8 /* PatternAtlasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternAtlasApp.swift; sourceTree = "<group>"; };
 		FE5CA659726FAC6E32BB48E4 /* curriculum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = curriculum.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,6 +82,7 @@
 		6A9696D733AD36B2880E2E66 /* PatternAtlasTests */ = {
 			isa = PBXGroup;
 			children = (
+				F98350982262ED217E6A2069 /* AnalyticsTests.swift */,
 				6259CEED717D04BC7B76D3AB /* StudyTests.swift */,
 			);
 			path = PatternAtlasTests;
@@ -102,6 +109,8 @@
 		BFFC410E5F77E95BD48C29C3 /* PatternAtlas */ = {
 			isa = PBXGroup;
 			children = (
+				DC08EC211325CCEA2554B665 /* Analytics.swift */,
+				BBCB01B56C40189D1FA6C631 /* AnalyticsViews.swift */,
 				40AA065A7ED0D5F9F425C12C /* Assets.xcassets */,
 				37539AE4596B6529C8A95FF4 /* Info.plist */,
 				C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */,
@@ -232,6 +241,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				517855E0B1B3D16A3BAB1847 /* Analytics.swift in Sources */,
+				4D028B285B25169C59A4D871 /* AnalyticsViews.swift in Sources */,
 				98EC99393D70B111C5FE4530 /* LibraryViews.swift in Sources */,
 				35C4AE1B1FBB8D2B07C8EFC1 /* Models.swift in Sources */,
 				BFBB2B8680E8C434C7FEE3E0 /* PatternAtlasApp.swift in Sources */,
@@ -244,6 +255,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C8678711416D91F33ABE3B3 /* AnalyticsTests.swift in Sources */,
 				2964B5DFE55DE01B4CA90C21 /* StudyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

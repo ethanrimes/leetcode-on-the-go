@@ -96,7 +96,7 @@ struct HomeView: View {
                 }
                 Text("Available offline. Your drafts and recall history stay on this device.").font(.caption).foregroundStyle(.secondary).padding(.vertical)
             }.padding(22).frame(maxWidth: 800)
-        }.background(AtlasStyle.paper).toolbar(.hidden, for: .navigationBar)
+        }.trackPage("/").background(AtlasStyle.paper).toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $review) { NavigationStack { ReviewSessionView(data: data) } }
     }
 }

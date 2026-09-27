@@ -1,3 +1,5 @@
+import {validateHistory, validateVisits, type LeetCodeHistory, type Visits} from './analytics';
+export * from './analytics';
 export type Level = 'Foundation' | 'Intermediate' | 'Advanced';
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 export type Rating = 'again' | 'hard' | 'good' | 'easy';
@@ -27,6 +29,7 @@ export interface Review {
   repetitions: number; lapses: number; interval: number; due: string; lastReviewed: string; rating: Rating;
 }
 export interface Progress {
+  leetcode?: LeetCodeHistory; visits?: Visits;
   version: 1; cards: Record<string, Review>; drafts: Record<string, string>; bookmarks: string[]; activity: Record<string, number>;
 }
 export const emptyProgress = (): Progress => ({version: 1, cards: {}, drafts: {}, bookmarks: [], activity: {}});
@@ -103,6 +106,8 @@ export function parseProgress(raw: string): Progress {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || typeof count !== 'number' || !Number.isInteger(count) || count<0) throw new Error('Invalid activity history.');
     result.activity[day]=count;
   }
+  if(value.leetcode != null) result.leetcode=validateHistory(value.leetcode);
+  if(value.visits != null) result.visits=validateVisits(value.visits);
   return result;
 }
 

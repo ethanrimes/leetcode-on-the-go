@@ -44,3 +44,11 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 - Progress is local to each device, with explicit JSON export/import; automatic cloud synchronization is not implemented.
 - The reference catalog is larger than the set of worked cards. The [coverage audit](COVERAGE.md) lists rare specialist extensions and non-algorithm topics outside the current worked curriculum.
 - GitHub Actions runs web validation before deployment. Individual workflow results are available in the repository's Actions tab.
+
+## Progress dashboard update · 2026-09-27
+
+- Web production build passed. All 22 desktop/mobile Playwright flows passed, including duplicate history imports, account mismatch rejection, both chart modes, freshness filters, route visit counting, and export pagination with synthetic server responses.
+- 13 TypeScript tests passed, covering aggregation deduplication, freshness vs visits, period filters, old backup compatibility, counter merging, invalid imports, and proportional non-overlapping treemap geometry. Existing content checks and 1,355 differential checks also passed.
+- Native app built for iPhone 17 Pro Simulator. Eight unit tests and three UI tests passed; the new UI flow opens the progress dashboard and switches treemap/stacked-bar views. Follow-up model changes were rechecked with the unit suite.
+- Desktop/mobile dashboard screenshots inspected. No horizontal viewport overflow after fixing the hidden import input.
+- Signed-in LeetCode submission response fields were observed in the user's browser. Actual headless export requires the separate browser session's one-time sign-in; anonymous access returned a sign-in/challenge response. Synthetic pagination tests do not establish the completeness of a real account's export.

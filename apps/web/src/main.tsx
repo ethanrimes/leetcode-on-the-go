@@ -1,10 +1,11 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {CodeEditor} from './CodeEditorLoader';
+import {ProgressDashboard} from './ProgressDashboard';
 import {ProblemBrowser} from './ProblemBrowser';
 
 import {ArrowRight, ArrowUpRight, BookOpen, Bookmark, Check, CheckCheck, ChevronDown, ChevronRight, CircleHelp, Code2, Download, ExternalLink, Eye, Flame, GitBranch, GraduationCap, Layers3, LayoutDashboard, Leaf, ListFilter, Menu, Network, Play, RotateCcw, Search, Settings2, Shuffle, Sparkles, Target, Timer, TrendingUp, Upload, X} from 'lucide-react';
-import {breadcrumbs, cardKey, dayKey, descendants, emptyProgress, isLearned, parseProgress, problemsFor, rateCard, studyQueue, type CatalogProblem, type Curriculum, type CurriculumNode, type Problem, type Progress, type Rating, libraryEntriesFor} from '@pattern-atlas/core';
+import {mergeProgress, recordVisit, breadcrumbs, cardKey, dayKey, descendants, emptyProgress, isLearned, parseProgress, problemsFor, rateCard, studyQueue, type CatalogProblem, type Curriculum, type CurriculumNode, type Problem, type Progress, type Rating, libraryEntriesFor} from '@pattern-atlas/core';
 import './styles.css';
 
 const STORAGE='pattern-atlas.progress.v1';
@@ -29,6 +30,11 @@ function App(){
   const [progress,setProgress]=useState<Progress>(readSavedProgress);
   const [toast,setToast]=useState(''); const [storageError,setStorageError]=useState(''); const [mobileNav,setMobileNav]=useState(false); const [search,setSearch]=useState('');
   const route=useRoute(); const [path,query='']=route.split('?'); const params=new URLSearchParams(query); const parts=path.split('/').filter(Boolean);
+  const lastPage=useRef('');
+  useEffect(()=>{if(!data||lastPage.current===path)return;lastPage.current=path;
+    let device:string;try{device=localStorage.getItem('pattern-atlas.device')||crypto.randomUUID();localStorage.setItem('pattern-atlas.device',device);}catch{device='session-'+crypto.randomUUID();}
+    setProgress(p=>recordVisit(p,device,path));
+  },[path,data]);
   const importRef=useRef<HTMLInputElement>(null);
   useEffect(()=>{let cancelled=false; fetch('/content/curriculum.json?v=3').then(async response=>{
     if(!response.ok) throw new Error('The curriculum could not be loaded.');
@@ -41,9 +47,8 @@ function App(){
   function exportProgress(){const url=URL.createObjectURL(new Blob([JSON.stringify(progress,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`pattern-atlas-${dayKey(new Date())}.json`;a.click();URL.revokeObjectURL(url);setToast('Progress and drafts exported.');}
   async function importProgress(file?:File){if(!file)return;try{
     const incoming=parseProgress(await file.text());
-    setProgress(current=>{const cards={...current.cards};for(const [key,review] of Object.entries(incoming.cards))if(!cards[key]||Date.parse(review.lastReviewed)>Date.parse(cards[key].lastReviewed))cards[key]=review;
-      const activity={...current.activity};for(const [day,count]of Object.entries(incoming.activity))activity[day]=Math.max(activity[day]??0,count);
-      return{version:1,cards,drafts:{...incoming.drafts,...current.drafts},bookmarks:[...new Set([...current.bookmarks,...incoming.bookmarks])],activity};});
+    mergeProgress(progress,incoming);
+    setProgress(current=>mergeProgress(current,incoming));
     setToast('Backup merged. Existing drafts were kept; newer review records were imported.');
   }catch(error){setToast(error instanceof Error?error.message:'Could not import this backup.');}finally{if(importRef.current)importRef.current.value='';}}
   if(!data)return <div className="loading"><div className="brand-mark"><Layers3/></div><h1>Pattern Atlas</h1><p>{loadError||'Opening your study library…'}</p>{loadError&&<button onClick={()=>location.reload()}>Try again</button>}</div>;
@@ -84,10 +89,9 @@ function App(){
         {active==='review'&&<ReviewSession {...common} nodeId={params.get('topic')??undefined}/>}
         {active==='catalog'&&<Catalog {...common} catalog={catalog} initialQuery={params.get('q')??''}/>}
         {active==='progress'&&<>
-          <p className="eyebrow">MAKE THE PATTERNS STICK</p><h1>Your progress</h1><p className="lead">Recognition grows with retrieval. Come back to what felt difficult.</p>
-          <section className="stats-row"><div><Eye/><strong>{reviewed}</strong><span>cards reviewed</span></div><div><CheckCheck/><strong>{mastered}</strong><span>recalled twice</span></div><div><RotateCcw/><strong>{due}</strong><span>due for review</span></div><div><Bookmark/><strong>{progress.bookmarks.length}</strong><span>saved problems</span></div></section>
-          <div className="section-heading"><h2>Topic by topic</h2><button className="button primary" onClick={()=>navigate('/review')}>Review cards <ArrowRight size={16}/></button></div>
-          <div className="topic-progress">{roots.map(n=>{const ps=problemsFor(data,n.id);const learned=ps.filter(p=>isLearned(progress,p)).length;return <a href={`#${nodePath(n.id)}`} key={n.id}><strong>{n.title}</strong><div className="progress-track"><i style={{width:`${learned/ps.length*100}%`}}/></div><span>{learned} / {ps.length}</span><ChevronRight size={16}/></a>;})}</div>
+          <p className="eyebrow">PRACTICE / COVERAGE / FRESHNESS</p><h1>Your progress</h1><p className="lead">Find the patterns to revisit and the gaps to work on next.</p>
+          <ProgressDashboard {...common}/>
+          <div className="section-heading"><h2>Recall practice</h2></div><section className="stats-row"><div><strong>{reviewed}</strong><span>cards reviewed</span></div><div><strong>{mastered}</strong><span>recalled twice</span></div><div><strong>{due}</strong><span>due for review</span></div></section>
           <div className="section-heading"><h2>Saved for later</h2></div><ProblemList {...common} problems={data.problems.filter(p=>progress.bookmarks.includes(p.id))}/>
           <section className="backup-panel"><div><h3>Your work travels with you</h3><p>Progress and drafts are saved in this browser. Export a backup to transfer them to another browser or the iOS app. Import merges newer reviews and keeps existing local drafts.</p></div><div className="button-row"><button className="button secondary" onClick={exportProgress}><Download size={16}/> Export backup</button><button className="button secondary" onClick={()=>importRef.current?.click()}><Upload size={16}/> Import backup</button></div></section>
         </>}
@@ -96,7 +100,7 @@ function App(){
       </main>
       <footer><span>Pattern Atlas <span className="footer-dot">·</span> Algorithm study workspace</span><a href="#/about">Sources & curriculum notes <ArrowUpRight size={13}/></a></footer>
     </div>
-    <input className="sr-only" type="file" accept="application/json,.json" ref={importRef} onChange={e=>void importProgress(e.target.files?.[0])}/>
+    <input className="sr-only" type="file" aria-label="Progress backup file" accept="application/json,.json" ref={importRef} onChange={e=>void importProgress(e.target.files?.[0])}/>
     {toast&&<div className="toast" role="status"><Check size={17}/>{toast}<button className="icon-button" aria-label="Dismiss message" onClick={()=>setToast('')}><X size={14}/></button></div>}
   </div>;
 }

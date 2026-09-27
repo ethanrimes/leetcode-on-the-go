@@ -45,3 +45,9 @@ The initial web bundle loads the editor only when a study card is opened. The Gr
 ## Verification
 
 `npm test` checks hierarchy integrity, every worked leaf mapping, web/iOS data parity, 200 authored examples, seeded differential checks for subtle algorithms, scheduling, filtered queues, and backup validation. Playwright tests the desktop and mobile web flow. XCTest tests native decoding/storage/scheduling and an actual UI reveal/rating flow on Simulator. See [VALIDATION.md](VALIDATION.md) for the latest observed run.
+
+## Progress analytics and LeetCode import
+
+The version-1 portable backup now has optional `leetcode` and `visits` extensions. Submission imports are normalized metadata keyed by ID, with account and export coverage metadata. Account mismatches fail before changing progress. Visits use per-device monotonic page counters; merge takes each device/page maximum. A new installation keeps its own device ID outside the portable backup.
+
+Both apps calculate unique-problem membership at every node, period-filtered acceptance, recent-practice freshness, and actionable authored-pattern suggestions. Balanced binary treemap layout gives proportional area without a chart dependency. Tiny tiles have accessible table/list alternatives. See [PROGRESS.md](PROGRESS.md) for metric definitions, export setup, privacy boundaries, and retention limitations.

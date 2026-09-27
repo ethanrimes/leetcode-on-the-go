@@ -30,7 +30,7 @@ struct LibraryView: View {
                 }
                 if filtered.isEmpty { ContentUnavailableView.search(text: search) }
             }
-        }.navigationTitle("Pattern library").searchable(text: $search, prompt: "Find a pattern or technique")
+        }.navigationTitle("Pattern library").trackPage("/library").searchable(text: $search, prompt: "Find a pattern or technique")
     }
 }
 struct NodeDetailView: View {
@@ -90,7 +90,7 @@ struct NodeDetailView: View {
                     }
                 }
             }
-        }.navigationTitle(node.kind == "pattern" ? "Pattern" : "Topic").navigationBarTitleDisplayMode(.inline)
+        }.trackPage("/library/\(node.id)").navigationTitle(node.kind == "pattern" ? "Pattern" : "Topic").navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $review) { NavigationStack { ReviewSessionView(data: data, nodeId: node.id) } }
     }
 }
@@ -111,7 +111,7 @@ struct ProblemLibraryView: View {
         List {
             ProblemCollectionSection(data: data, query: query)
             Section { Text("\(data.problems.count.formatted()) problems with offline Python solutions. Official statements and reference-only entries open on LeetCode.").font(.caption).foregroundStyle(.secondary) }
-        }.navigationTitle("Problem index").searchable(text: $query, prompt: "Title or exact problem number")
+        }.navigationTitle("Problem index").trackPage("/catalog").searchable(text: $query, prompt: "Title or exact problem number")
     }
 }
 

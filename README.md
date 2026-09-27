@@ -10,7 +10,7 @@ The solution library includes **193 authored lessons** and **2,716 additional co
 
 The Graphite design uses charcoal, slate, and blue, compact topic indexes, and sortable problem tables. Every leaf supports difficulty, number, and title ordering, with a saved preference per collection.
 
-Features include recursive topic navigation, pattern and problem difficulty labels, original summaries, recognition cues, pitfalls, a Python editor with automatic local draft saving, multiple solution approaches where included, solution reveal, self-rated spaced review, bookmarks, progress, and portable JSON backups. The iOS app is native SwiftUI and includes the worked curriculum offline.
+Features include recursive topic navigation, pattern and problem difficulty labels, original summaries, recognition cues, pitfalls, a Python editor with automatic local draft saving, multiple solution approaches where included, solution reveal, self-rated spaced review, bookmarks, a progress dashboard with treemaps and stacked bars, practice freshness, refocus suggestions, submission history, page-entry tracking, and portable JSON backups. The iOS app is native SwiftUI and includes the worked curriculum offline.
 
 - `apps/web`: React + TypeScript, responsive browser study workspace.
 - `apps/ios`: native SwiftUI iPhone/iPad app, with an offline curriculum.
@@ -48,3 +48,9 @@ Core lesson summaries, explanations, and code are authored for this project. Add
 This project is independent of LeetCode, EndlessCheng, and labuladong.
 
 Third-party licenses and dependency attribution are in [THIRD_PARTY.md](docs/THIRD_PARTY.md).
+
+## Import your LeetCode history
+
+Run `npm run history:login` once to sign in in an isolated browser, then `npm run history:export` for headless updates. Import the JSON from Your progress on web or Progress on iOS. `--through YYYY-MM-DD` sets a cutoff date; `--days 30` fetches a recent update. Both apps merge repeated imports without duplicates.
+
+A browser-console/userscript exporter is also available in the web dashboard. See [the progress guide](docs/PROGRESS.md) for setup, freshness definitions, and data coverage limitations. Private exports and the isolated browser session are excluded from Git.

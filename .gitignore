@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.DS_Store
+.env*
+!.env.example
+.build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+test-results/
+playwright-report/
+__pycache__/
+.azure/
+artifacts/

@@ -21,14 +21,15 @@ struct ProblemDetailView: View {
                 VStack(alignment: .leading, spacing: 22) {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack { Eyebrow(text: "Problem \(problem.id)"); LevelBadge(text: problem.difficulty); if problem.premium { LevelBadge(text: "Premium") } }
-                        Text(problem.title).font(.system(.title, design: .rounded, weight: .bold))
+                        Text(problem.title).font(.system(.title, design: .default, weight: .bold))
                         if !reviewMode || revealed, let pattern {
                             NavigationLink { NodeDetailView(data: data, node: pattern) } label: { Label(pattern.title, systemImage: "point.3.connected.trianglepath.dotted").font(.caption) }
                         }
                     }
                     VStack(alignment: .leading, spacing: 17) {
-                        Eyebrow(text: "The challenge · original study summary")
+                        Eyebrow(text: problem.origin == "community" ? "Community study card" : "The challenge · original study summary")
                         Text(problem.description).font(.subheadline).lineSpacing(5)
+                        if problem.origin == "community", let url = URL(string: problem.sourceUrl) { Link("Read official problem statement ↗", destination: url).font(.subheadline.weight(.medium)) }
                         ForEach(Array(problem.examples.enumerated()), id: \.offset) { _, example in
                             VStack(alignment: .leading, spacing: 10) {
                                 Eyebrow(text: "Arguments")
@@ -38,13 +39,13 @@ struct ProblemDetailView: View {
                             }.frame(maxWidth: .infinity, alignment: .leading).padding(16).background(AtlasStyle.green.opacity(0.055), in: RoundedRectangle(cornerRadius: 9))
                         }
                         DisclosureGroup("Input notes") {
-                            Text(problem.constraints + " Study functions use solve(...). Trees and linked lists use LeetCode-style node objects.").font(.caption).foregroundStyle(.secondary).padding(.top, 10)
+                            Text(problem.constraints).font(.caption).foregroundStyle(.secondary).padding(.top, 10)
                         }.font(.caption.weight(.medium))
                         Divider()
                         Label("Name the state. State the invariant. Estimate the complexity.", systemImage: "sparkles").font(.caption).foregroundStyle(AtlasStyle.green)
                         Button { showHint.toggle() } label: { Label(showHint ? "Hide hint" : "Need a small hint?", systemImage: "lightbulb").font(.caption) }
                         if showHint, let pattern { Text(pattern.description + "\n\n" + pattern.tips.joined(separator: " ")).font(.caption).foregroundStyle(.secondary).lineSpacing(4) }
-                    }.padding(20).background(.background, in: RoundedRectangle(cornerRadius: 14))
+                    }.padding(20).background(.background, in: RoundedRectangle(cornerRadius: 6))
                     VStack(alignment: .leading, spacing: 16) {
                         Picker("Workspace", selection: $tab) { Text("Your draft").tag(0); if revealed { Text("Solution").tag(1) } }.pickerStyle(.segmented)
                         if tab == 0 {
@@ -65,9 +66,16 @@ struct ProblemDetailView: View {
                                     .onChange(of: selected) { _, _ in rated = nil }
                             }
                             Text(solution.approach).font(.subheadline).lineSpacing(5)
+                            if let credit = solution.attribution {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    if let url = URL(string: credit.url) { Link("By " + credit.author + " ↗", destination: url).font(.caption) }
+                                    if let url = URL(string: "https://github.com/walkccc/LeetCode/blob/" + credit.commit + "/LICENSE") { Link("MIT license", destination: url).font(.caption) }
+                                    Text("Source preserved. Syntax checked; not judge-verified here.").font(.caption2).foregroundStyle(.secondary)
+                                }
+                            }
                             ScrollView(.horizontal) {
                                 Text(solution.code).font(.system(size: 12, design: .monospaced)).lineSpacing(5).textSelection(.enabled).padding(17)
-                            }.foregroundStyle(Color(red: 0.83, green: 0.9, blue: 0.76)).background(AtlasStyle.forest, in: RoundedRectangle(cornerRadius: 10))
+                            }.foregroundStyle(Color(red: 0.84, green: 0.89, blue: 0.98)).background(AtlasStyle.forest, in: RoundedRectangle(cornerRadius: 10))
                                 .accessibilityIdentifier("canonicalSolution")
                             VStack(alignment: .leading, spacing: 9) {
                                 Label("Time: " + solution.time, systemImage: "clock")
@@ -75,7 +83,7 @@ struct ProblemDetailView: View {
                             }.font(.caption).foregroundStyle(.secondary)
                             if let pattern { Text("Watch for this: " + pattern.tips.joined(separator: " ")).font(.caption).lineSpacing(4).foregroundStyle(.secondary) }
                         }
-                    }.padding(18).background(.background, in: RoundedRectangle(cornerRadius: 14)).id("workspace")
+                    }.padding(18).background(.background, in: RoundedRectangle(cornerRadius: 6)).id("workspace")
                     if !revealed {
                         Button {
                             editing = false; revealed = true; tab = 1
@@ -99,7 +107,7 @@ struct ProblemDetailView: View {
                                     }.disabled(rated != nil).accessibilityIdentifier("rate_" + rating.rawValue)
                                 }
                             }
-                        }.padding(18).background(AtlasStyle.green.opacity(0.07), in: RoundedRectangle(cornerRadius: 13))
+                        }.padding(18).background(AtlasStyle.green.opacity(0.07), in: RoundedRectangle(cornerRadius: 6))
                     }
                     if let url = URL(string: problem.sourceUrl) {
                         Link(destination: url) { Label("Read full statement & run on LeetCode", systemImage: "arrow.up.right.square").font(.caption).frame(maxWidth: .infinity) }.padding(.vertical, 7)

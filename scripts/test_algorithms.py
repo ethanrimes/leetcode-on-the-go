@@ -9,6 +9,7 @@ rng=random.Random(1947)
 data=json.loads((Path(__file__).resolve().parents[1]/'packages/content/curriculum.json').read_text())
 implementations={}
 for p in data['problems']:
+    if p.get('origin') == 'community': continue
     implementations[p['id']]=[]
     for s in p['solutions']:
         scope={}; exec(compile(s['code'],'<authored-solution>','exec'),scope)

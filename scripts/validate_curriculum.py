@@ -1,6 +1,7 @@
 """Check graph integrity and execute authored solution examples (not a user-code judge)."""
 import ast
 import copy
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -36,7 +37,17 @@ def linked(values):
 
 errors=[]; checked=0
 for problem in data['problems']:
-    assert problem['solutions'] and problem['examples']
+    assert problem['solutions']
+    if problem.get('origin') == 'community':
+        assert not problem.get('test'), 'Imported code must never execute in authored validation'
+        for solution in problem['solutions']:
+            ast.parse(solution['code'])
+            assert solution['patternId'] in nodes
+            credit=solution['attribution']
+            assert credit['license']=='MIT' and credit['url'].startswith('https://github.com/walkccc/LeetCode/blob/'+credit['commit']+'/')
+            assert hashlib.sha256(solution['code'].encode()).hexdigest()==credit['sha256']
+        continue
+    assert problem['examples']
     assert len(set(problem['patternIds']))==len(problem['patternIds'])
     for solution in problem['solutions']:
         assert solution['patternId'] in nodes
@@ -75,3 +86,13 @@ for node in nodes.values():
 if errors: raise SystemExit('\n'.join(errors))
 assert (root/'apps/ios/PatternAtlas/Resources/curriculum.json').read_bytes()==(root/'packages/content/curriculum.json').read_bytes()
 print(f'Validated {len(nodes)} nodes, all leaf mappings, web/iOS parity, and {checked} Python solution examples.')
+
+assert len(data['problems']) > 2800
+assert sum(n['kind']=='collection' and n['id'].startswith('practice-') for n in nodes.values()) == 313
+assert len({p['id'] for p in data['problems']})==len(data['problems'])
+known={p['id'] for p in data['catalog']}
+for node in nodes.values():
+    assert set(node.get('problemIds',[])) <= known
+for problem in data['problems']:
+    assert set(problem.get('collectionIds',[])) <= nodes.keys()
+print(f"Validated {sum(p.get('origin')=='community' for p in data['problems'])} attributed community cards (syntax and integrity only).")

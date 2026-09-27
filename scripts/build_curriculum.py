@@ -4,6 +4,7 @@ import shutil
 from pathlib import Path
 from content import foundations, dynamic_programming, graphs, trees, structures, search_strings, greedy_math, advanced, specialists, completion
 from content.base import nodes, problems, ROOT
+from content.practice import expand
 
 reference=json.loads((ROOT/'packages/content/reference-index.json').read_text())
 families={'Arrays & hashing':'mOr1u6','Two pointers & windows':'0viNMK','Binary search':'SqopEo','Dynamic programming':'tXLS3i','Graphs & grids':'01LUak','Trees & linked lists':'K0n2gO','Stacks, heaps & range queries':'mOr1u6','Backtracking & enumeration':'K0n2gO','Strings & tries':'SJFwQI','Greedy & intervals':'g6KTKL','Sorting & selection':'mOr1u6','Bits, math & geometry':'IYT3ss'}
@@ -18,7 +19,8 @@ for node in nodes:
     # These are source-section references, not claims that every linked problem uses this exact leaf pattern.
     node['references']=[dict(title=' / '.join(s['path']),url=guide['url'],problemIds=s['problemIds']) for s in matching]
 
-data=dict(version=1,updatedAt='2026-09-27',language='Python',nodes=nodes,problems=list(problems.values()))
+catalog,stats=expand(nodes,problems,reference)
+data=dict(catalog=catalog,stats=stats,version=1,updatedAt='2026-09-27',language='Python',nodes=nodes,problems=list(problems.values()))
 target=ROOT/'packages/content/curriculum.json'
 target.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 public=ROOT/'apps/web/public/content'; public.mkdir(parents=True,exist_ok=True)
@@ -26,4 +28,4 @@ for filename in ('curriculum.json','catalog.json','reference-index.json','offici
     if (ROOT/'packages/content'/filename).exists(): shutil.copyfile(ROOT/'packages/content'/filename,public/filename)
 resources=ROOT/'apps/ios/PatternAtlas/Resources'; resources.mkdir(parents=True,exist_ok=True)
 shutil.copyfile(target,resources/'curriculum.json')
-print(f'Built {sum(n["kind"]=="pattern" for n in nodes)} patterns, {len(problems)} worked problems, {len(nodes)} hierarchy nodes.')
+print(f'Built {sum(n["kind"]=="pattern" for n in nodes)} authored patterns, {len(problems)} solution cards, {len(nodes)} hierarchy nodes.')

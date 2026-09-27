@@ -7,6 +7,7 @@ struct Curriculum: Codable {
     let language: String
     let nodes: [PatternNode]
     let problems: [StudyProblem]
+    let catalog: [CatalogProblem]
     var roots: [PatternNode] { nodes.filter { $0.parentId == nil } }
     var patterns: [PatternNode] { nodes.filter { $0.kind == "pattern" } }
     func children(of id: String) -> [PatternNode] { nodes.filter { $0.parentId == id } }
@@ -25,7 +26,45 @@ struct Curriculum: Codable {
     }
     func problems(for id: String) -> [StudyProblem] {
         let ids = descendants(of: id)
-        return problems.filter { !$0.patternIds.filter { ids.contains($0) }.isEmpty }
+        return problems.filter { !Set($0.patternIds + ($0.collectionIds ?? [])).isDisjoint(with: ids) }
+    }
+}
+extension Curriculum {
+    func entries(for id: String? = nil) -> [CatalogProblem] {
+        guard let id else { return catalog }
+        let scope = descendants(of: id)
+        var included = Set(problems(for: id).map(\.id))
+        for node in nodes where scope.contains(node.id) { included.formUnion(node.problemIds ?? []) }
+        return catalog.filter { included.contains($0.id) }
+    }
+}
+struct CatalogTag: Codable, Hashable { let name: String; let slug: String }
+struct CatalogProblem: Codable, Identifiable, Hashable {
+    let id: String; let title: String; let slug: String; let difficulty: String; let premium: Bool
+    let tags: [CatalogTag]?
+}
+enum ProblemOrder: String, CaseIterable {
+    case difficulty, difficultyDescending, number, numberDescending, title
+    var label: String { switch self {
+    case .difficulty: "Difficulty: easy to hard"
+    case .difficultyDescending: "Difficulty: hard to easy"
+    case .number: "Number: ascending"
+    case .numberDescending: "Number: descending"
+    case .title: "Title: A–Z"
+    } }
+    func sorted(_ entries: [CatalogProblem]) -> [CatalogProblem] {
+        let ranks = ["Easy": 0, "Medium": 1, "Hard": 2]
+        return entries.sorted { a, b in
+            let numberAscending = a.id.compare(b.id, options: .numeric) == .orderedAscending
+            switch self {
+            case .number: return numberAscending
+            case .numberDescending: return a.id.compare(b.id, options: .numeric) == .orderedDescending
+            case .title: return a.title == b.title ? numberAscending : a.title.localizedStandardCompare(b.title) == .orderedAscending
+            case .difficulty, .difficultyDescending:
+                let x = ranks[a.difficulty, default: 0], y = ranks[b.difficulty, default: 0]
+                return x == y ? numberAscending : (self == .difficulty ? x < y : x > y)
+            }
+        }
     }
 }
 struct PatternNode: Codable, Identifiable, Hashable {
@@ -41,6 +80,8 @@ struct PatternNode: Codable, Identifiable, Hashable {
     let why: String
     let sourceUrls: [String]
     let references: [ReferenceSection]
+    let problemIds: [String]?
+    let sourceTitle: String?
 }
 struct ReferenceSection: Codable, Hashable {
     let title: String
@@ -48,6 +89,8 @@ struct ReferenceSection: Codable, Hashable {
     let problemIds: [String]
 }
 struct StudyProblem: Codable, Identifiable, Hashable {
+    let origin: String?
+    let collectionIds: [String]?
     let id: String
     let title: String
     let slug: String
@@ -62,7 +105,11 @@ struct StudyProblem: Codable, Identifiable, Hashable {
     let sourceUrl: String
 }
 struct Example: Codable, Hashable { let input: String; let output: String; let note: String }
+struct SolutionAttribution: Codable, Hashable {
+    let author: String; let license: String; let url: String; let commit: String; let sha256: String
+}
 struct CanonicalSolution: Codable, Hashable {
+    let attribution: SolutionAttribution?
     let patternId: String
     let title: String
     let language: String
@@ -171,7 +218,7 @@ struct ReviewCard: Identifiable {
     func queue(nodeId: String? = nil, limit: Int = 10, now: Date = .now) -> [ReviewCard] {
         guard let data = curriculum else { return [] }
         let ids = nodeId.map { data.descendants(of: $0) }
-        let cards = data.problems.flatMap { p in p.patternIds.filter { ids?.contains($0) ?? true }.map { ReviewCard(problem: p, patternId: $0) } }
+        let cards = data.problems.flatMap { p in p.patternIds.filter { (ids?.contains($0) ?? true) || (ids.map { !Set(p.collectionIds ?? []).isDisjoint(with: $0) } ?? false) }.map { ReviewCard(problem: p, patternId: $0) } }
         return Array(cards.filter { progress.cards[$0.id].map { (dateFromISO($0.due) ?? .distantFuture) <= now } ?? true }.enumerated().sorted { a, b in
             let x = progress.cards[a.element.id]; let y = progress.cards[b.element.id]
             if let x, let y { return x.due == y.due ? a.offset < b.offset : x.due < y.due }

@@ -9,9 +9,9 @@ import SwiftUI
     }
 }
 enum AtlasStyle {
-    static let green = Color(red: 0.20, green: 0.37, blue: 0.28)
-    static let forest = Color(red: 0.09, green: 0.19, blue: 0.15)
-    static let lime = Color(red: 0.83, green: 0.93, blue: 0.67)
+    static let green = Color(red: 0.19, green: 0.37, blue: 0.83)
+    static let forest = Color(red: 0.09, green: 0.11, blue: 0.15)
+    static let lime = Color(red: 0.85, green: 0.90, blue: 1.0)
     static let paper = Color(uiColor: .systemGroupedBackground)
 }
 struct AppRootView: View {
@@ -59,37 +59,37 @@ struct HomeView: View {
                     Image(systemName: "square.3.layers.3d").font(.title2).foregroundStyle(AtlasStyle.green)
                     Text("Pattern Atlas").font(.headline)
                     Spacer()
-                    Image(systemName: "leaf").foregroundStyle(AtlasStyle.green)
+                    Image(systemName: "chevron.left.forwardslash.chevron.right").foregroundStyle(AtlasStyle.green)
                 }
                 VStack(alignment: .leading, spacing: 10) {
-                    Eyebrow(text: "A little practice, every day")
-                    Text("Build intuition.\nOne pattern at a time.").font(.system(.largeTitle, design: .rounded, weight: .bold)).tracking(-1.1)
-                    Text("Learn the idea behind the problem. Recall it. Make it yours.").font(.subheadline).foregroundStyle(.secondary).lineSpacing(4)
+                    Eyebrow(text: "Algorithms / Systematic practice")
+                    Text("Algorithm practice,\norganized.").font(.system(.largeTitle, design: .default, weight: .bold)).tracking(-1.1)
+                    Text("A structured library of techniques, problems, and reference implementations.").font(.subheadline).foregroundStyle(.secondary).lineSpacing(4)
                 }
                 VStack(alignment: .leading, spacing: 17) {
-                    Label("YOUR DAILY PRACTICE", systemImage: "sparkles").font(.system(size: 9, weight: .semibold)).tracking(1.4).foregroundStyle(AtlasStyle.lime)
+                    Label("RECALL SESSION", systemImage: "square.stack").font(.system(size: 9, weight: .semibold)).tracking(1.4).foregroundStyle(AtlasStyle.lime)
                     HStack(alignment: .top) {
-                        Text("A few cards.\nA sharper way to think.").font(.system(.title2, design: .rounded, weight: .semibold)).foregroundStyle(.white)
+                        Text("Test your understanding.").font(.system(.title2, design: .default, weight: .semibold)).foregroundStyle(.white)
                         Spacer(minLength: 10)
                         Image(systemName: "point.3.connected.trianglepath.dotted").font(.system(size: 48, weight: .ultraLight)).foregroundStyle(AtlasStyle.lime.opacity(0.7))
                     }
                     Text("Recall the approach before revealing the solution.").font(.caption).foregroundStyle(.white.opacity(0.65))
                     Button { review = true } label: {
                         HStack { Text("Start a study session"); Spacer(); Image(systemName: "arrow.right") }
-                            .font(.subheadline.weight(.semibold)).padding(14).foregroundStyle(AtlasStyle.forest).background(AtlasStyle.lime, in: RoundedRectangle(cornerRadius: 9))
+                            .font(.subheadline.weight(.semibold)).padding(14).foregroundStyle(AtlasStyle.forest).background(AtlasStyle.lime, in: RoundedRectangle(cornerRadius: 5))
                     }.accessibilityIdentifier("startReview")
                     Label("10 cards · at your own pace", systemImage: "clock").font(.caption2).foregroundStyle(.white.opacity(0.55))
-                }.padding(23).background(AtlasStyle.forest, in: RoundedRectangle(cornerRadius: 19))
+                }.padding(23).background(AtlasStyle.forest, in: RoundedRectangle(cornerRadius: 6))
                 HStack(spacing: 0) {
                     StatView(value: "\(data.patterns.count)", label: "Patterns")
                     Divider().frame(height: 30)
                     StatView(value: "\(data.problems.count)", label: "Study cards")
                     Divider().frame(height: 30)
                     StatView(value: "\(store.dueCount)", label: "Due for review")
-                }.padding(.vertical, 19).background(.background, in: RoundedRectangle(cornerRadius: 12))
+                }.padding(.vertical, 19).background(.background, in: RoundedRectangle(cornerRadius: 6))
                 VStack(alignment: .leading, spacing: 7) {
-                    Eyebrow(text: "Your map, from fundamentals to finesse")
-                    Text("Explore the patterns").font(.title2.weight(.bold))
+                    Eyebrow(text: "CURRICULUM INDEX")
+                    Text("Topics and techniques").font(.title2.weight(.bold))
                 }
                 ForEach(data.roots) { node in
                     NavigationLink { NodeDetailView(data: data, node: node) } label: { TopicCard(data: data, node: node) }.buttonStyle(.plain)
@@ -108,14 +108,15 @@ struct StatView: View {
 struct TopicCard: View {
     let data: Curriculum
     let node: PatternNode
+    private var patternCount: Int { let ids = data.descendants(of: node.id); return data.patterns.filter { ids.contains($0.id) }.count }
     var body: some View {
         VStack(alignment: .leading, spacing: 13) {
             HStack { Image(systemName: "point.3.connected.trianglepath.dotted").font(.title3).foregroundStyle(AtlasStyle.green).padding(10).background(AtlasStyle.green.opacity(0.07), in: RoundedRectangle(cornerRadius: 10)); Spacer(); LevelBadge(text: node.level) }
             Text(node.title).font(.headline)
             Text(node.description).font(.caption).foregroundStyle(.secondary).lineSpacing(3)
             Divider()
-            HStack { Text("\(data.patterns.filter { data.descendants(of: node.id).contains($0.id) }.count) patterns · \(data.problems(for: node.id).count) problems").font(.caption2).foregroundStyle(.secondary); Spacer(); Image(systemName: "arrow.up.right").font(.caption).foregroundStyle(AtlasStyle.green) }
-        }.padding(19).background(.background, in: RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).stroke(.primary.opacity(0.04)))
+            HStack { Text("\(patternCount) patterns · \(data.entries(for: node.id).count.formatted()) problems").font(.caption2).foregroundStyle(.secondary); Spacer(); Image(systemName: "arrow.up.right").font(.caption).foregroundStyle(AtlasStyle.green) }
+        }.padding(19).background(.background, in: RoundedRectangle(cornerRadius: 6))
+            .overlay(RoundedRectangle(cornerRadius: 6).stroke(.primary.opacity(0.04)))
     }
 }

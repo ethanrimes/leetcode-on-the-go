@@ -1,3 +1,4 @@
+import {choose} from './select';
 import {test,expect} from '@playwright/test';
 
 test('browse a four-level taxonomy and reveal the right solution',async({page})=>{
@@ -41,9 +42,9 @@ test('catalog filters by official topic and exact number, with honest reference 
   await expect(page.locator('.problem-list>a')).toHaveCount(1);
   await expect(page.locator('.problem-list')).toContainText('Two Sum');
   await page.getByLabel('Filter problems').fill('');
-  await page.getByLabel('Official LeetCode topic').selectOption('Dynamic Programming');
-  await page.getByLabel('Problem difficulty').selectOption('Hard');
-  await page.getByLabel('Solution availability').selectOption('Reference only');
+  await choose(page,'Official LeetCode topic','Dynamic Programming');
+  await choose(page,'Problem difficulty','Hard');
+  await choose(page,'Solution availability','Reference only');
   await expect(page.locator('.problem-list>a').first()).toContainText('Hard');
   const external=page.locator('.problem-list>a[target="_blank"]').first();
   await expect(external).toHaveAttribute('href',/^https:\/\/leetcode.com\/problems\//);
@@ -70,14 +71,14 @@ test('layout stays within the viewport and navigation is accessible',async({page
 test('leaf sorting is numerical, persistent, and restricted to that collection',async({page})=>{
   await page.goto('/#/library/practice-0viNMK-0');
   await expect(page.locator('h1')).toHaveText('Fundamentals');
-  await page.getByLabel('Sort problems').selectOption('number-desc');
+  await choose(page,'Sort problems','Problem number: descending');
   const ids=await page.locator('.problem-list>a').evaluateAll(rows=>rows.map(r=>Number(r.getAttribute('data-problem-id'))));
   expect(ids.length).toBeGreaterThan(5);
   expect(ids).toEqual([...ids].sort((a,b)=>b-a));
   expect(ids).toContain(643);expect(ids).not.toContain(1);
   await page.reload();
-  await expect(page.getByLabel('Sort problems')).toHaveValue('number-desc');
-  await page.getByLabel('Problem difficulty').selectOption('Easy');
+  await expect(page.getByRole('combobox',{name:'Sort problems'})).toHaveText('Problem number: descending');
+  await choose(page,'Problem difficulty','Easy');
   for(const row of await page.locator('.problem-list>a').all()) await expect(row).toContainText('Easy');
 });
 test('community cards reveal attributed code and retain their own draft',async({page})=>{

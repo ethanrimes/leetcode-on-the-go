@@ -1,3 +1,4 @@
+import {Select} from './Select';
 import {useMemo, useState} from 'react';
 import {ArrowUpRight, Bookmark, ChevronRight, Code2, Search} from 'lucide-react';
 import {libraryEntriesFor, problemOrders, sortProblems, type Curriculum, type Progress, type ProblemOrder} from '@pattern-atlas/core';
@@ -25,13 +26,13 @@ export function ProblemBrowser({data,progress,nodeId,initialQuery=''}:{data:Curr
   return <section className="problem-browser">
     <div className="filterbar">
       <label className="search-field"><Search size={17}/><input aria-label="Filter problems" placeholder="Search title, number, or topic" value={query} onChange={e=>{setQuery(e.target.value);setLimit(50);}}/></label>
-      <select aria-label="Problem difficulty" value={difficulty} onChange={e=>{setDifficulty(e.target.value);setLimit(50);}}>{['All difficulties','Easy','Medium','Hard'].map(v=><option key={v}>{v}</option>)}</select>
-      <select aria-label="Solution availability" value={availability} onChange={e=>{setAvailability(e.target.value);setLimit(50);}}>{['All problems','With solutions','Authored lessons','Reference only'].map(v=><option key={v}>{v}</option>)}</select>
+      <Select aria-label="Problem difficulty" value={difficulty} onChange={e=>{setDifficulty(e.target.value);setLimit(50);}}>{['All difficulties','Easy','Medium','Hard'].map(v=><option key={v}>{v}</option>)}</Select>
+      <Select aria-label="Solution availability" value={availability} onChange={e=>{setAvailability(e.target.value);setLimit(50);}}>{['All problems','With solutions','Authored lessons','Reference only'].map(v=><option key={v}>{v}</option>)}</Select>
     </div>
     <div className="list-toolbar">
       <span role="status">{results.length.toLocaleString()} problems <span className="muted">/ {results.filter(p=>worked.has(p.id)).length.toLocaleString()} with solutions</span></span>
-      <div><select aria-label="Official LeetCode topic" value={topic} onChange={e=>{setTopic(e.target.value);setLimit(50);}}>{['All topics',...tags].map(v=><option key={v}>{v}</option>)}</select>
-      <select aria-label="Sort problems" value={order} onChange={e=>changeOrder(e.target.value as ProblemOrder)}>{problemOrders.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+      <div><Select aria-label="Official LeetCode topic" value={topic} onChange={e=>{setTopic(e.target.value);setLimit(50);}}>{['All topics',...tags].map(v=><option key={v}>{v}</option>)}</Select>
+      <Select aria-label="Sort problems" value={order} onChange={e=>changeOrder(e.target.value as ProblemOrder)}>{problemOrders.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}</Select></div>
     </div>
     {node?.kind==='pattern'&&<p className="collection-note">Authored lessons demonstrate this pattern. Related practice comes from the source guide’s surrounding sections and may use neighboring techniques.</p>}
     <div className="problem-table-head"><span>PROBLEM</span><span>DIFFICULTY</span><span>CONTENT</span></div>

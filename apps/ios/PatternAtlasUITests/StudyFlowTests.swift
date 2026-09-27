@@ -43,11 +43,15 @@ final class StudyFlowTests: XCTestCase {
     func testNativeProgressDashboardAndCharts() {
         let app = XCUIApplication(); app.launch()
         app.tabBars.buttons["Progress"].tap()
-        XCTAssertTrue(app.buttons["importLeetCode"].waitForExistence(timeout: 10))
+        let coverage = app.buttons["Coverage & freshness"]
+        if coverage.waitForExistence(timeout: 3) { coverage.tap() }
+        let importer = app.buttons["importLeetCode"]
+        for _ in 0..<12 { if importer.isHittable { break }; app.swipeUp() }
+        XCTAssertTrue(importer.exists)
         let map = app.descendants(matching: .any)["coverageTreemap"].firstMatch
-        for _ in 0..<12 { if map.isHittable { break }; app.swipeUp() }
-        XCTAssertTrue(map.exists)
         let bars = app.buttons["Stacked bars"]
+        for _ in 0..<16 { if bars.isHittable { break }; app.swipeUp() }
+        XCTAssertTrue(map.exists)
         XCTAssertTrue(bars.isHittable); bars.tap()
         let screenshot = XCTAttachment(screenshot: app.screenshot())
         screenshot.name = "Native progress stacked bars"; screenshot.lifetime = .keepAlways; add(screenshot)

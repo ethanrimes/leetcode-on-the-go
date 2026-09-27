@@ -68,25 +68,28 @@ struct AnalyticsDashboardSections: View {
     private func focusSection(_ snapshot: AnalyticsSnapshot) -> some View {
         Section {
             Picker("Refresh after", selection: $filter.freshDays) { ForEach([7,14,30,60,90], id: \.self) { Text("\($0) days").tag($0) } }
-            ForEach(snapshot.focus) { item in
-                NavigationLink { NodeDetailView(data: data, node: item.node) } label: {
-                    VStack(alignment: .leading, spacing: 7) {
-                        HStack { Text(item.node.title).font(.subheadline.weight(.medium)); Spacer(); Text("\(Int((Double(item.fresh) / Double(item.total) * 100).rounded()))% fresh").font(.caption.bold()).foregroundStyle(AtlasStyle.green) }
-                        Text("\(item.due) reviews due · \(item.practiced - item.fresh) need refresh · \(item.total - item.practiced) no dated practice").font(.caption2).foregroundStyle(.secondary)
-                        if let date = item.lastPracticed.flatMap(dateFromISO) { Text("Last practiced \(date.formatted(date: .abbreviated, time: .omitted)) · \(item.solved)/\(item.total) accepted").font(.caption2).foregroundStyle(.secondary) }
-                    }.padding(.vertical, 5)
-                }
+            ForEach(snapshot.recommendations) { item in
+                VStack(alignment: .leading, spacing: 9) {
+                    HStack { Text(item.kind).font(.caption.weight(.semibold)).foregroundStyle(AtlasStyle.green); Spacer(); Text(item.node.level).font(.caption2).foregroundStyle(.secondary) }
+                    Text(item.topic).font(.caption2).foregroundStyle(.secondary)
+                    NavigationLink { NodeDetailView(data: data, node: item.node) } label: { Text(item.node.title).font(.subheadline.weight(.semibold)) }
+                    Text(item.reason).font(.caption).foregroundStyle(.secondary)
+                    NavigationLink { ProblemDetailView(data: data, problem: item.problem, initialPattern: item.node.id) } label: {
+                        Text("Practice #\(item.problem.id) · \(item.problem.title)").font(.caption.weight(.medium)).foregroundStyle(AtlasStyle.green)
+                    }
+                }.padding(.vertical, 8)
             }
-            if snapshot.focus.isEmpty { Text("No patterns need refreshing in this scope.").font(.caption) }
-        } header: { Text("Where to refocus") } footer: { Text("Fresh means a submission or recall review within \(filter.freshDays) days. Visits do not count. Suggestions prioritize due reviews, then stale practice, then coverage gaps. This is a practice signal, not a mastery score.") }
+            if snapshot.recommendations.isEmpty { Text("No practice is due for these filters. Broaden the category or difficulty to explore more patterns.").font(.caption) }
+        } header: { Text("Recommended practice") } footer: { Text("A varied set based on all available history: due reviews, unsuccessful attempts, uncertain solutions, older practice, then gaps. Category, difficulty, and pattern level filters apply. Missing dates stay unknown; completion does not prove mastery.") }
     }
+
     private var filterSection: some View {
         Section("Explore coverage") {
             Picker("Category", selection: $filter.scope) {
                 Text("Entire curriculum").tag("")
                 ForEach(data.nodes.filter { $0.kind == "category" }) { Text($0.title).tag($0.id) }
             }
-            Picker("Aggregation", selection: $filter.depth) { Text("Next level").tag(1); Text("2 levels down").tag(2); Text("3 levels down").tag(3); Text("All leaves").tag(99) }
+            Picker("Map detail", selection: $filter.depth) { Text("Overview").tag(1); Text("Grouped detail").tag(2); Text("Fine detail").tag(3); Text("All patterns & collections").tag(99) }
             Picker("Problem difficulty", selection: $filter.difficulty) { Text("All difficulties").tag(""); ForEach(["Easy","Medium","Hard"], id: \.self) { Text($0).tag($0) } }
             Picker("Pattern level", selection: $filter.level) { Text("All levels").tag(""); ForEach(["Foundation","Intermediate","Advanced"], id: \.self) { Text($0).tag($0) } }
             Picker("Submission period", selection: $filter.period) { Text("All imported history").tag(0); Text("Last 30 days").tag(30); Text("Last 90 days").tag(90) }

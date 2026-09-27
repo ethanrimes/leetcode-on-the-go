@@ -115,7 +115,7 @@ struct ProblemDetailView: View {
                 }.padding(20).frame(maxWidth: 850)
             }.background(AtlasStyle.paper)
         }
-        .navigationTitle(reviewMode ? "Recall practice" : "Problem study").navigationBarTitleDisplayMode(.inline)
+        .trackPage("/problem/\(problem.id)").navigationTitle(reviewMode ? "Recall practice" : "Problem study").navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { store.toggleBookmark(problem.id) } label: { Image(systemName: store.progress.bookmarks.contains(problem.id) ? "bookmark.fill" : "bookmark") }
@@ -152,6 +152,6 @@ struct ReviewSessionView: View {
                 }.padding(30).frame(maxWidth: 650, maxHeight: .infinity)
             } else { ProgressView("Preparing your deck…") }
         }.toolbar { ToolbarItem(placement: .topBarLeading) { Button("Close") { dismiss() } } }
-            .onAppear { if !started { cards = store.queue(nodeId: nodeId); started = true } }
+            .trackPage("/review").onAppear { if !started { cards = store.queue(nodeId: nodeId); started = true } }
     }
 }

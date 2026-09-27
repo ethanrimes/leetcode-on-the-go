@@ -53,11 +53,11 @@ test('backup import validates and merges without replacing an existing draft',as
   await page.getByLabel('Solution draft').locator('.cm-content').fill('local draft');
   await page.goto('/#/progress');
   const backup={version:1,cards:{},drafts:{'1':'incoming draft','2':'imported new draft'},bookmarks:['2'],activity:{}};
-  await page.locator('input[type=file]').setInputFiles({name:'backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(backup))});
+  await page.getByLabel('Progress backup file').setInputFiles({name:'backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(backup))});
   await expect(page.getByRole('status')).toContainText('Backup merged');
   const progress=await page.evaluate(()=>JSON.parse(localStorage.getItem('pattern-atlas.progress.v1')!));
   expect(progress.drafts['1']).toBe('local draft');expect(progress.drafts['2']).toBe('imported new draft');
-  await page.locator('input[type=file]').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{"version":2}')});
+  await page.getByLabel('Progress backup file').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{"version":2}')});
   await expect(page.getByRole('status')).toContainText('not a Pattern Atlas');
 });
 test('layout stays within the viewport and navigation is accessible',async({page},testInfo)=>{

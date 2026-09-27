@@ -12,3 +12,7 @@ playwright-report/
 __pycache__/
 .azure/
 artifacts/
+
+# Private LeetCode session and submission exports
+.local/
+leetcode-history-*.json

@@ -23,18 +23,7 @@ struct ProgressViewScreen: View {
                     StatView(value: "\(store.dueCount)", label: "Due now")
                 }.padding(.vertical, 12)
             }
-            Section("Topic by topic") {
-                ForEach(data.roots) { node in
-                    let problems = data.problems(for: node.id)
-                    let learned = problems.filter { store.learned($0) }.count
-                    NavigationLink { NodeDetailView(data: data, node: node) } label: {
-                        VStack(alignment: .leading, spacing: 10) {
-                            HStack { Text(node.title).font(.caption.weight(.medium)); Spacer(); Text("\(learned) / \(problems.count)").font(.caption2).foregroundStyle(.secondary) }
-                            ProgressView(value: Double(learned), total: Double(max(1, problems.count)))
-                        }.padding(.vertical, 6)
-                    }
-                }
-            }
+            AnalyticsDashboardSections(data: data)
             Section("Saved for later") {
                 let saved = data.problems.filter { store.progress.bookmarks.contains($0.id) }
                 ForEach(saved) { problem in NavigationLink { ProblemDetailView(data: data, problem: problem) } label: { ProblemRow(problem: problem) } }
@@ -47,7 +36,7 @@ struct ProgressViewScreen: View {
             Section {
                 NavigationLink("Sources & curriculum notes") { CurriculumNotesView(data: data) }
             }
-        }.navigationTitle("Your progress")
+        }.navigationTitle("Your progress").trackPage("/progress")
             .fileExporter(isPresented: $exporting, document: document, contentType: .json, defaultFilename: "pattern-atlas-backup") { result in
                 if case .failure(let error) = result { store.message = error.localizedDescription }
             }
@@ -78,6 +67,6 @@ struct CurriculumNotesView: View {
                 Link("Repository & coverage audit", destination: URL(string: "https://github.com/ethanrimes/leetcode-on-the-go")!)
             }
             Section("Your private notebook") { Text("The complete worked curriculum is bundled for offline study. Drafts and review history remain on this device. The app does not execute your code. Open LeetCode to run or submit solutions. This app is independent of LeetCode and the referenced educators.").font(.caption).foregroundStyle(.secondary).lineSpacing(4) }
-        }.navigationTitle("Curriculum notes").navigationBarTitleDisplayMode(.inline)
+        }.navigationTitle("Curriculum notes").trackPage("/about").navigationBarTitleDisplayMode(.inline)
     }
 }

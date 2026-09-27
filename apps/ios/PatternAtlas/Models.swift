@@ -158,6 +158,8 @@ func dateFromISO(_ string: String) -> Date? {
 }
 func cardKey(_ problem: String, _ pattern: String) -> String { "\(problem):\(pattern)" }
 struct StudyProgress: Codable {
+    var leetcode: LeetCodeHistory?
+    var visits: PageVisits?
     var version = 1
     var cards: [String: Review] = [:]
     var drafts: [String: String] = [:]
@@ -170,6 +172,7 @@ struct StudyProgress: Codable {
               value.cards.values.allSatisfy({ $0.repetitions >= 0 && $0.lapses >= 0 && $0.interval >= 0 && $0.interval.isFinite && dateFromISO($0.due) != nil && dateFromISO($0.lastReviewed) != nil }),
               value.drafts.values.allSatisfy({ $0.count <= 200_000 }),
               value.activity.allSatisfy({ $0.key.range(of: #"^\d{4}-\d{2}-\d{2}$"#, options: .regularExpression) != nil && $0.value >= 0 }) else { throw StudyError.invalidBackup }
+        guard value.leetcode?.valid ?? true, validVisits(value.visits ?? [:]) else { throw StudyError.invalidBackup }
         return value
     }
 }
@@ -187,7 +190,7 @@ struct ReviewCard: Identifiable {
     var loadError: String?
     var message: String?
     var progress = StudyProgress()
-    private let defaults: UserDefaults
+    let defaults: UserDefaults
     private let key = "pattern-atlas.progress.v1"
     init(defaults: UserDefaults = .standard, bundle: Bundle = .main) {
         self.defaults = defaults
@@ -233,10 +236,13 @@ struct ReviewCard: Identifiable {
     func exportData() throws -> Data { let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]; return try encoder.encode(progress) }
     func mergeBackup(_ data: Data) throws {
         let incoming = try StudyProgress.decode(data)
+        let history = try incoming.leetcode.map { try progress.leetcode?.merging($0) ?? $0 } ?? progress.leetcode
         for (key, review) in incoming.cards where progress.cards[key] == nil || review.lastReviewed > progress.cards[key]!.lastReviewed { progress.cards[key] = review }
         for (key, draft) in incoming.drafts where progress.drafts[key] == nil { progress.drafts[key] = draft }
         progress.bookmarks = Array(Set(progress.bookmarks + incoming.bookmarks)).sorted()
         for (day, count) in incoming.activity { progress.activity[day] = max(progress.activity[day] ?? 0, count) }
+        progress.leetcode = history
+        progress.visits = mergeVisits(progress.visits ?? [:], incoming.visits ?? [:])
         save(); message = "Backup merged. Existing local drafts were kept."
     }
 }

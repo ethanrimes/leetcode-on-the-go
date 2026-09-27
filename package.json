@@ -1,0 +1,18 @@
+{
+  "name": "leetcode-on-the-go",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["apps/web", "packages/core"],
+  "scripts": {
+    "dev": "npm run dev -w apps/web",
+    "build": "npm run content:build && npm run build -w apps/web",
+    "content:build": "python3 scripts/build_curriculum.py",
+    "content:check": "python3 scripts/validate_curriculum.py",
+    "test": "npm run content:check && tsx --test packages/core/src/*.test.ts",
+    "test:e2e": "playwright test",
+    "ios:generate": "npm run content:build && cd apps/ios && xcodegen generate",
+    "deploy": "bash infrastructure/deploy.sh"
+  },
+  "engines": {"node": ">=22.12.0"},
+  "devDependencies": {"@playwright/test": "^1.58.2", "tsx": "^4.21.0", "typescript": "^5.9.3"}
+}

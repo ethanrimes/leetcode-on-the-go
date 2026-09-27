@@ -17,7 +17,8 @@
     "deploy": "bash infrastructure/deploy.sh",
     "history:login": "node scripts/leetcode-history.mjs --login",
     "history:export": "node scripts/leetcode-history.mjs",
-    "history:update": "tsx scripts/update-history.mts"
+    "history:update": "tsx scripts/update-history.mts",
+    "history:open": "tsx scripts/open-history.mts"
   },
   "engines": {
     "node": ">=22.12.0"

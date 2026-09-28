@@ -206,3 +206,27 @@ def solve(operations):
         out.append(outgoing.pop() if op[0]=='pop' else outgoing[-1])
     return out
 ''','O(1) amortized per operation','O(n)')
+
+C('Stacks, heaps & range queries / Monotone structures','Circular next-greater scan',503,'Intermediate','Useful','An unresolved item may find its successor after the end of an array.','Scan indices twice modulo n, but push unresolved indices only during the first lap; the second lap only resolves them.','Pushing on both laps duplicates candidates and obscures the one-answer-per-index invariant.','For each value in a circular array, return the first greater value encountered moving right, or -1.',[[1,2,1]],[2,-1,2],'''
+def solve(nums):
+    n = len(nums)
+    answer = [-1] * n
+    pending = []
+    for step in range(2 * n):
+        i = step % n
+        while pending and nums[pending[-1]] < nums[i]:
+            answer[pending.pop()] = nums[i]
+        if step < n: pending.append(i)
+    return answer
+''','O(n)','O(n)')
+C('Stacks, heaps & range queries / Monotone structures','Greedy digit removal',402,'Intermediate','Useful','Discard digits to make the smallest remaining number.','While removals remain, a smaller incoming digit can replace a larger previous digit. Then remove any remaining quota from the tail.','Leading zeros must be stripped, and an empty result is zero.','Remove exactly k digits from a decimal string to produce the smallest possible nonnegative integer string.', ['1432219',3],'1219','''
+def solve(num, k):
+    digits = []
+    for ch in num:
+        while k and digits and digits[-1] > ch:
+            digits.pop()
+            k -= 1
+        digits.append(ch)
+    if k: digits = digits[:-k]
+    return ''.join(digits).lstrip('0') or '0'
+''','O(n)','O(n)')

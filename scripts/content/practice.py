@@ -17,6 +17,22 @@ TAG_ROOTS = {
 'math':'bits-math-geometry','bit-manipulation':'bits-math-geometry','bitmask':'bits-math-geometry','number-theory':'bits-math-geometry','combinatorics':'bits-math-geometry','geometry':'bits-math-geometry','probability-and-statistics':'bits-math-geometry','randomized':'bits-math-geometry','game-theory':'bits-math-geometry','rejection-sampling':'bits-math-geometry','reservoir-sampling':'bits-math-geometry',
 'array':'arrays-hashing','hash-table':'arrays-hashing','prefix-sum':'arrays-hashing','counting':'arrays-hashing','simulation':'arrays-hashing','hash-function':'arrays-hashing'
 }
+# The catalog snapshot includes finer-grained topic slugs than the 75 broad
+# official topics. Route these to *topic collections*, never to authored
+# pattern leaves: a tag describes a problem, not the checked-in solution.
+TAG_ROOTS.update({tag: root for root, tags in {
+    'arrays-hashing': '''data-stream hash-function''',
+    'greedy-intervals': '''boyer-moore-majority-vote-algorithm sweep-line interactive''',
+    'binary-search': '''ternary-search''',
+    'dynamic-programming': '''0-1-knapsack complete-knapsack dp-on-trees knapsack-problem longest-common-subsequence longest-increasing-subsequence memoization mixed-knapsack multiple-knapsack''',
+    'graphs-grids': '''0-1-bfs a-search articulation-point bellman-ford-algorithm bidirectional-search bipartite-graph boruvkas-algorithm bridge-graph dijkstra dinics-algorithm directed-acyclic-graph edmonds-karp-algorithm eulerian-graph eulerian-path flow-network floyd-warshall-algorithm graph-coloring hamiltonian-path heuristic-search hungarian-algorithm k-shortest-path kosarajus-algorithm kruskals-algorithm matching-graph maximum-flow maximum-matching minimum-cost-flow minimum-cut mpm-algorithm perfect-matching planar-graph prims-algorithm push-relabel-algorithm semi-eulerian-graph successive-shortest-path-algorithm tarjans-scc-algorithm''',
+    'trees-linked-lists': '''binary-lifting cartesian-tree doubly-linked-list floyds-cycle-finding-algorithm lowest-common-ancestor''',
+    'stacks-heaps-range-queries': '''bracket-sequences heap iterator k-d-tree li-chao-tree persistent-data-structure range-minimum-maximum-query sparse-table splay-tree sqrt-decomposition treap''',
+    'backtracking-enumeration': '''algorithm-x brute-force-search dancing-links''',
+    'strings-tries': '''aho-corasick-algorithm boyer-moore-string-search-algorithm knuth-morris-pratt-algorithm lexicographically-minimal-string-rotation lyndon-factorization manacher palindromic-tree suffix-automaton suffix-tree z-algorithm''',
+    'sorting-selection': '''bubble-sort quicksort sort timsort tournament-sort''',
+    'bits-math-geometry': '''bezouts-lemma brainteaser convex-hull euclidean-algorithm eulers-theorem eulers-totient-function extended-euclidean-algorithm fermats-little-theorem greatest-common-divisor impartial-game inclusion-exclusion-principle least-common-multiple linear-algebra minimax-algorithm minimum-enclosing-circle newtons-method nim-game pigeonhole-principle polygons primality-test prime-factorization prime-number-sieve sieve-theory sprague-grundy-theorem triangulation zero-sum-game''',
+}.items() for tag in tags.split()})
 
 def expand(nodes, problems, reference):
     catalog=json.loads((ROOT/'packages/content/catalog.json').read_text())['problems']
@@ -68,7 +84,9 @@ def expand(nodes, problems, reference):
         metadata=catalog_by_id[pid]
         collections=memberships[pid]
         primary=collections[0] if collections else 'community-unclassified'
-        if not collections: node_by_id[primary]['problemIds'].append(pid)
+        if not collections:
+            node_by_id[primary]['problemIds'].append(pid)
+            collections=[primary]
         solutions=[]
         for i,variant in enumerate(record['solutions']):
             solutions.append(dict(patternId=primary,title='Community implementation'+(f' {i+1}' if len(record['solutions'])>1 else ''),language='Python',

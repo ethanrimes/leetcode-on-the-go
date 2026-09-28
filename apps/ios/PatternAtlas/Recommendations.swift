@@ -13,7 +13,7 @@ struct PracticeRecommendation: Identifiable {
 
 // Keep priorities and topic diversification aligned with packages/core/recommendations.ts.
 func practiceRecommendations(_ data: Curriculum, progress: StudyProgress, filter: AnalyticsFilter, now: Date = .now) -> [PracticeRecommendation] {
-    let branch = filter.scope.isEmpty ? nil : data.descendants(of: filter.scope)
+    let branch = filter.selectedScopes.isEmpty ? nil : filter.selectedScopes.reduce(into: Set<String>()) { $0.formUnion(data.descendants(of: $1)) }
     var latest: [String: LeetCodeSubmission] = [:]
     var completed = Set(progress.leetcode?.completions?.slugs ?? [])
     for submission in progress.leetcode?.submissions.values ?? [:].values {
@@ -25,11 +25,11 @@ func practiceRecommendations(_ data: Curriculum, progress: StudyProgress, filter
     var candidates: [PracticeRecommendation] = []
     for node in data.patterns {
         if let branch, !branch.contains(node.id) { continue }
-        if !filter.level.isEmpty && node.level != filter.level { continue }
+        if !filter.selectedLevels.isEmpty && !filter.selectedLevels.contains(node.level) { continue }
         var root = node; var seen = Set<String>()
         while let parentId = root.parentId, let parent = data.node(parentId), seen.insert(parentId).inserted { root = parent }
         for problem in data.problems where problem.solutions.contains(where: { $0.patternId == node.id }) {
-            if !filter.difficulty.isEmpty && problem.difficulty != filter.difficulty { continue }
+            if !filter.selectedDifficulties.isEmpty && !filter.selectedDifficulties.contains(problem.difficulty) { continue }
             let key = cardKey(problem.id, node.id), review = progress.cards[key]
             let rating = progress.familiarity?[key]?.rating, submission = latest[problem.slug]
             let submissionDate = submission.flatMap { dateFromISO($0.timestamp) }, reviewDate = review.flatMap { dateFromISO($0.lastReviewed) }

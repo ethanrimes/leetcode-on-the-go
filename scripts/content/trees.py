@@ -157,8 +157,41 @@ def solve(a, b):
     return dummy.next
 ''','O(m+n)','O(1)')
 
-for number in [104,102,437,236,98,230,543,124,337,968]:
+C('Trees & linked lists / Binary tree traversal','Rightmost node per level',199,'Foundation','Useful','Observe the tree as if only the rightmost node at each depth were visible.','BFS processes a complete level together; the final node removed from that level is the visible one.','Do not read the growing queue length after adding children.','Return the right-side view of a binary tree from top to bottom.',[[1,2,3,None,5,None,4]],[1,3,4],'''
+def solve(root):
+    from collections import deque
+    if not root: return []
+    queue = deque([root])
+    view = []
+    while queue:
+        size = len(queue)
+        for i in range(size):
+            node = queue.popleft()
+            if i == size - 1: view.append(node.val)
+            if node.left: queue.append(node.left)
+            if node.right: queue.append(node.right)
+    return view
+''','O(n)','O(width)')
+C('Trees & linked lists / Binary tree traversal','Mirror-pair recursion',101,'Foundation','Useful','Decide whether two subtrees reflect one another.','Compare outer children to each other and inner children to each other, recursively.','Comparing left and right subtrees in the same direction tests equality, not symmetry.','Return whether a binary tree is symmetric around its center.',[[1,2,2,3,4,4,3]],True,'''
+def solve(root):
+    def mirror(left, right):
+        if not left or not right: return left is right
+        return (left.val == right.val and
+                mirror(left.left, right.right) and
+                mirror(left.right, right.left))
+    return mirror(root.left, root.right) if root else True
+''','O(n)','O(height)')
+C('Trees & linked lists / Linked list pointers','Fast-slow midpoint',876,'Foundation','Core','Reach the midpoint without knowing the chain length in advance.','Move slow one link and fast two links; when fast ends, slow is at the middle.','For even length, this convention returns the second middle node.','Return the middle node of a singly linked list; examples show its suffix as values.',[[1,2,3,4,5,6]],[4,5,6],'''
+def solve(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow
+''','O(n)','O(1)')
+
+for number in [104,102,437,236,98,230,543,124,337,968,199,101]:
     problems[str(number)]['test']['adapter']='tree'
     problems[str(number)]['constraints'] += ' Input root is a TreeNode with val, left, and right; examples use level-order arrays. Recursive versions use the call stack.'
-for number in [206,19,21]: problems[str(number)]['test']['adapter']='linked'
+for number in [206,19,21,876]: problems[str(number)]['test']['adapter']='linked'
 problems['141']['test']['adapter']='cycle'

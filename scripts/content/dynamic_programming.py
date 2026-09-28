@@ -302,3 +302,63 @@ def solve(n):
     for _ in range(3, n+1): a, b, c = b, c, (2*c+a)%1_000_000_007
     return c
 ''','O(n)','O(1)')
+
+C('Dynamic programming / Compressed & advanced states','Remainder-class maximum',1262,'Intermediate','Useful','Only a sum modulo a small divisor affects whether the final answer is valid.','After each value, keep the largest achievable sum for each remainder. Read exclusively from the previous layer so an item is used once.','An unreachable remainder must remain negative infinity, including when values are zero.','Choose a subset of nonnegative integers with maximum sum divisible by three.',[[3,6,5,1,8]],18,'''
+def solve(nums):
+    dp = [0, float('-inf'), float('-inf')]
+    for x in nums:
+        nxt = dp[:]
+        for remainder, value in enumerate(dp):
+            candidate = (remainder+x)%3
+            nxt[candidate] = max(nxt[candidate], value+x)
+        dp = nxt
+    return dp[0]
+''','O(n)','O(1)')
+C('Dynamic programming / Grids & multiple sequences','Blocked-cell path counts',63,'Foundation','Core','Some grid cells cannot belong to any path.','A free cell receives paths from above and left; an obstacle resets its count to zero. Seed the first cell with one path only if free.','Leaving a stale count under an obstacle permits paths to cross it.','Count paths from the top-left to bottom-right of a grid with obstacles marked 1, moving only right or down.',[[[0,0,0],[0,1,0],[0,0,0]]],2,'''
+def solve(obstacleGrid):
+    dp = [0]*len(obstacleGrid[0])
+    dp[0] = int(obstacleGrid[0][0] == 0)
+    for row in obstacleGrid:
+        for c, blocked in enumerate(row):
+            if blocked: dp[c] = 0
+            elif c: dp[c] += dp[c-1]
+    return dp[-1]
+''','O(mn)','O(n)')
+C('Dynamic programming / Grids & multiple sequences','Matching suffix lengths',718,'Intermediate','Useful','The match must be contiguous in both sequences.','Let dp[i][j] be the equal suffix length ending at both positions; on a mismatch reset it to zero. Retain the maximum over all endpoints.','Taking the maximum of top and left would solve a subsequence problem instead.','Return the longest length of a contiguous subarray appearing in both integer arrays.',[[1,2,3,2,1],[3,2,1,4,7]],3,'''
+def solve(nums1, nums2):
+    dp = [0]*(len(nums2)+1); best = 0
+    for x in nums1:
+        for j in range(len(nums2), 0, -1):
+            dp[j] = dp[j-1]+1 if x == nums2[j-1] else 0
+            best = max(best, dp[j])
+    return best
+''','O(mn)','O(n)')
+C('Dynamic programming / Subsequences','Reconstruct a compatible chain',368,'Intermediate','Useful','The actual chain is required, rather than just its length.','Sort positive values; store the length and predecessor index of the best divisible chain ending at each value, then backtrack from the best endpoint.','Sorting makes divisibility transitive along the recovered chain.','Return any largest subset of distinct positive integers in which every pair has one value dividing the other.',[[1,2,4,8]],[1,2,4,8],'''
+def solve(nums):
+    nums = sorted(nums); n = len(nums)
+    length = [1]*n; parent = [-1]*n
+    for i in range(n):
+        for j in range(i):
+            if nums[i]%nums[j] == 0 and length[j]+1 > length[i]:
+                length[i], parent[i] = length[j]+1, j
+    if not n: return []
+    i = max(range(n), key=lambda x: length[x]); answer = []
+    while i != -1:
+        answer.append(nums[i]); i = parent[i]
+    return answer[::-1]
+''','O(n²)','O(n)')
+C('Dynamic programming / State machines','Bounded transaction layers',188,'Advanced','Useful','A trade limit makes the number of completed sells part of the state.','For each allowed trade, update cash and hold from the previous day. A sale consumes one transaction; a purchase does not.','Updating from fresh states can incorrectly buy and sell on the same day.','With at most k nonoverlapping stock transactions, maximize profit from daily prices.',[2,[2,4,1]],2,'''
+def solve(k, prices):
+    if not prices or not k: return 0
+    if k >= len(prices)//2:
+        return sum(max(0, prices[i]-prices[i-1]) for i in range(1,len(prices)))
+    cash = [0]+[float('-inf')]*k
+    hold = [float('-inf')]*(k+1)
+    for price in prices:
+        next_cash, next_hold = cash[:], hold[:]
+        for used in range(k+1):
+            next_hold[used] = max(hold[used], cash[used]-price)
+            if used: next_cash[used] = max(cash[used], hold[used-1]+price)
+        cash, hold = next_cash, next_hold
+    return max(cash)
+''','O(nk)','O(k)')

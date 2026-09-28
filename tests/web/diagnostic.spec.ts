@@ -19,10 +19,10 @@ test('diagnostic opens solutions without answering, revises ratings, and reports
  await page.getByRole('button',{name:'View diagnostic summary'}).click();
  await expect(page.getByRole('heading',{name:'Your familiarity snapshot'})).toBeVisible();
  await page.getByRole('link',{name:'View familiarity dashboard'}).click();
- const panel=page.getByLabel('Diagnostic familiarity',{exact:true});await expect(panel).toContainText('1 of 200 solution sets assessed');
+ const panel=page.getByLabel('Diagnostic familiarity',{exact:true});await expect(panel).toContainText(/1 of \d+ solution sets assessed/);
  await choose(page,'Group familiarity by','Individual patterns & collections');await page.getByLabel('Find a concept or pattern').fill('Frequency signatures');
  await expect(panel.locator('.familiarity-row')).toHaveCount(1);await expect(panel.locator('.familiarity-row')).toContainText('1 definitely');
- await page.reload();await expect(panel).toContainText('1 of 200 solution sets assessed');
+ await page.reload();await expect(panel).toContainText(/1 of \d+ solution sets assessed/);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.goto(`/#/diagnostic?topic=${pattern}`);await expect(page.getByRole('button',{name:'Start diagnostic test',exact:true})).toBeDisabled();
  await choose(page,'Diagnostic selection','All · reassess previous ratings');await page.getByRole('button',{name:'Start diagnostic test',exact:true}).click();

@@ -47,7 +47,7 @@ The initial web bundle loads the editor only when a study card is opened. The Gr
 
 ## Verification
 
-`npm test` checks hierarchy integrity, every worked leaf mapping, web/iOS data parity, 200 authored examples, seeded differential checks for subtle algorithms, scheduling, filtered queues, and backup validation. Playwright tests the desktop and mobile web flow. XCTest tests native decoding/storage/scheduling and an actual UI reveal/rating flow on Simulator. See [VALIDATION.md](VALIDATION.md) for the latest observed run.
+`npm test` checks hierarchy integrity, every worked leaf mapping, web/iOS data parity, 221 authored examples, seeded differential checks for subtle algorithms, scheduling, filtered queues, and backup validation. Playwright tests the desktop and mobile web flow. XCTest tests native decoding/storage/scheduling and an actual UI reveal/rating flow on Simulator. See [VALIDATION.md](VALIDATION.md) for the latest observed run.
 
 ## Progress analytics and LeetCode import
 

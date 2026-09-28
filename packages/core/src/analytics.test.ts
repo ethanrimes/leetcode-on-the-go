@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {analytics,emptyProgress,recordVisit,pageVisits,mergeVisits,parseProgress,parseSubmissionExport,mergeHistory,mergeProgress,treemap,type Curriculum,type SubmissionExport,type CurriculumNode} from './index';
+import {analytics,emptyProgress,recordVisit,pageVisits,mergeVisits,parseProgress,parseSubmissionExport,mergeHistory,mergeProgress,treemap,hierarchicalTreemap,type Curriculum,type SubmissionExport,type CurriculumNode} from './index';
 const now=new Date('2026-09-27T12:00:00.000Z');
 const packet:SubmissionExport={format:'pattern-atlas-leetcode',version:1,account:'demo',exportedAt:now.toISOString(),complete:true,submissions:[
   {id:'1',slug:'two-sum',title:'Two Sum',timestamp:'2026-08-01T00:00:00.000Z',status:'Accepted',language:'python3'},
@@ -66,6 +66,21 @@ test('treemap covers the canvas with proportional, non-overlapping rectangles',(
  for(const r of rects){assert.ok(Math.abs(r.width*r.height/(800*500)-weights[r.index]/201)<1e-10);assert.ok(r.x>=0&&r.y>=0&&r.x+r.width<=800.00001&&r.y+r.height<=500.00001);}
  for(let i=0;i<rects.length;i++)for(let j=i+1;j<rects.length;j++){const a=rects[i],b=rects[j];assert.ok(Math.min(a.x+a.width,b.x+b.width)-Math.max(a.x,b.x)<1e-9||Math.min(a.y+a.height,b.y+b.height)-Math.max(a.y,b.y)<1e-9);}
  assert.deepEqual(treemap([]),[]);
+});
+test('multiple filters union selected values and nested treemap frames keep siblings together',()=>{
+ const progress={...emptyProgress(),leetcode:history()};
+ const result=analytics(data,progress,{depth:99,scope:['root','other'],difficulty:['Easy','Medium'],level:['Foundation'],periods:['recent','middle'],now:+now});
+ assert.deepEqual(new Set(result.tiles.map(tile=>tile.node.id)),new Set(['one','two','other']));
+ assert.equal(result.submissions.length,3);
+ const recent=analytics(data,progress,{depth:1,scope:['root'],difficulty:['Easy'],periods:['recent'],now:+now});
+ assert.equal(recent.submissions.length,1);assert.equal(recent.solved,0);
+ const nested=hierarchicalTreemap(result.tiles,data.nodes,800,500);
+ assert.equal(nested.tiles.length,3);
+ const group=nested.groups.find(frame=>frame.id==='root')!;
+ assert.ok(group);
+ for(const rectangle of nested.tiles.filter(rectangle=>['one','two'].includes(result.tiles[rectangle.index].node.id))){
+   assert.ok(rectangle.x>=group.x&&rectangle.y>=group.y&&rectangle.x+rectangle.width<=group.x+group.width&&rectangle.y+rectangle.height<=group.y+group.height);
+ }
 });
 test('a due recall is attributed to its exact pattern, not every pattern sharing a problem',()=>{
  const progress={...emptyProgress(),cards:{'1:one':{repetitions:1,lapses:0,interval:1,rating:'good' as const,lastReviewed:'2026-01-01T00:00:00.000Z',due:'2026-01-02T00:00:00.000Z'}}};

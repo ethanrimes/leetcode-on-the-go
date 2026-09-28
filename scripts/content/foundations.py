@@ -348,3 +348,48 @@ def solve(position, m):
         else: right = mid-1
     return left
 ''','O(n log n + n log range)','O(n)')
+
+C('Binary search / Ordered positions','Equal-value boundaries',34,'Intermediate','Core','Find the full interval occupied by a target in sorted data.','Run lower bound twice: once for target and once for the first value greater than target. The answer lies between them.','An arbitrary binary-search hit does not identify either boundary.','Return the first and last index of target in a sorted array, or [-1,-1] if absent.',[[1,2,2,2,4],2],[1,3],'''
+def solve(nums, target):
+    def lower(x):
+        lo, hi = 0, len(nums)
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if nums[mid] < x: lo = mid + 1
+            else: hi = mid
+        return lo
+    first = lower(target)
+    if first == len(nums) or nums[first] != target: return [-1, -1]
+    return [first, lower(target + 1) - 1]
+''','O(log n)','O(1)')
+C('Binary search / Ordered positions','Rotated minimum boundary',153,'Intermediate','Useful','Find the pivot value in a rotated sorted array.','Compare mid to the rightmost candidate; a larger mid lies before the wrap, otherwise the minimum remains at mid or left of it.','This strict comparison assumes distinct values.','Return the smallest value in a nonempty rotated sorted array of distinct integers.',[[4,5,6,1,2,3]],1,'''
+def solve(nums):
+    lo, hi = 0, len(nums) - 1
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if nums[mid] > nums[hi]: lo = mid + 1
+        else: hi = mid
+    return nums[lo]
+''','O(log n)','O(1)')
+C('Two pointers & windows / Sliding windows','Minimum window with positive sums',209,'Intermediate','Core','Reach a sum threshold with as few consecutive elements as possible.','With positive values, removing from the left strictly lowers the sum; shrink every valid window before advancing right.','This shrink rule fails when negatives can later restore the sum.','Return the minimum length of a contiguous subarray whose sum is at least target, or 0 if none exists. All nums are positive.',[7,[2,3,1,2,4,3]],2,'''
+def solve(target, nums):
+    left = total = 0
+    best = len(nums) + 1
+    for right, value in enumerate(nums):
+        total += value
+        while total >= target:
+            best = min(best, right - left + 1)
+            total -= nums[left]
+            left += 1
+    return 0 if best > len(nums) else best
+''','O(n)','O(1)')
+C('Arrays & hashing / Prefix & difference','Balanced binary prefix states',525,'Intermediate','Useful','Find the longest interval with equal numbers of two symbols.','Treat zero as -1 and one as +1; equal transformed prefixes delimit a balanced interval. Save each prefix’s earliest position.','Overwriting the earliest position can only shorten later intervals.','Return the maximum length of a contiguous subarray with equally many 0s and 1s.',[[0,1,0,0,1,1]],6,'''
+def solve(nums):
+    first = {0: -1}
+    balance = best = 0
+    for i, value in enumerate(nums):
+        balance += 1 if value else -1
+        if balance in first: best = max(best, i - first[balance])
+        else: first[balance] = i
+    return best
+''','O(n)','O(n)')

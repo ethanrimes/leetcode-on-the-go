@@ -9,7 +9,7 @@ final class DiagnosticTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suite) }
         let store = StudyStore(defaults: defaults), data = try XCTUnwrap(store.curriculum)
         let cards = diagnosticCards(data)
-        XCTAssertEqual(cards.count, 200)
+        XCTAssertEqual(cards.count, data.patterns.count)
         let queue = diagnosticQueue(data, progress: store.progress, options: DiagnosticOptions(limit: 12))
         func root(_ node: PatternNode) -> String { if let parent = node.parentId.flatMap(data.node) { return root(parent) }; return node.id }
         XCTAssertEqual(Set(queue.map { root($0.node) }).count, 12)

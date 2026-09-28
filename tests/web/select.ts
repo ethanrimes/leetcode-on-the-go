@@ -3,3 +3,8 @@ export async function choose(page:Page,label:string,option:string) {
  await page.getByRole('combobox',{name:label,exact:true}).click();
  await page.getByRole('option',{name:option,exact:true}).click();
 }
+export async function toggleMulti(page:Page,label:string,option:string) {
+ await page.getByRole('button',{name:label,exact:true}).click();
+ await page.getByRole('option',{name:option,exact:true}).click();
+ await page.keyboard.press('Escape');
+}

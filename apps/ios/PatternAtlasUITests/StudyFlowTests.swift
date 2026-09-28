@@ -62,7 +62,7 @@ final class StudyFlowTests: XCTestCase {
         let app = XCUIApplication(); app.launch()
         app.tabBars.buttons["Progress"].tap()
         let start = app.buttons["startDiagnostic"]
-        for _ in 0..<5 { if start.isHittable { break }; app.swipeUp() }
+        for _ in 0..<30 { if start.isHittable { break }; app.swipeUp() }
         XCTAssertTrue(start.waitForExistence(timeout: 10)); start.tap()
         let begin = app.buttons["beginDiagnostic"]
         for _ in 0..<5 { if begin.isHittable { break }; app.swipeUp() }

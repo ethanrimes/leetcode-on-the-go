@@ -136,12 +136,19 @@ struct CoverageStats: Identifiable {
 }
 struct AnalyticsFilter {
     var scope = ""
+    var scopes: [String] = []
     var depth = 1
     var difficulty = ""
+    var difficulties: [String] = []
     var level = ""
+    var levels: [String] = []
     var query = ""
     var period = 0
+    var periods: [String] = []
     var freshDays = 30
+    var selectedScopes: [String] { scopes.isEmpty ? (scope.isEmpty ? [] : [scope]) : scopes }
+    var selectedDifficulties: [String] { difficulties.isEmpty ? (difficulty.isEmpty ? [] : [difficulty]) : difficulties }
+    var selectedLevels: [String] { levels.isEmpty ? (level.isEmpty ? [] : [level]) : levels }
 }
 struct CurriculumAnalytics {
     let data: Curriculum
@@ -166,9 +173,22 @@ struct CurriculumAnalytics {
     func snapshot(_ progress: StudyProgress, filter: AnalyticsFilter, now: Date = .now) -> AnalyticsSnapshot {
         let pages = totalVisits(progress.visits ?? [:])
         let all = Array(progress.leetcode?.submissions.values ?? [:].values)
-        let submissions = all.filter { filter.period == 0 || (dateFromISO($0.timestamp) ?? .distantPast) >= now.addingTimeInterval(-Double(filter.period) * 86400) }
-        let solved = Set(submissions.filter(\.accepted).map(\.slug) + (filter.period == 0 ? progress.leetcode?.completions?.slugs ?? [] : [])), attempted = Set(submissions.map(\.slug))
-        let eligible = Dictionary(uniqueKeysWithValues: data.catalog.filter { filter.difficulty.isEmpty || $0.difficulty == filter.difficulty }.map { ($0.id, $0) })
+        let submissions = all.filter { submission in
+            guard let date = dateFromISO(submission.timestamp) else { return false }
+            if filter.period > 0 && date < now.addingTimeInterval(-Double(filter.period) * 86400) { return false }
+            guard !filter.periods.isEmpty else { return true }
+            let age = now.timeIntervalSince(date)
+            return filter.periods.contains { period in
+                switch period {
+                case "recent": return age < 30 * 86400
+                case "middle": return age >= 30 * 86400 && age < 90 * 86400
+                case "older": return age >= 90 * 86400
+                default: return false
+                }
+            }
+        }
+        let solved = Set(submissions.filter(\.accepted).map(\.slug) + (filter.period == 0 && filter.periods.isEmpty ? progress.leetcode?.completions?.slugs ?? [] : [])), attempted = Set(submissions.map(\.slug))
+        let eligible = Dictionary(uniqueKeysWithValues: data.catalog.filter { filter.selectedDifficulties.isEmpty || filter.selectedDifficulties.contains($0.difficulty) }.map { ($0.id, $0) })
         let bySlug = Dictionary(uniqueKeysWithValues: data.catalog.map { ($0.slug, $0.id) })
         var practice: [String: Date] = [:]; var due = Set<String>()
         for s in all { if let id = bySlug[s.slug], let date = dateFromISO(s.timestamp) { practice[id] = max(practice[id] ?? .distantPast, date) } }
@@ -194,14 +214,18 @@ struct CurriculumAnalytics {
         func frontier(_ id: String, _ depth: Int) -> [PatternNode] {
             (children[id] ?? []).flatMap { node in depth > 1 && !(children[node.id] ?? []).isEmpty ? frontier(node.id, depth - 1) : [node] }
         }
-        var nodes = frontier(filter.scope, filter.depth)
-        if nodes.isEmpty, let node = data.node(filter.scope) { nodes = [node] }
-        let visibleNodes = nodes.filter { (filter.level.isEmpty || $0.level == filter.level) && (filter.query.isEmpty || $0.title.localizedCaseInsensitiveContains(filter.query)) }
+        let scopes = filter.selectedScopes.filter { data.node($0) != nil }
+        let roots = scopes.filter { id in !scopes.contains { other in other != id && data.descendants(of: other).contains(id) } }
+        let nodes = roots.isEmpty ? frontier("", filter.depth) : roots.flatMap { id -> [PatternNode] in
+            let found = frontier(id, filter.depth)
+            return found.isEmpty ? data.node(id).map { [$0] } ?? [] : found
+        }
+        let visibleNodes = nodes.filter { (filter.selectedLevels.isEmpty || filter.selectedLevels.contains($0.level)) && (filter.query.isEmpty || $0.title.localizedCaseInsensitiveContains(filter.query)) }
         let tileStats: [CoverageStats] = visibleNodes.map(stats)
         let tiles = tileStats.filter { $0.total > 0 }.sorted { a, b in a.total == b.total ? a.id < b.id : a.total > b.total }
-        let scope = filter.scope.isEmpty ? Set(data.catalog.map(\.id)) : membership[filter.scope] ?? []
+        let scope = roots.isEmpty ? Set(data.catalog.map(\.id)) : roots.reduce(into: Set<String>()) { $0.formUnion(membership[$1] ?? []) }
         let problems = eligible.values.filter { scope.contains($0.id) }; let slugs = Set(problems.map(\.slug))
-        let branch = filter.scope.isEmpty ? Set(data.nodes.map(\.id)) : data.descendants(of: filter.scope)
+        let branch = roots.isEmpty ? Set(data.nodes.map(\.id)) : roots.reduce(into: Set<String>()) { $0.formUnion(data.descendants(of: $1)) }
         let candidates: [CoverageStats] = data.patterns.filter { branch.contains($0.id) }.map(stats)
         let needingPractice = candidates.filter { $0.total > 0 && ($0.fresh < $0.total || $0.due > 0) }
         let focus = needingPractice.sorted { a, b in
@@ -213,7 +237,7 @@ struct CurriculumAnalytics {
         }
         return AnalyticsSnapshot(recommendations: practiceRecommendations(data, progress: progress, filter: filter, now: now), tiles: tiles, focus: Array(focus.prefix(6)), total: problems.count, solved: problems.filter { solved.contains($0.slug) }.count,
             attempted: problems.filter { attempted.contains($0.slug) && !solved.contains($0.slug) }.count,
-            submissions: submissions.filter { (filter.scope.isEmpty && filter.difficulty.isEmpty) || slugs.contains($0.slug) }.sorted { $0.timestamp > $1.timestamp },
+            submissions: submissions.filter { (roots.isEmpty && filter.selectedDifficulties.isEmpty) || slugs.contains($0.slug) }.sorted { $0.timestamp > $1.timestamp },
             unmapped: all.filter { bySlug[$0.slug] == nil }.count, pages: pages)
     }
 }
@@ -238,4 +262,46 @@ func treemap(_ weights: [Int], width: Double, height: Double) -> [TileRectangle]
     }
     split(weights.enumerated().filter { $0.element > 0 }.map { ($0.offset, Double($0.element)) }, 0, 0, width, height)
     return result
+}
+struct GroupRectangle: Identifiable {
+    let id: String; let title: String; let depth: Int
+    let x: Double; let y: Double; let width: Double; let height: Double
+}
+struct HierarchicalTreemapLayout {
+    let tiles: [TileRectangle]
+    let groups: [GroupRectangle]
+}
+func hierarchicalTreemap(_ tiles: [CoverageStats], nodes: [PatternNode], width: Double, height: Double) -> HierarchicalTreemapLayout {
+    final class Branch {
+        let id: String; let title: String; let tileIndex: Int?
+        var weight = 0; var children: [Branch] = []
+        init(_ id: String, _ title: String, _ tileIndex: Int? = nil) { self.id = id; self.title = title; self.tileIndex = tileIndex }
+    }
+    let byId = Dictionary(uniqueKeysWithValues: nodes.map { ($0.id, $0) }), root = Branch("", "")
+    for (index, tile) in tiles.enumerated() {
+        var ancestors: [PatternNode] = [], parent = tile.node.parentId
+        while let id = parent, let node = byId[id] { ancestors.insert(node, at: 0); parent = node.parentId }
+        var branch = root
+        for node in ancestors {
+            let child = branch.children.first { $0.id == node.id } ?? {
+                let created = Branch(node.id, node.title); branch.children.append(created); return created
+            }()
+            child.weight += tile.total; branch = child
+        }
+        let leaf = Branch(tile.node.id, tile.node.title, index); leaf.weight = tile.total; branch.children.append(leaf)
+    }
+    var rectangles: [TileRectangle] = [], groups: [GroupRectangle] = []
+    func layout(_ branch: Branch, _ x: Double, _ y: Double, _ w: Double, _ h: Double, _ depth: Int) {
+        let children = branch.children.sorted { $0.weight == $1.weight ? $0.id < $1.id : $0.weight > $1.weight }
+        for rect in treemap(children.map(\.weight), width: w, height: h) {
+            let child = children[rect.id], cx = x + rect.x, cy = y + rect.y
+            if let index = child.tileIndex { rectangles.append(TileRectangle(id: index, x: cx, y: cy, width: rect.width, height: rect.height)); continue }
+            groups.append(GroupRectangle(id: child.id, title: child.title, depth: depth, x: cx, y: cy, width: rect.width, height: rect.height))
+            let inset = min(4, min(rect.width / 20, rect.height / 20))
+            let header = rect.height > 95 && rect.width > 120 ? min(20, rect.height / 5) : inset
+            layout(child, cx + inset, cy + header, max(0, rect.width - inset * 2), max(0, rect.height - header - inset), depth + 1)
+        }
+    }
+    layout(root, 0, 0, width, height, 0)
+    return HierarchicalTreemapLayout(tiles: rectangles, groups: groups)
 }

@@ -19,6 +19,7 @@
 		93009669CAA75CBB8A351354 /* Diagnostic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79155EC7190FEEE3C7134819 /* Diagnostic.swift */; };
 		98EC99393D70B111C5FE4530 /* LibraryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */; };
 		9C8678711416D91F33ABE3B3 /* AnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98350982262ED217E6A2069 /* AnalyticsTests.swift */; };
+		AB91BE5FD958D6122AB25CE4 /* ActivityViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220E51B37D02628A556BAA9D /* ActivityViews.swift */; };
 		ACF498ED4A2275603EBEA901 /* CloudHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC8ECEC17829C98264AD74D /* CloudHistory.swift */; };
 		BFBB2B8680E8C434C7FEE3E0 /* PatternAtlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD385A1BF167A49418CC3E8 /* PatternAtlasApp.swift */; };
 		CC3F979FFD582F5A3ACB8146 /* DiagnosticViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11045352F76555FF2A6A052E /* DiagnosticViews.swift */; };
@@ -49,6 +50,7 @@
 		062415641DAC6603F8B3532E /* PatternAtlas.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PatternAtlas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViews.swift; sourceTree = "<group>"; };
 		11045352F76555FF2A6A052E /* DiagnosticViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticViews.swift; sourceTree = "<group>"; };
+		220E51B37D02628A556BAA9D /* ActivityViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViews.swift; sourceTree = "<group>"; };
 		224B98FF28FF46558D8846F5 /* PatternAtlasTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PatternAtlasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37539AE4596B6529C8A95FF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3AB5E78449629874580A1B84 /* walkccc-MIT.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "walkccc-MIT.txt"; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 		BFFC410E5F77E95BD48C29C3 /* PatternAtlas */ = {
 			isa = PBXGroup;
 			children = (
+				220E51B37D02628A556BAA9D /* ActivityViews.swift */,
 				DC08EC211325CCEA2554B665 /* Analytics.swift */,
 				BBCB01B56C40189D1FA6C631 /* AnalyticsViews.swift */,
 				40AA065A7ED0D5F9F425C12C /* Assets.xcassets */,
@@ -256,6 +259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB91BE5FD958D6122AB25CE4 /* ActivityViews.swift in Sources */,
 				517855E0B1B3D16A3BAB1847 /* Analytics.swift in Sources */,
 				4D028B285B25169C59A4D871 /* AnalyticsViews.swift in Sources */,
 				ACF498ED4A2275603EBEA901 /* CloudHistory.swift in Sources */,

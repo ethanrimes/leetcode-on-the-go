@@ -40,6 +40,7 @@ struct ProgressViewScreen: View {
                     Text(history.account).font(.caption).foregroundStyle(.secondary)
                     NavigationLink("Coverage & freshness") { List { AnalyticsDashboardSections(data: data) }.navigationTitle("LeetCode progress").trackPage("/progress/leetcode") }
                 }
+                LeetCodeActivitySection(data: data, history: history)
             }
             Section {
                 HStack {
@@ -48,8 +49,8 @@ struct ProgressViewScreen: View {
                     StatView(value: "\(store.dueCount)", label: "Due now")
                 }.padding(.vertical, 12)
             }
-            FamiliarityDashboardSection(data: data)
             AnalyticsDashboardSections(data: data)
+            FamiliarityDashboardSection(data: data)
             Section("Saved for later") {
                 let saved = data.problems.filter { store.progress.bookmarks.contains($0.id) }
                 ForEach(saved) { problem in NavigationLink { ProblemDetailView(data: data, problem: problem) } label: { ProblemRow(problem: problem) } }

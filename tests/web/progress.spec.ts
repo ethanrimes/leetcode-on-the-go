@@ -1,4 +1,4 @@
-import {choose} from './select';
+import {choose,toggleMulti} from './select';
 import {test,expect} from '@playwright/test';
 const fixture={format:'pattern-atlas-leetcode',version:1,account:'demo-test',exportedAt:new Date().toISOString(),complete:true,submissions:[
  {id:'900001',slug:'two-sum',title:'Two Sum',timestamp:new Date().toISOString(),status:'Accepted',language:'python3'},
@@ -20,7 +20,7 @@ test('history imports deduplicate and power both chart views and freshness',asyn
  await choose(page,'Map detail','All patterns & collections');
  await page.getByLabel('Find a tile').fill('Frequency signatures');
  await expect(page.locator('.treemap-tile')).toHaveCount(1);
- await page.locator('.treemap-tile').click();await expect(page.locator('.tile-detail')).toContainText('fresh');
+ const opened=page.waitForEvent('popup');await page.locator('.treemap-tile').click();const problems=await opened;await expect(problems.getByRole('heading',{name:'Frequency signatures'})).toBeVisible();await expect(page.locator('.tile-detail')).toContainText('fresh');await problems.close();
  await page.getByLabel('Find a tile').fill('');await choose(page,'Map detail','Overview');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.screenshot({path:`artifacts/progress-${info.project.name}.png`,fullPage:true});
@@ -59,25 +59,27 @@ test('undated completions populate all-time coverage without filling diagnostic 
  await page.getByRole('link',{name:'View coverage & freshness ↓'}).click();
  await expect(page).toHaveURL(/#\/progress$/);
  await expect(page.locator('.completion-note')).toContainText('2 completed problems');
- await expect(page.getByLabel('Diagnostic familiarity',{exact:true})).toContainText('0 of 200 solution sets assessed');
+ await expect(page.getByLabel('Diagnostic familiarity',{exact:true})).toContainText(/0 of \d+ solution sets assessed/);
  await expect(page.locator('.submission-history tbody tr')).toHaveCount(0);
- await choose(page,'Submission period','Last 30 days');
+ await toggleMulti(page,'Submission period','Last 30 days');
  await expect(page.getByLabel('Submission statistics')).toContainText('0accepted problems');
  await page.reload();await expect(page.getByLabel('Submission statistics')).toContainText('2accepted problems');
 });
 
 test('styled menus fit the viewport, support keyboard selection, and expose readable map detail names',async({page},info)=>{
  await page.goto('/#/progress');
- const trigger=page.getByRole('combobox',{name:'Pattern level',exact:true});
+ const trigger=page.getByRole('button',{name:'Pattern level',exact:true});
  await trigger.scrollIntoViewIfNeeded();const control=await trigger.boundingBox();await trigger.click();
- const menu=page.getByRole('listbox');await expect(menu).toBeVisible();
+ const menu=page.getByRole('listbox',{name:'Pattern level'});await expect(menu).toBeVisible();
  const box=await menu.boundingBox();
  expect(box!.width).toBeLessThanOrEqual(control!.width+2);expect(box!.height).toBeLessThanOrEqual(322);
  expect(box!.x).toBeGreaterThanOrEqual(0);expect(box!.x+box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
  await page.screenshot({path:`artifacts/styled-select-${info.project.name}.png`});
  await page.keyboard.press('Escape');await expect(menu).not.toBeVisible();await expect(trigger).toBeFocused();
- await trigger.press('ArrowDown');await page.keyboard.press('End');await page.keyboard.press('Enter');
- await expect(trigger).toHaveText('Advanced');
+ await trigger.click();await menu.getByRole('option',{name:'Advanced'}).click();await menu.getByRole('option',{name:'Intermediate'}).click();
+ await expect(menu.getByRole('option',{name:'Advanced'})).toHaveAttribute('aria-selected','true');
+ await expect(menu.getByRole('option',{name:'Intermediate'})).toHaveAttribute('aria-selected','true');
+ await page.keyboard.press('Escape');await expect(trigger).toHaveText('2 selected');
  await choose(page,'Map detail','All patterns & collections');
  await expect(page.getByRole('combobox',{name:'Map detail'})).toHaveText('All patterns & collections');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
@@ -95,15 +97,18 @@ test('treemap reveals details on hover or keyboard focus and remains tappable',a
   await page.keyboard.press('Escape');await expect(tooltip).not.toBeVisible();
   await page.mouse.move(0,0);await tile.focus();await expect(tooltip).toBeVisible();
  }
- await tile.click();await expect(page.locator('.tile-detail')).toContainText('Frequency signatures');
- await expect(page.getByRole('link',{name:'Open study page',exact:true})).toBeVisible();
+ const opened=page.waitForEvent('popup');await tile.click();const problems=await opened;
+ await expect(problems).toHaveURL(/\/library\/arrays-hashing-lookup-counting-frequency-signatures\?problems=1/);
+ await expect(problems.locator('.problem-browser')).toBeVisible();
+ await expect(page.locator('.tile-detail')).toContainText('Frequency signatures');
+ await expect(page.getByRole('link',{name:'Open problems ↗',exact:true})).toBeVisible();await problems.close();
 });
 
 test('recommended tiles explain imported evidence, honor difficulty, and open the exact worked approach',async({page},info)=>{
  await page.goto('/#/progress');
  const history={...fixture,submissions:[{...fixture.submissions[0],id:'900010',slug:'group-anagrams',title:'Group Anagrams',status:'Wrong Answer'}]};
  await page.getByLabel('LeetCode history file').setInputFiles({name:'history.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(history))});
- await choose(page,'Problem difficulty','Medium');
+ await toggleMulti(page,'Problem difficulty','Medium');
  const panel=page.getByRole('region',{name:'Recommended practice'});
  await expect(panel).toContainText('Latest recorded submission: Wrong Answer');
  const links=panel.locator('.practice-problem');
@@ -113,4 +118,33 @@ test('recommended tiles explain imported evidence, honor difficulty, and open th
  await panel.scrollIntoViewIfNeeded();await page.screenshot({path:`artifacts/recommended-practice-${info.project.name}.png`});
  await links.first().click();await expect(page.locator('h1')).toHaveText('Group Anagrams');
  await expect(page).toHaveURL(/pattern=arrays-hashing-lookup-counting-frequency-signatures/);
+});
+
+test('coverage leads the page, combines filter values, and outlines each parent category',async({page})=>{
+ await page.goto('/#/progress');
+ const map=page.locator('.progress-explorer'),diagnostic=page.getByLabel('Diagnostic familiarity',{exact:true});
+ expect(await map.evaluate((element,other)=>Boolean(element.compareDocumentPosition(document.querySelector(other)!)&Node.DOCUMENT_POSITION_FOLLOWING),'[aria-label="Diagnostic familiarity"]')).toBe(true);
+ const categories=page.getByRole('button',{name:'Category',exact:true});await categories.click();
+ await page.getByRole('option',{name:'Arrays & hashing',exact:true}).click();
+ await page.getByRole('option',{name:'Binary search',exact:true}).click();
+ await expect(categories).toHaveText('2 selected');await page.keyboard.press('Escape');
+ await toggleMulti(page,'Problem difficulty','Easy');await toggleMulti(page,'Problem difficulty','Medium');
+ await choose(page,'Map detail','All patterns & collections');
+ await expect(page.locator('.treemap-group[data-group-id="arrays-hashing"]')).toBeVisible();
+ await expect(page.locator('.treemap-group[data-group-id="binary-search"]')).toBeVisible();
+ const group=await page.locator('.treemap-group[data-group-id="arrays-hashing"]').boundingBox();
+ expect(group!.width).toBeGreaterThan(40);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await expect(diagnostic).toBeVisible();
+});
+
+test('activity calendar opens dated LeetCode submissions without inventing dates for completion snapshots',async({page})=>{
+ await page.goto('/#/progress');
+ await page.getByLabel('LeetCode history file').setInputFiles({name:'history.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(fixture))});
+ const activity=page.getByLabel('LeetCode activity');await expect(activity).toContainText('1accepted submissions');
+ const today=page.getByRole('button',{name:new RegExp(`${new Date().toDateString()}: 2 submissions`)});
+ await today.click();await expect(activity.locator('.activity-detail')).toContainText('Two Sum');
+ await expect(activity.locator('.activity-detail li')).toHaveCount(2);
+ const olderYear=String(new Date(fixture.submissions[2].timestamp).getFullYear());
+ await choose(page,'Activity year',olderYear);await expect(activity).toContainText(`1submissions in ${olderYear}`);
 });

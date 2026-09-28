@@ -36,6 +36,8 @@ open apps/ios/PatternAtlas.xcodeproj
 
 Select the `PatternAtlas` scheme and an iPhone simulator. To install on a physical device, select your Apple development team in Xcode’s Signing & Capabilities settings. No developer signing credentials are checked into this repo.
 
+For TestFlight, the [release workflow](docs/TESTFLIGHT.md) builds with Xcode 26+, imports signing material from GitHub secrets, and uploads using an App Store Connect API key. It uses the same CI distribution approach as AgroAmigo; local Xcode account sign-in is optional for that route.
+
 For Azure deployment, run `npm run deploy` after authenticating the Azure CLI to the configured subscription. The dedicated resource group is `leetcode-on-the-go-rg`; the web app and managed API use Azure Static Web Apps Free, with a private Azure Storage table for LeetCode history. GitHub Actions validates web/content changes before deploying `main`. The deployment token is held in a GitHub secret. See [architecture](docs/ARCHITECTURE.md), [source methodology](docs/SOURCES.md), and [verification evidence](docs/VALIDATION.md).
 
 LeetCode completions and submissions sync through the private Azure API after owner authentication. Drafts, ratings, and page visits stay on the current device; export/import remains available for backups. Running code and submitting solutions happen on LeetCode.

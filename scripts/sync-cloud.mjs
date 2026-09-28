@@ -24,4 +24,13 @@ if (remote.account.toLowerCase() !== history.account.toLowerCase() ||
     [...localIds].some(id => !remoteIds.has(id)) || [...localSlugs].some(slug => !remoteSlugs.has(slug))) {
   throw new Error('Azure verification did not contain every local submission and completion.');
 }
+for (const [year, calendar] of Object.entries(history.calendars ?? {})) {
+  const savedCalendar = remote.calendars?.[year];
+  const canonicalDays = value => JSON.stringify(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)));
+  if (!savedCalendar || Date.parse(savedCalendar.observedAt) < Date.parse(calendar.observedAt) ||
+      savedCalendar.observedAt === calendar.observedAt && canonicalDays(savedCalendar.days) !== canonicalDays(calendar.days)) {
+    throw new Error(`Azure verification did not preserve the ${year} source calendar. Deploy the latest API and retry.`);
+  }
+}
 console.log(`Azure verified: ${remoteSlugs.size} completion snapshot slugs, ${remoteIds.size} dated submissions for ${result.account}.`);
+for (const [year, calendar] of Object.entries(remote.calendars ?? {})) console.log(`Calendar ${year}: ${Object.values(calendar.days).reduce((a, b) => a + b, 0)} submissions, ${Object.keys(calendar.days).length} active days.`);

@@ -56,7 +56,7 @@ extension StudyStore {
                 save()
             }
             if let history = progress.leetcode {
-                let packet = SubmissionExport(completions: history.completions, through: history.through,
+                let packet = SubmissionExport(calendars: history.calendars, completions: history.completions, through: history.through,
                                               format: "pattern-atlas-leetcode", version: 1,
                                               account: history.account, exportedAt: history.exportedAt,
                                               complete: history.complete, submissions: Array(history.submissions.values))

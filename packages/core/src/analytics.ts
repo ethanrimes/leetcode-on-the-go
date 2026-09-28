@@ -1,10 +1,11 @@
 import {mergeFamiliarity} from './diagnostic';
+import {validateCalendars,mergeCalendars,type ActivityCalendars} from './activity';
 import {descendants, type Curriculum, type CurriculumNode, type Progress} from './index';
 
 export interface Submission {id:string; slug:string; title:string; timestamp:string; status:string; language:string}
 export interface CompletionSnapshot {observedAt:string; slugs:string[]}
-export interface LeetCodeHistory {completions?:CompletionSnapshot; through?:string; account:string; exportedAt:string; complete:boolean; submissions:Record<string,Submission>}
-export interface SubmissionExport {completions?:CompletionSnapshot; through?:string; format:'pattern-atlas-leetcode'; version:1; account:string; exportedAt:string; complete:boolean; submissions:Submission[]}
+export interface LeetCodeHistory {calendars?:ActivityCalendars; completions?:CompletionSnapshot; through?:string; account:string; exportedAt:string; complete:boolean; submissions:Record<string,Submission>}
+export interface SubmissionExport {calendars?:ActivityCalendars; completions?:CompletionSnapshot; through?:string; format:'pattern-atlas-leetcode'; version:1; account:string; exportedAt:string; complete:boolean; submissions:Submission[]}
 export interface Visit {count:number; lastVisited:string}
 export type Visits = Record<string,Record<string,Visit>>;
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
@@ -24,7 +25,7 @@ export function validateHistory(value:unknown):LeetCodeHistory {
     if(!object(c)||!date(c.observedAt)||!Array.isArray(c.slugs)||c.slugs.length>100_000||c.slugs.some(s=>typeof s!=='string'||s.length>300||!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s)))throw new Error('Invalid completion snapshot. Nothing was imported.');
     completions={observedAt:c.observedAt,slugs:[...new Set(c.slugs as string[])].sort()};
   }
-  return {completions,through:value.through as string|undefined,account:value.account,exportedAt:value.exportedAt,complete:value.complete,submissions};
+  return {calendars:validateCalendars(value.calendars),completions,through:value.through as string|undefined,account:value.account,exportedAt:value.exportedAt,complete:value.complete,submissions};
 }
 export function parseSubmissionExport(raw:string):LeetCodeHistory {
   if(raw.length>10_000_000)throw new Error('Submission file is too large (maximum 10 MB).');
@@ -43,7 +44,7 @@ export function mergeHistory(current:LeetCodeHistory|undefined,incoming:LeetCode
   const incomingNewer=Date.parse(incoming.exportedAt)>=Date.parse(current.exportedAt);
   const a=current.completions,b=incoming.completions;
   const completions=!a?b:!b?a:Date.parse(b.observedAt)>=Date.parse(a.observedAt)?b:a;
-  return {...(incomingNewer?incoming:current),completions,submissions:incomingNewer?{...current.submissions,...incoming.submissions}:{...incoming.submissions,...current.submissions}};
+  return {...(incomingNewer?incoming:current),completions,calendars:current.calendars||incoming.calendars?mergeCalendars(current.calendars,incoming.calendars):undefined,submissions:incomingNewer?{...current.submissions,...incoming.submissions}:{...incoming.submissions,...current.submissions}};
 }
 export function validateVisits(value:unknown):Visits {
   if(!object(value))throw new Error('Invalid visit history.');

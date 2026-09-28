@@ -1,5 +1,6 @@
 import {createHash, randomUUID, timingSafeEqual} from 'node:crypto';
 import {gzipSync, gunzipSync} from 'node:zlib';
+import {validateCalendars, mergeCalendars} from './activity-calendar.mjs';
 
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const validDate = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value));
@@ -31,7 +32,7 @@ export function parseExport(value) {
     }
     completions = {observedAt: snapshot.observedAt, slugs: [...new Set(snapshot.slugs)].sort()};
   }
-  return {account: value.account, exportedAt: value.exportedAt, complete: value.complete,
+  return {account: value.account, exportedAt: value.exportedAt, complete: value.complete, calendars: validateCalendars(value.calendars),
     ...(value.through ? {through: value.through} : {}), ...(completions ? {completions} : {}), submissions};
 }
 
@@ -41,7 +42,7 @@ export function mergeHistory(current, incoming) {
   const newer = Date.parse(incoming.exportedAt) >= Date.parse(current.exportedAt);
   const a = current.completions, b = incoming.completions;
   const completions = !a ? b : !b ? a : Date.parse(b.observedAt) >= Date.parse(a.observedAt) ? b : a;
-  return {...(newer ? incoming : current), completions,
+  return {...(newer ? incoming : current), completions, calendars: current.calendars || incoming.calendars ? mergeCalendars(current.calendars, incoming.calendars) : undefined,
     submissions: newer ? {...current.submissions, ...incoming.submissions} : {...incoming.submissions, ...current.submissions}};
 }
 

@@ -43,7 +43,7 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 ## Boundaries
 
 - Authored examples and selected differential checks do not replace LeetCode's complete test suites. The application intentionally delegates code execution to LeetCode.
-- Native physical-device signing, TestFlight, and App Store submission have not been performed.
+- Native physical-device signing, TestFlight, and App Store submission have not been performed. [TestFlight preparation](TESTFLIGHT.md) records the release configuration and current account/tooling blockers.
 - LeetCode completion and submission history now synchronizes through the private Azure history API. Drafts, diagnostic ratings, recall reviews, and page visits remain device-local and can be moved with explicit JSON export/import.
 - The reference catalog is larger than the set of worked cards. The [coverage audit](COVERAGE.md) lists rare specialist extensions and non-algorithm topics outside the current worked curriculum.
 - GitHub Actions runs web validation before deployment. Individual workflow results are available in the repository's Actions tab.

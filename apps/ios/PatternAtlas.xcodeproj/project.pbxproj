@@ -28,6 +28,7 @@
 		D1E9362C74A0B7B41F169BBF /* StudyFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */; };
 		D7B4AE3861EF0E2DB627BACD /* Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D421B03886DBF50B1A1C5949 /* Recommendations.swift */; };
 		E0FA855E68C5A44AF728BAF2 /* DiagnosticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C9DA44D07891E9D746960E /* DiagnosticTests.swift */; };
+		EF29F7B52A03DA9F294D66D3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 748CDDDC709F911D84ED25E5 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		68C9DA44D07891E9D746960E /* DiagnosticTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticTests.swift; sourceTree = "<group>"; };
 		6BC8ECEC17829C98264AD74D /* CloudHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudHistory.swift; sourceTree = "<group>"; };
 		6E8FABF0944AB6C2C2B24629 /* StudyFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyFlowTests.swift; sourceTree = "<group>"; };
+		748CDDDC709F911D84ED25E5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		79155EC7190FEEE3C7134819 /* Diagnostic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostic.swift; sourceTree = "<group>"; };
 		BBCB01B56C40189D1FA6C631 /* AnalyticsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViews.swift; sourceTree = "<group>"; };
 		C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViews.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				C90B1CB5BA7B5169BA30E002 /* LibraryViews.swift */,
 				F69F9CCF4D8C30D48554ECD0 /* Models.swift */,
 				FAD385A1BF167A49418CC3E8 /* PatternAtlasApp.swift */,
+				748CDDDC709F911D84ED25E5 /* PrivacyInfo.xcprivacy */,
 				10B3B4DC97A7AF1B71A1B365 /* ProgressViews.swift */,
 				D421B03886DBF50B1A1C5949 /* Recommendations.swift */,
 				0214829F5B5F573090F439CA /* StudyViews.swift */,
@@ -216,6 +219,9 @@
 					01E54E9BE19D297877560E00 = {
 						TestTargetID = D52D90092F7BECA56B0B4D3B;
 					};
+					D52D90092F7BECA56B0B4D3B = {
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = D2C156C7FBCE0B1ABE6F8035 /* Build configuration list for PBXProject "PatternAtlas" */;
@@ -245,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				39E8B51A940CCD2113DAE81C /* Assets.xcassets in Resources */,
+				EF29F7B52A03DA9F294D66D3 /* PrivacyInfo.xcprivacy in Resources */,
 				4A955EC5102E39E657AD05F8 /* curriculum.json in Resources */,
 				5AEDAA1A89AB1D189E3BF200 /* walkccc-MIT.txt in Resources */,
 			);
@@ -330,6 +337,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PatternAtlas/Info.plist;
@@ -337,8 +345,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ethanrimes.patternatlas;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ethanrimes.leetcode-on-the-go";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -349,6 +357,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PatternAtlas/Info.plist;

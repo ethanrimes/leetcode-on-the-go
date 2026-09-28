@@ -22,7 +22,14 @@ targets:
         CURRENT_PROJECT_VERSION: '1'
         GENERATE_INFOPLIST_FILE: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_STYLE: Automatic
+      configs:
+        Release:
+          PRODUCT_BUNDLE_IDENTIFIER: com.ethanrimes.leetcode-on-the-go
+          MARKETING_VERSION: '1.0'
     scheme:
+      archive:
+        config: Release
       testTargets:
         - PatternAtlasTests
         - PatternAtlasUITests

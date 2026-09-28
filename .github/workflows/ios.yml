@@ -1,5 +1,6 @@
 name: Native iOS build and tests
 on:
+  workflow_call:
   workflow_dispatch:
   pull_request:
     paths: ['apps/ios/**', 'packages/content/**', 'scripts/**', '.github/workflows/ios.yml']
@@ -10,6 +11,7 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      - run: node --test scripts/ios-release.test.mjs
       - run: python3 scripts/build_curriculum.py
       - run: brew install xcodegen
       - run: cd apps/ios && xcodegen generate

@@ -48,6 +48,12 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 - The reference catalog is larger than the set of worked cards. The [coverage audit](COVERAGE.md) lists rare specialist extensions and non-algorithm topics outside the current worked curriculum.
 - GitHub Actions runs web validation before deployment. Individual workflow results are available in the repository's Actions tab.
 
+## TestFlight workflow preparation · 2026-09-27
+
+- Adapted AgroAmigo's temporary-keychain, manual-signing, API-key upload workflow for the native SwiftUI target. The release depends on the existing native test workflow and validates the exact app, team, profile type, expiry, and certificate before signing.
+- The local credential check passed for API-key consistency, P12 password/private key, distribution-certificate matching and validity. The supplied profile belongs to a different app. The configuration script will obtain a matching profile using the Apple API before configuring this repository's encrypted secrets.
+- Seven parser/profile-validation tests and Actionlint passed. No credentials were committed. Apple API permissions, a signed device archive, GitHub Actions execution, and TestFlight processing remain unverified because this session has no terminal network access to Apple/GitHub.
+
 ## LeetCode activity reconciliation · 2026-09-27
 
 - The old REST importer had retained only 400 submission details, including 299 in 2025. The chart used that incomplete list as its yearly activity total and calculated streaks across all years. LeetCode's live `userCalendar(year: 2025)` instead reported 1,272 submissions, 49 active days, and a 13-day streak.

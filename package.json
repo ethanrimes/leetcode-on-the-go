@@ -14,6 +14,8 @@
     "test": "npm run content:check && python3 scripts/test_algorithms.py && tsx --test packages/core/src/*.test.ts && node --test api/*.test.mjs",
     "test:e2e": "playwright test",
     "ios:generate": "npm run content:build && cd apps/ios && xcodegen generate",
+    "ios:signing:inspect": "node scripts/ios-release.mjs inspect",
+    "ios:signing:configure": "node scripts/ios-release.mjs configure",
     "deploy": "bash infrastructure/deploy.sh",
     "history:login": "node scripts/leetcode-history.mjs --login",
     "history:export": "node scripts/leetcode-history.mjs",

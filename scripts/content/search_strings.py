@@ -213,3 +213,19 @@ def solve(s,words):
         else: count+=1
     return count
 ''','O(|s| + total word characters × log |s|)','O(|s|)')
+
+G('Strings & tries / Parsing & normalization','Turn text into structured components before comparing or transforming it.','Define separators, empty components, and normalization rules explicitly.',['Avoid numeric conversion when a component may exceed fixed-width integer bounds.'],'string')
+C('Strings & tries / Parsing & normalization','Whitespace-token reconstruction',151,'Foundation','Useful','Reorder words while normalizing irregular spaces.','Split on whitespace into tokens, reverse their order, then join with a single separator.','Reversing raw characters alone reverses letters inside each word.','Reverse the order of words in s, trimming outer spaces and using one space between words.', ['  hello   world  '],'world hello','''
+def solve(s):
+    return ' '.join(reversed(s.split()))
+''','O(n)','O(n)')
+C('Strings & tries / Parsing & normalization','Componentwise version comparison',165,'Intermediate','Useful','Compare dotted numeric components without treating the whole string as a decimal.','Split each version into integer components, pad the shorter sequence with zeros, and compare at the first unequal position.','Trailing zero components do not change the version order.','Return -1, 0, or 1 according to whether version1 is less than, equal to, or greater than version2.', ['1.0.3','1.0.7'],-1,'''
+def solve(version1, version2):
+    left = [int(x) for x in version1.split('.')]
+    right = [int(x) for x in version2.split('.')]
+    for i in range(max(len(left), len(right))):
+        a = left[i] if i < len(left) else 0
+        b = right[i] if i < len(right) else 0
+        if a != b: return -1 if a < b else 1
+    return 0
+''','O(n + m)','O(n + m)')

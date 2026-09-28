@@ -7,7 +7,10 @@ export interface PracticeRecommendation {
 /** Explainable practice priorities, based only on exact worked-solution mappings. */
 export function practiceRecommendations(data:Curriculum,progress:Progress,filter:Pick<AnalyticsFilter,'scope'|'difficulty'|'level'|'freshDays'|'now'>):PracticeRecommendation[] {
  const now=filter.now??Date.now(),days=filter.freshDays??30;
- const branch=filter.scope?descendants(data.nodes,filter.scope):undefined;
+ const scopes=Array.isArray(filter.scope)?filter.scope:filter.scope?[filter.scope]:[];
+ const branch=scopes.length?new Set(scopes.flatMap(id=>[...descendants(data.nodes,id)])):undefined;
+ const difficulties=Array.isArray(filter.difficulty)?filter.difficulty:filter.difficulty?[filter.difficulty]:[];
+ const levels=Array.isArray(filter.level)?filter.level:filter.level?[filter.level]:[];
  const latest=new Map<string,Submission>(),completed=new Set(progress.leetcode?.completions?.slugs??[]);
  for(const s of Object.values(progress.leetcode?.submissions??{})) {
   if(Date.parse(s.timestamp)>now)continue;
@@ -17,10 +20,10 @@ export function practiceRecommendations(data:Curriculum,progress:Progress,filter
  }
  const candidates:PracticeRecommendation[]=[];
  for(const node of data.nodes) {
-  if(node.kind!=='pattern'||(branch&&!branch.has(node.id))||(filter.level&&node.level!==filter.level))continue;
+  if(node.kind!=='pattern'||(branch&&!branch.has(node.id))||(levels.length&&!levels.includes(node.level)))continue;
   const root=breadcrumbs(data.nodes,node.id)[0]??node;
   for(const problem of data.problems) {
-   if(!problem.solutions.some(s=>s.patternId===node.id)||(filter.difficulty&&problem.difficulty!==filter.difficulty))continue;
+   if(!problem.solutions.some(s=>s.patternId===node.id)||(difficulties.length&&!difficulties.includes(problem.difficulty)))continue;
    const key=`${problem.id}:${node.id}`,review=progress.cards[key],rating=progress.familiarity?.[key]?.rating,submission=latest.get(problem.slug);
    const last=Math.max(submission?Date.parse(submission.timestamp):0,review?Date.parse(review.lastReviewed):0);
    const age=last?Math.max(0,Math.floor((now-last)/86400000)):undefined;

@@ -240,3 +240,84 @@ def solve(n, connections):
         if tin[u]<0: dfs(u,-1)
     return answer
 ''','O(V+E)','O(V+E)','For deep graphs, convert the DFS to an explicit stack to avoid Python recursion limits.')
+C('Graphs & grids / Traversal & components','Boundary-first component removal',130,'Intermediate','Core','A region survives exactly when it connects to the board boundary.','Flood-fill boundary O cells as safe, then flip only the unmarked O cells and restore the safe markers.','Diagonal contact does not connect cells in this board.','Capture every O region fully surrounded by X cells in a board, modifying the board in place.',[[['X','X','X','X'],['X','O','O','X'],['X','X','O','X'],['X','O','X','X']]], [['X','X','X','X'],['X','X','X','X'],['X','X','X','X'],['X','O','X','X']],'''
+def solve(board):
+    from collections import deque
+    m, n = len(board), len(board[0]); q = deque()
+    for r in range(m):
+        for c in (0,n-1):
+            if board[r][c] == 'O': board[r][c] = '#'; q.append((r,c))
+    for c in range(n):
+        for r in (0,m-1):
+            if board[r][c] == 'O': board[r][c] = '#'; q.append((r,c))
+    while q:
+        r,c = q.popleft()
+        for a,b in ((r+1,c),(r-1,c),(r,c+1),(r,c-1)):
+            if 0 <= a < m and 0 <= b < n and board[a][b] == 'O':
+                board[a][b] = '#'; q.append((a,b))
+    for r in range(m):
+        for c in range(n): board[r][c] = 'O' if board[r][c] == '#' else 'X'
+    return board
+''','O(mn)','O(mn)')
+C('Graphs & grids / Traversal & components','Unit-cost eight-direction BFS',1091,'Foundation','Useful','Every legal grid move has equal cost.','Enqueue an open neighbor once and assign its distance on discovery. Include diagonals because they are valid edges here.','The shortest path length counts cells, so the starting cell has distance one.','Find the shortest clear path from top-left to bottom-right in a binary grid, moving in eight directions; blocked cells are 1.',[[[0,1],[1,0]]],2,'''
+def solve(grid):
+    from collections import deque
+    n = len(grid)
+    if grid[0][0] or grid[-1][-1]: return -1
+    q = deque([(0,0,1)]); grid[0][0] = 1
+    while q:
+        r,c,d = q.popleft()
+        if r == n-1 and c == n-1: return d
+        for dr in (-1,0,1):
+            for dc in (-1,0,1):
+                a,b = r+dr,c+dc
+                if 0 <= a < n and 0 <= b < n and grid[a][b] == 0:
+                    grid[a][b] = 1; q.append((a,b,d+1))
+    return -1
+''','O(n²)','O(n²)')
+C('Graphs & grids / Directed order','Construct a topological order',210,'Intermediate','Core','The task asks for a valid ordering, not only whether one exists.','Repeatedly take a zero-indegree course, append it, and release courses depending on it. Return an empty list if a cycle prevents a complete order.','An ordering can vary; any permutation respecting every prerequisite is valid.','Return a possible order of all courses given [course,prerequisite] edges, or [] if impossible.',[3,[[1,0],[2,1]]],[0,1,2],'''
+def solve(numCourses, prerequisites):
+    from collections import deque
+    graph = [[] for _ in range(numCourses)]; degree = [0]*numCourses
+    for course, before in prerequisites:
+        graph[before].append(course); degree[course] += 1
+    q = deque(i for i in range(numCourses) if degree[i] == 0); order = []
+    while q:
+        u = q.popleft(); order.append(u)
+        for v in graph[u]:
+            degree[v] -= 1
+            if degree[v] == 0: q.append(v)
+    return order if len(order) == numCourses else []
+''','O(V+E)','O(V+E)')
+C('Graphs & grids / Connectivity & structure','Count components with union-find',547,'Intermediate','Useful','An adjacency matrix describes undirected connections, including indirect ones.','Start with one component per city; each successful union across an upper-triangle edge reduces the count by one.','The diagonal and mirrored half contain no new connections.','Given a symmetric matrix where 1 means two cities connect directly, count connected provinces.',[[[1,1,0],[1,1,0],[0,0,1]]],2,'''
+def solve(isConnected):
+    n = len(isConnected); parent = list(range(n)); size = [1]*n; count = n
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]; x = parent[x]
+        return x
+    for i in range(n):
+        for j in range(i+1,n):
+            if not isConnected[i][j]: continue
+            a,b = find(i),find(j)
+            if a == b: continue
+            if size[a] < size[b]: a,b = b,a
+            parent[b] = a; size[a] += size[b]; count -= 1
+    return count
+''','O(n² α(n))','O(n)')
+C('Graphs & grids / Shortest paths','Maximum-product path',1514,'Intermediate','Useful','Edge probabilities multiply rather than add along a route.','Prioritize the largest current path probability in a max heap; relax a neighbor when multiplying by an edge improves it.','A zero-probability path cannot improve any state.','Given undirected edges and success probabilities, return the maximum probability of reaching end from start.',[3,[[0,1],[1,2],[0,2]],[0.5,0.5,0.2],0,2],0.25,'''
+def solve(n, edges, succProb, start_node, end_node):
+    from heapq import heappush, heappop
+    graph = [[] for _ in range(n)]
+    for (u,v), p in zip(edges,succProb):
+        graph[u].append((v,p)); graph[v].append((u,p))
+    best = [0.0]*n; best[start_node] = 1.0; heap = [(-1.0,start_node)]
+    while heap:
+        neg,u = heappop(heap); probability = -neg
+        if probability < best[u]: continue
+        if u == end_node: return probability
+        for v,p in graph[u]:
+            candidate = probability*p
+            if candidate > best[v]: best[v] = candidate; heappush(heap,(-candidate,v))
+    return 0.0
+''','O((V+E) log(V+E))','O(V+E)')

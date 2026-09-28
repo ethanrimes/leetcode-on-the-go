@@ -1,8 +1,8 @@
-import {cloneElement,useEffect,useId,useLayoutEffect,useRef,useState,type ButtonHTMLAttributes,type ReactElement} from 'react';
+import {cloneElement,useEffect,useId,useLayoutEffect,useRef,useState,type AnchorHTMLAttributes,type ReactElement} from 'react';
 import {createPortal} from 'react-dom';
 import {breadcrumbs,type Curriculum,type NodeStats} from '@pattern-atlas/core';
 
-export function TileTooltip({stats:s,data,children}:{stats:NodeStats;data:Curriculum;children:ReactElement<ButtonHTMLAttributes<HTMLButtonElement>>}) {
+export function TileTooltip({stats:s,data,children}:{stats:NodeStats;data:Curriculum;children:ReactElement<AnchorHTMLAttributes<HTMLAnchorElement>>}) {
  const id=useId(),popup=useRef<HTMLDivElement>(null),timer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
  const [anchor,setAnchor]=useState<{x:number;y:number}|null>(null),[position,setPosition]=useState({left:14,top:14});
  const cancel=()=>clearTimeout(timer.current);
@@ -40,6 +40,6 @@ export function TileTooltip({stats:s,data,children}:{stats:NodeStats;data:Curric
    <div className="tooltip-coverage"><strong>{s.solved} / {s.total}</strong><span>accepted · {Math.round(s.solved/s.total*100)}% coverage</span></div>
    <div className="tooltip-track"><span style={{width:`${s.solved/s.total*100}%`}}/></div>
    <dl><div><dt>Attempted, not accepted</dt><dd>{s.attempted}</dd></div><div><dt>No recorded attempt</dt><dd>{s.unseen}</dd></div><div><dt>Fresh practice</dt><dd>{s.fresh}</dd></div><div><dt>Needs refresh</dt><dd>{s.practiced-s.fresh}</dd></div><div><dt>No dated practice</dt><dd>{s.total-s.practiced}</dd></div><div><dt>Page entries</dt><dd>{s.visits}</dd></div></dl>
-   <p className="tooltip-footer">{s.lastPracticed?`Last practiced ${new Date(s.lastPracticed).toLocaleDateString()}`:'Practice date unknown'}<span>Click for study links</span></p>
+   <p className="tooltip-footer">{s.lastPracticed?`Last practiced ${new Date(s.lastPracticed).toLocaleDateString()}`:'Practice date unknown'}<span>Open problems in a new tab</span></p>
   </div>,document.body)}</>;
 }

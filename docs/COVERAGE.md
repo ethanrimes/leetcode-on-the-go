@@ -4,13 +4,15 @@ Reviewed 2026-09-27. This document distinguishes worked lessons from source refe
 
 ## Published curriculum
 
-- 704 hierarchy nodes, including 12 topic roots, 200 authored patterns, and 313 source-guide practice collections.
-- 2,909 unique problems with local solutions: 193 authored lessons and 2,716 additional community cards. See [PROBLEM_LIBRARY.md](PROBLEM_LIBRARY.md) for collection membership and source provenance.
-- 200 independently authored Python implementations, each checked against its example.
+- 836 hierarchy nodes, including 12 topic roots, 221 authored patterns, and 313 source-guide practice collections.
+- 2,911 unique problems with local solutions: 214 authored lessons and 2,697 additional community cards. See [PROBLEM_LIBRARY.md](PROBLEM_LIBRARY.md) for collection membership and source provenance.
+- 221 independently authored Python implementations, each checked against its example.
 - 4,068 factual problem references from LeetCode’s algorithms catalog snapshot.
 - 3,629 catalog entries matched current official topic metadata; unmatched entries remain searchable without invented tags.
 - 12 EndlessCheng guides retrieved directly and inspected, yielding 313 problem-bearing sections.
 - Labuladong: reviewed the full public algorithm directory, roadmap, quick learning plan, complete-plan overview, and data-structure chapter overview. Paid articles were not copied or treated as read.
+
+The pattern table below records the original 200 worked leaves. The 21 added leaves and their problem anchors are documented in the [DP/graph](COVERAGE_DP_GRAPHS.md) and [foundation](COVERAGE_FOUNDATIONS.md) audits. The [mapping audit](COVERAGE_MAPPING.md) accounts for all 172 tagged topic slugs in the catalog and identifies 433 entries that still lack both tag and guide association.
 
 ## Audit decisions
 

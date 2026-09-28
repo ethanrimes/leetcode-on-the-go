@@ -10,6 +10,35 @@ struct PageEntryModifier: ViewModifier {
 }
 extension View { func trackPage(_ page: String) -> some View { modifier(PageEntryModifier(page: page)) } }
 
+private struct MultiFilterChoice: Identifiable { let id: String; let title: String }
+private struct MultiFilterPicker: View {
+    let title: String
+    let allLabel: String
+    let choices: [MultiFilterChoice]
+    @Binding var selection: [String]
+    @State private var query = ""
+    private var summary: String {
+        if selection.isEmpty { return allLabel }
+        if selection.count == 1 { return choices.first { $0.id == selection[0] }?.title ?? allLabel }
+        return "\(selection.count) selected"
+    }
+    var body: some View {
+        NavigationLink {
+            List {
+                Button("Clear selection") { selection = [] }.disabled(selection.isEmpty)
+                ForEach(choices.filter { query.isEmpty || $0.title.localizedCaseInsensitiveContains(query) }) { choice in
+                    Button {
+                        if selection.contains(choice.id) { selection.removeAll { $0 == choice.id } }
+                        else { selection.append(choice.id) }
+                    } label: {
+                        HStack { Text(choice.title).foregroundStyle(.primary); Spacer(); if selection.contains(choice.id) { Image(systemName: "checkmark").foregroundStyle(.blue) } }
+                    }
+                }
+            }.navigationTitle(title).searchable(text: $query, prompt: "Find an option")
+        } label: { HStack { Text(title); Spacer(); Text(summary).foregroundStyle(.secondary).lineLimit(1) } }
+    }
+}
+
 struct AnalyticsDashboardSections: View {
     let data: Curriculum
     @Environment(StudyStore.self) private var store
@@ -31,9 +60,9 @@ struct AnalyticsDashboardSections: View {
                         StatView(value: "\(snapshot.total)", label: "In scope")
                     }.padding(.vertical, 12)
                 }
-                focusSection(snapshot)
                 filterSection
                 chartSection(snapshot)
+                focusSection(snapshot)
                 Section("History & activity") {
                     NavigationLink { SubmissionHistoryView(data: data, submissions: snapshot.submissions) } label: { Label("Submission history · \(snapshot.submissions.count)", systemImage: "clock.arrow.circlepath") }
                     NavigationLink { PageEntriesView(data: data) } label: { Label("Page entries · \(snapshot.pages.values.reduce(0) { $0 + $1.count })", systemImage: "rectangle.on.rectangle") }
@@ -63,7 +92,7 @@ struct AnalyticsDashboardSections: View {
             } else { Text("Bring your LeetCode history into your study workspace.").font(.subheadline) }
             Button { importing = true } label: { Label("Import LeetCode history", systemImage: "square.and.arrow.down") }.accessibilityIdentifier("importLeetCode")
             NavigationLink("How to export or update") { LeetCodeExportHelpView() }
-        } header: { Text("LeetCode history") } footer: { Text("Import the same JSON on web and iOS. Submission IDs are merged once; no automatic background sync.") }
+        } header: { Text("LeetCode history") } footer: { Text("Imported submission IDs merge once. When Azure history is connected, updates synchronize across web and iOS.") }
     }
     private func focusSection(_ snapshot: AnalyticsSnapshot) -> some View {
         Section {
@@ -85,14 +114,11 @@ struct AnalyticsDashboardSections: View {
 
     private var filterSection: some View {
         Section("Explore coverage") {
-            Picker("Category", selection: $filter.scope) {
-                Text("Entire curriculum").tag("")
-                ForEach(data.nodes.filter { $0.kind == "category" }) { Text($0.title).tag($0.id) }
-            }
+            MultiFilterPicker(title: "Category", allLabel: "Entire curriculum", choices: data.nodes.filter { $0.kind == "category" }.map { MultiFilterChoice(id: $0.id, title: $0.title) }, selection: $filter.scopes)
             Picker("Map detail", selection: $filter.depth) { Text("Overview").tag(1); Text("Grouped detail").tag(2); Text("Fine detail").tag(3); Text("All patterns & collections").tag(99) }
-            Picker("Problem difficulty", selection: $filter.difficulty) { Text("All difficulties").tag(""); ForEach(["Easy","Medium","Hard"], id: \.self) { Text($0).tag($0) } }
-            Picker("Pattern level", selection: $filter.level) { Text("All levels").tag(""); ForEach(["Foundation","Intermediate","Advanced"], id: \.self) { Text($0).tag($0) } }
-            Picker("Submission period", selection: $filter.period) { Text("All imported history").tag(0); Text("Last 30 days").tag(30); Text("Last 90 days").tag(90) }
+            MultiFilterPicker(title: "Problem difficulty", allLabel: "All difficulties", choices: ["Easy","Medium","Hard"].map { MultiFilterChoice(id: $0, title: $0) }, selection: $filter.difficulties)
+            MultiFilterPicker(title: "Pattern level", allLabel: "All levels", choices: ["Foundation","Intermediate","Advanced"].map { MultiFilterChoice(id: $0, title: $0) }, selection: $filter.levels)
+            MultiFilterPicker(title: "Submission period", allLabel: "All imported history", choices: [MultiFilterChoice(id: "recent", title: "Last 30 days"), MultiFilterChoice(id: "middle", title: "31–90 days ago"), MultiFilterChoice(id: "older", title: "Over 90 days ago")], selection: $filter.periods)
             TextField("Find a category or pattern tile", text: $filter.query)
             Toggle("Show practice freshness", isOn: $freshness)
         }
@@ -105,12 +131,12 @@ struct AnalyticsDashboardSections: View {
                 legend(freshness ? "Needs refresh" : "Attempted", .orange)
                 legend(freshness ? "No dated practice" : "No attempt", .gray.opacity(0.4))
             }
-            if !filter.scope.isEmpty { Button("Back to all topics") { filter.scope = ""; selected = nil } }
+            if !filter.selectedScopes.isEmpty { Button("Back to all topics") { filter.scope = ""; filter.scopes = []; selected = nil } }
             if snapshot.tiles.isEmpty { Text("No categories match these filters.").font(.caption) }
-            else if chart == "Treemap" { CoverageTreemap(tiles: snapshot.tiles, freshness: freshness, selected: $selected).frame(height: 400) }
+            else if chart == "Treemap" { CoverageTreemap(data: data, tiles: snapshot.tiles, freshness: freshness, selected: $selected).frame(height: 400) }
             else {
                 ScrollView { LazyVStack(spacing: 14) { ForEach(snapshot.tiles) { item in
-                    Button { selected = item.id } label: { CoverageBar(item: item, freshness: freshness) }.buttonStyle(.plain).accessibilityLabel(item.accessibilitySummary)
+                    NavigationLink { TopicProblemsView(data: data, node: item.node) } label: { CoverageBar(item: item, freshness: freshness) }.buttonStyle(.plain).accessibilityLabel(item.accessibilitySummary)
                 } }.padding(.vertical, 10) }.frame(height: 400)
             }
             if let item = snapshot.tiles.first(where: { $0.id == selected }) {
@@ -118,7 +144,7 @@ struct AnalyticsDashboardSections: View {
                     Text(item.node.title).font(.headline)
                     Text("\(item.solved) accepted · \(item.attempted) attempted · \(item.unseen) no recorded attempt").font(.caption)
                     Text("\(item.fresh) fresh · \(item.practiced - item.fresh) need refresh · \(item.visits) category entries").font(.caption).foregroundStyle(.secondary)
-                    if !data.children(of: item.id).isEmpty { Button("Drill into category") { filter.scope = item.id; selected = nil } }
+                    if !data.children(of: item.id).isEmpty { Button("Drill into category") { filter.scope = ""; filter.scopes = [item.id]; selected = nil } }
                     NavigationLink("Open study page") { NodeDetailView(data: data, node: item.node) }
                 }.padding(.vertical, 8)
             }
@@ -126,22 +152,36 @@ struct AnalyticsDashboardSections: View {
                 List(snapshot.tiles) { item in NavigationLink { NodeDetailView(data: data, node: item.node) } label: { CoverageBar(item: item, freshness: freshness) } }
                     .navigationTitle("Coverage details").trackPage("/progress/tiles")
             }
-        } footer: { Text("Area represents problem memberships. Blue fill shows the selected metric. Problems can appear in multiple tiles; totals count each problem once. Acceptance does not prove a particular technique was used. Freshness uses all recorded practice, independent of the submission-period filter. Category entries include child category pages.") }
+        } footer: { Text("Labeled borders keep related categories together. Tap a tile to open its problems. Tile area reflects problem memberships; totals count each problem once. Acceptance does not prove a particular technique was used. Freshness uses all recorded practice.") }
     }
     private func legend(_ text: String, _ color: Color) -> some View { HStack(spacing: 4) { Circle().fill(color).frame(width: 6, height: 6); Text(text).font(.system(size: 9)).foregroundStyle(.secondary) } }
 }
 struct CoverageTreemap: View {
+    let data: Curriculum
     let tiles: [CoverageStats]
     let freshness: Bool
     @Binding var selected: String?
     var body: some View {
         GeometryReader { geometry in
-            let rectangles = treemap(tiles.map(\.total), width: geometry.size.width, height: geometry.size.height)
+            let layout = hierarchicalTreemap(tiles, nodes: data.nodes, width: geometry.size.width, height: geometry.size.height)
             ZStack(alignment: .topLeading) {
-                ForEach(rectangles) { rect in
+                ForEach(layout.groups) { group in
+                    Rectangle().stroke(Color.blue.opacity(group.depth == 0 ? 0.7 : 0.45), lineWidth: group.depth == 0 ? 2 : 1)
+                        .frame(width: group.width, height: group.height)
+                        .position(x: group.x + group.width / 2, y: group.y + group.height / 2)
+                        .allowsHitTesting(false)
+                    if group.width > 120 && group.height > 95 {
+                        Text(group.title).font(.system(size: 9, weight: .semibold)).lineLimit(1)
+                            .foregroundStyle(Color.blue.opacity(0.85))
+                            .frame(width: max(0, group.width - 8), alignment: .leading)
+                            .position(x: group.x + group.width / 2, y: group.y + 9)
+                            .allowsHitTesting(false)
+                    }
+                }
+                ForEach(layout.tiles) { rect in
                     let tile = tiles[rect.id]
                     let value = freshness ? tile.fresh : tile.solved
-                    Button { selected = tile.id } label: {
+                    NavigationLink { TopicProblemsView(data: data, node: tile.node) } label: {
                         ZStack(alignment: .bottomLeading) {
                             Color(uiColor: .secondarySystemGroupedBackground)
                             AtlasStyle.green.opacity(0.32).frame(height: max(0, rect.height - 2) * Double(value) / Double(tile.total))
@@ -152,10 +192,23 @@ struct CoverageTreemap: View {
                             }.padding(6).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         }.frame(width: max(0, rect.width - 2), height: max(0, rect.height - 2)).clipped()
                             .overlay(Rectangle().stroke(selected == tile.id ? AtlasStyle.green : Color.secondary.opacity(0.2), lineWidth: selected == tile.id ? 2 : 0.5))
-                    }.buttonStyle(.plain).position(x: rect.x + rect.width / 2, y: rect.y + rect.height / 2).accessibilityLabel(tile.accessibilitySummary)
+                    }.buttonStyle(.plain).simultaneousGesture(TapGesture().onEnded { selected = tile.id })
+                        .position(x: rect.x + rect.width / 2, y: rect.y + rect.height / 2)
+                        .accessibilityLabel(tile.accessibilitySummary + ". Open problems")
                 }
             }
         }.accessibilityIdentifier("coverageTreemap")
+    }
+}
+struct TopicProblemsView: View {
+    let data: Curriculum
+    let node: PatternNode
+    var body: some View {
+        List {
+            Section { Text("Problems mapped to \(node.title). Filter and sort the list, then open a worked solution or LeetCode reference.").font(.caption).foregroundStyle(.secondary) }
+            ProblemCollectionSection(data: data, nodeId: node.id)
+            Section { NavigationLink("Read the technique") { NodeDetailView(data: data, node: node) } }
+        }.navigationTitle(node.title).trackPage("/progress/problems/\(node.id)")
     }
 }
 struct CoverageBar: View {
@@ -183,7 +236,7 @@ struct LeetCodeExportHelpView: View {
                 Link("Open web exporter instructions", destination: URL(string: "https://blue-sea-0c03ac51e.3.azurestaticapps.net/#/progress")!)
                 Link("LeetCode progress", destination: URL(string: "https://leetcode.com/progress/")!)
             }
-            Section("Easy repeat updates") { Text("For headless updates from your computer, run npm run history:login once in the repository, then npm run history:export. Install the browser script in a userscript manager to keep an export button on LeetCode. Reimporting is safe: submissions are merged by ID. Exports contain metadata only; passwords, cookies, and solution code are excluded. Both apps store your history locally.").font(.caption).foregroundStyle(.secondary) }
+            Section("Easy repeat updates") { Text("For headless updates from your computer, run npm run history:login once in the repository, then npm run history:export. Install the browser script in a userscript manager to keep an export button on LeetCode. Reimporting is safe: submissions are merged by ID. Exports contain metadata only; passwords, cookies, and solution code are excluded. Connected apps also synchronize history through the private Azure service.").font(.caption).foregroundStyle(.secondary) }
         }.navigationTitle("Update history").trackPage("/progress/export-help")
     }
 }

@@ -102,6 +102,14 @@ final class AnalyticsTests: XCTestCase {
         XCTAssertEqual(after.tiles.first { $0.id == frequency.id }?.visits, 1)
         filter.period = 30
         XCTAssertEqual(engine.snapshot(store.progress, filter: filter, now: now).solved, 0)
+        filter.period = 0; filter.periods = ["recent"]
+        XCTAssertEqual(engine.snapshot(store.progress, filter: filter, now: now).solved, 0)
+        filter.periods = []; filter.scopes = [data.roots[0].id, data.roots[1].id]
+        let multi = engine.snapshot(store.progress, filter: filter, now: now)
+        XCTAssertFalse(multi.tiles.isEmpty)
+        let grouped = hierarchicalTreemap(multi.tiles, nodes: data.nodes, width: 800, height: 500)
+        XCTAssertEqual(grouped.tiles.count, multi.tiles.count)
+        XCTAssertTrue(grouped.groups.contains { $0.id == data.roots[0].id })
     }
     func testInvalidRecordsAndTreemapGeometry() throws {
         XCTAssertThrowsError(try LeetCodeHistory.decodeExport(Data(#"{"format":"other"}"#.utf8)))

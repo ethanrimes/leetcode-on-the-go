@@ -5,7 +5,7 @@ import {analytics,assessFamiliarity,diagnosticCards,diagnosticQueue,emptyProgres
 const data:Curriculum=JSON.parse(readFileSync(new URL('../../content/curriculum.json',import.meta.url),'utf8'));
 const now=new Date('2026-09-27T12:00:00.000Z');
 test('diagnostic samples breadth, exact approaches and usable local solutions',()=>{
- const cards=diagnosticCards(data);assert.equal(cards.length,200);assert.equal(new Set(cards.map(c=>c.key)).size,200);
+ const cards=diagnosticCards(data),patternCount=data.nodes.filter(node=>node.kind==='pattern').length;assert.equal(cards.length,patternCount);assert.equal(new Set(cards.map(c=>c.key)).size,patternCount);
  const queue=diagnosticQueue(data,emptyProgress(),{mode:'unassessed',limit:12});
  const root=(id:string):string=>{const node=data.nodes.find(n=>n.id===id)!;return node.parentId?root(node.parentId):id;};
  assert.equal(new Set(queue.map(c=>root(c.node.id))).size,12);

@@ -5,18 +5,18 @@ Verified on 2026-09-27. These results describe observed checks, not a guarantee 
 | Check | Observed result |
 | --- | --- |
 | Production web build | Passed TypeScript and Vite production compilation |
-| Curriculum integrity | 704 nodes: 12 roots, 200 authored patterns, 313 source practice collections, 2,909 problems with solutions; references, hierarchy, and bundled web/iOS parity passed |
-| Community integrity | 2,716 additional cards passed Python syntax, source SHA-256, attribution, and membership checks; imported code was not executed |
-| Authored solution examples | All 200 pattern examples passed |
+| Curriculum integrity | 836 nodes: 12 roots, 221 authored patterns, 313 source practice collections, 2,911 problems with solutions; references, hierarchy, and bundled web/iOS parity passed |
+| Community integrity | 2,697 additional cards passed Python syntax, source SHA-256, attribution, and membership checks; imported code was not executed |
+| Authored solution examples | All 221 pattern examples passed |
 | Seeded algorithm checks | 1,355 differential/property checks passed, covering prefix counting, subarray/window methods, monotonic structures, string algorithms, range queries, lazy propagation, SCCs, and LFU eviction |
-| Shared study logic | 7 tests passed for scheduling, filtered queues, backup validation/merge, collection membership, and sorting |
-| Local browser flows | 16 Playwright tests passed across desktop and mobile viewports |
-| Deployed browser flows | The same 16 Playwright tests passed against the Azure production URL |
-| Native iOS | 7 tests passed on iPhone 17 Pro Simulator, iOS 26.1: 5 model/content/storage/scheduling tests and 2 UI tests exercising authored review and community search/reveal/attribution |
+| Shared study logic | 22 tests passed for scheduling, analytics, multi-selection, diagnostic ratings, recommendations, backup validation/merge, collection membership, and sorting |
+| Local browser flows | 38 Playwright tests passed across desktop and mobile viewports |
+| Deployed browser flows | 34 prior Playwright flows passed against the Azure production URL; new build pending deployment |
+| Native iOS | All 16 tests passed on iPhone 17 Pro Simulator, including 12 model tests and four UI study flows |
 | Azure content | HTTPS returned 200; hosted curriculum matched the repository content byte for byte |
 | Azure private history | Uploaded the authenticated export and read back all 637 completion snapshot slugs and 400 dated submissions from Table Storage |
 | Hosted account | GitHub sign-in in Comet loaded 637 completed problems and 400 dated submissions from Azure; a fresh headless browser retained the same data after reload |
-| Cloud API | Unauthenticated history GET returned 401; three history-store tests passed |
+| Cloud API | Unauthenticated history GET returned 401; four history-store tests passed |
 
 Live deployment: [Pattern Atlas](https://blue-sea-0c03ac51e.3.azurestaticapps.net).
 
@@ -47,6 +47,14 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 - LeetCode completion and submission history now synchronizes through the private Azure history API. Drafts, diagnostic ratings, recall reviews, and page visits remain device-local and can be moved with explicit JSON export/import.
 - The reference catalog is larger than the set of worked cards. The [coverage audit](COVERAGE.md) lists rare specialist extensions and non-algorithm topics outside the current worked curriculum.
 - GitHub Actions runs web validation before deployment. Individual workflow results are available in the repository's Actions tab.
+
+## Curriculum and progress exploration update · 2026-09-27
+
+- Rebuilt the shared web/iOS curriculum from the three coverage audits: 221 authored patterns, 2,911 solution cards, and 836 hierarchy nodes. All 172 distinct official topic slugs in the checked-in catalog now route to practice collections. The 433 catalog references without topic or source-guide metadata remain unassigned to a specific pattern; the audits list further specialist authored-lesson gaps.
+- Curriculum parity, all 221 authored examples, all 2,697 community card integrity checks, 1,355 seeded differential checks, 22 shared logic tests, and four API tests passed. The community implementations were not executed against LeetCode's judge.
+- The web progress screen now places coverage before familiarity, supports multi-select filters, draws nested category frames, opens a tile's problem list in a new tab, and shows a clickable dated activity calendar. A dense 707-tile view was visually inspected, including its 129 group frames.
+- The production web build and all 38 desktop/mobile browser flows passed after a hover-card click-through correction. Browser checks include multi-filter unions, frame rendering, hover/focus details, new-tab tile navigation, and day-specific submission lists.
+- The native progress screen adds the same filter combinations, grouped coverage, problem navigation, and an activity calendar with day details. All 16 simulator tests passed after adjusting the diagnostic flow for the longer progress screen.
 
 ## Azure history sync · 2026-09-27
 

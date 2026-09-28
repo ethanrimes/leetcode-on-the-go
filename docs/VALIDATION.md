@@ -11,7 +11,7 @@ Verified on 2026-09-27. These results describe observed checks, not a guarantee 
 | Seeded algorithm checks | 1,355 differential/property checks passed, covering prefix counting, subarray/window methods, monotonic structures, string algorithms, range queries, lazy propagation, SCCs, and LFU eviction |
 | Shared study logic | 22 tests passed for scheduling, analytics, multi-selection, diagnostic ratings, recommendations, backup validation/merge, collection membership, and sorting |
 | Local browser flows | 38 Playwright tests passed across desktop and mobile viewports |
-| Deployed browser flows | 34 prior Playwright flows passed against the Azure production URL; new build pending deployment |
+| Deployed browser flows | Current release smoke checked on Azure: progress, activity, and four multi-select filters loaded; 34 earlier production browser flows passed |
 | Native iOS | All 16 tests passed on iPhone 17 Pro Simulator, including 12 model tests and four UI study flows |
 | Azure content | HTTPS returned 200; hosted curriculum matched the repository content byte for byte |
 | Azure private history | Uploaded the authenticated export and read back all 637 completion snapshot slugs and 400 dated submissions from Table Storage |
@@ -55,6 +55,7 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 - The web progress screen now places coverage before familiarity, supports multi-select filters, draws nested category frames, opens a tile's problem list in a new tab, and shows a clickable dated activity calendar. A dense 707-tile view was visually inspected, including its 129 group frames.
 - The production web build and all 38 desktop/mobile browser flows passed after a hover-card click-through correction. Browser checks include multi-filter unions, frame rendering, hover/focus details, new-tab tile navigation, and day-specific submission lists.
 - The native progress screen adds the same filter combinations, grouped coverage, problem navigation, and an activity calendar with day details. All 16 simulator tests passed after adjusting the diagnostic flow for the longer progress screen.
+- GitHub Actions validated and deployed commit `5330702`. The hosted curriculum matched the committed JSON byte for byte, a fresh headless browser loaded the progress/activity UI and four multi-select filters, and the private Azure history API read back 637 completion slugs and 400 dated submissions after sync.
 
 ## Azure history sync · 2026-09-27
 

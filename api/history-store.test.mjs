@@ -48,3 +48,15 @@ test('only the configured GitHub owner or correct sync key can read history',()=
   assert.equal(authorize(new Headers({'x-ms-client-principal':principal({identityProvider:'github',userDetails:'ethanrimes',userRoles:['anonymous','authenticated']})}),settings),true);
   assert.equal(authorize(new Headers({'x-ms-client-principal':principal({identityProvider:'github',userDetails:'someone-else',userRoles:['authenticated']})}),settings),false);
 });
+
+test('Azure preserves source calendars across old-client sync and selects the newest snapshot per year',async()=>{
+  const table=new MemoryTable(),calendar={year:2025,observedAt:'2026-09-27T12:00:00.000Z',days:{'2025-05-01':12,'2025-05-02':8}};
+  await saveHistory(table,parseExport({...packet(['1']),calendars:{'2025':calendar}}));
+  await saveHistory(table,parseExport(packet(['2'],'2026-09-27T13:00:00.000Z')));
+  let {history}=await readHistory(table);assert.deepEqual(history.calendars['2025'],calendar);
+  const older={...calendar,observedAt:'2026-09-26T12:00:00.000Z',days:{'2025-05-01':1}};
+  await saveHistory(table,parseExport({...packet(['3']),calendars:{'2025':older}}));
+  ({history}=await readHistory(table));assert.deepEqual(toExport(history).calendars['2025'],calendar);
+  assert.equal(Object.keys(history.submissions).length,3);
+  for(const days of [{'2025-02-30':1},{'2024-05-01':1},{'2025-05-01':-1}])assert.throws(()=>parseExport({...packet([]),calendars:{'2025':{...calendar,days}}}));
+});

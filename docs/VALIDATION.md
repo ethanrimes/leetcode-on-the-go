@@ -9,14 +9,14 @@ Verified on 2026-09-27. These results describe observed checks, not a guarantee 
 | Community integrity | 2,697 additional cards passed Python syntax, source SHA-256, attribution, and membership checks; imported code was not executed |
 | Authored solution examples | All 221 pattern examples passed |
 | Seeded algorithm checks | 1,355 differential/property checks passed, covering prefix counting, subarray/window methods, monotonic structures, string algorithms, range queries, lazy propagation, SCCs, and LFU eviction |
-| Shared study logic | 22 tests passed for scheduling, analytics, multi-selection, diagnostic ratings, recommendations, backup validation/merge, collection membership, and sorting |
-| Local browser flows | 38 Playwright tests passed across desktop and mobile viewports |
+| Shared study logic | 25 tests passed, including source calendar reconciliation, UTC dates, selected-year streaks, and snapshot merge compatibility |
+| Local browser flows | All 40 Playwright tests passed across desktop and mobile viewports |
 | Deployed browser flows | Current release smoke checked on Azure: progress, activity, and four multi-select filters loaded; 34 earlier production browser flows passed |
-| Native iOS | All 16 tests passed on iPhone 17 Pro Simulator, including 12 model tests and four UI study flows |
+| Native iOS | All 18 tests passed on iPhone 17 Pro Simulator, including 14 model tests and four UI study flows |
 | Azure content | HTTPS returned 200; hosted curriculum matched the repository content byte for byte |
 | Azure private history | Uploaded the authenticated export and read back all 637 completion snapshot slugs and 400 dated submissions from Table Storage |
 | Hosted account | GitHub sign-in in Comet loaded 637 completed problems and 400 dated submissions from Azure; a fresh headless browser retained the same data after reload |
-| Cloud API | Unauthenticated history GET returned 401; four history-store tests passed |
+| Cloud API | Unauthenticated history GET returned 401; five history-store tests passed, including calendar persistence across old-client uploads |
 
 Live deployment: [Pattern Atlas](https://blue-sea-0c03ac51e.3.azurestaticapps.net).
 
@@ -47,6 +47,13 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 - LeetCode completion and submission history now synchronizes through the private Azure history API. Drafts, diagnostic ratings, recall reviews, and page visits remain device-local and can be moved with explicit JSON export/import.
 - The reference catalog is larger than the set of worked cards. The [coverage audit](COVERAGE.md) lists rare specialist extensions and non-algorithm topics outside the current worked curriculum.
 - GitHub Actions runs web validation before deployment. Individual workflow results are available in the repository's Actions tab.
+
+## LeetCode activity reconciliation · 2026-09-27
+
+- The old REST importer had retained only 400 submission details, including 299 in 2025. The chart used that incomplete list as its yearly activity total and calculated streaks across all years. LeetCode's live `userCalendar(year: 2025)` instead reported 1,272 submissions, 49 active days, and a 13-day streak.
+- The GraphQL `submissionList` exporter reached the oldest available record and recovered 1,883 details. Every UTC day matched the independently fetched source calendars: 494 submissions / 24 active days / 12-day longest streak in 2024; 1,272 / 49 / 13 in 2025; 117 / 5 / 3 in 2026. There were zero daily count mismatches across all three years. The 2025 records contained 835 accepted results. These are private account observations at the export time; exports remain git-ignored.
+- Web and native now preserve source calendar snapshots alongside details, use UTC day boundaries, scope longest streak to the selected year, and show current streak only for the current year. Missing individual results are explicitly distinguished from source-reported zero activity. Older-client uploads retain calendar snapshots in Azure.
+- A headless browser imported the recovered file and verified the 2025 figures, the matching-total note, and the rendered chart. The production web build and all 40 browser flows passed. The native build and all 18 simulator checks passed. All 25 core tests, five API tests, curriculum checks, and 1,355 algorithm checks passed.
 
 ## Curriculum and progress exploration update · 2026-09-27
 

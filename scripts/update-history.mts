@@ -34,6 +34,7 @@ const packet={...merged,format:'pattern-atlas-leetcode',version:1,submissions:Ob
 const temporary=output+'.tmp';
 await writeFile(temporary,JSON.stringify(packet,null,2),{mode:0o600});await chmod(temporary,0o600);await rename(temporary,output);
 console.log(`Ready: ${Object.keys(merged.submissions).length} dated submissions, ${merged.completions?.slugs.length??0} snapshot completions.\nImport ${output} in Pattern Atlas.`);
+console.log(`${Object.keys(merged.calendars??{}).length} source calendars retained for activity reconciliation.`);
 if(partial)console.log('LeetCode stopped the detailed export early. Available records were merged; history remains partial.');
 const simulator=option('--simulator');
 if(simulator) {

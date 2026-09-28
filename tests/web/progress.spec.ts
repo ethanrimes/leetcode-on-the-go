@@ -40,7 +40,11 @@ test('exporter paginates and downloads metadata without credentials or source co
  await page.route('https://leetcode.com/**',async route=>{
   const url=new URL(route.request().url());
   if(url.pathname==='/api/problems/all/')return route.fulfill({json:{user_name:'demo-test',stat_status_pairs:[{status:'ac',stat:{question__title_slug:'two-sum'}},{status:'ac',stat:{question__title_slug:'group-anagrams'}},{status:null,stat:{question__title_slug:'valid-anagram'}}]}});
-  if(url.pathname==='/api/submissions/') {const offset=Number(url.searchParams.get('offset'));return route.fulfill({json:{submissions_dump:offset===0?[{id:101,title_slug:'two-sum',title:'Two Sum',timestamp:1720000000,status_display:'Accepted',lang:'python3',code:'SECRET CODE'}]:[{id:102,title_slug:'valid-anagram',title:'Valid Anagram',timestamp:1710000000,status_display:'Wrong Answer',lang:'python3'}],has_next:offset===0,last_key:'cursor'}});}
+  if(url.pathname==='/graphql/') {
+   const {query,variables}=route.request().postDataJSON();
+   if(query.includes('userProfileCalendar'))return route.fulfill({json:{data:{matchedUser:{userCalendar:{activeYears:[2024],streak:1,totalActiveDays:variables.year===2024?2:0,submissionCalendar:JSON.stringify(variables.year===2024?{'1719964800':1,'1709942400':1}:{})}}}}});
+   const offset=variables.offset;return route.fulfill({json:{data:{submissionList:{submissions:offset===0?[{id:101,titleSlug:'two-sum',title:'Two Sum',timestamp:1720000000,statusDisplay:'Accepted',lang:'python3',code:'SECRET CODE'}]:[{id:102,titleSlug:'valid-anagram',title:'Valid Anagram',timestamp:1710000000,statusDisplay:'Wrong Answer',lang:'python3'}],hasNext:offset===0,lastKey:'cursor'}}}});
+  }
   return route.fulfill({contentType:'text/html',body:'<html><body>Signed-in fixture</body></html>'});
  });
  await page.goto('https://leetcode.com/progress/');await page.addScriptTag({path:'apps/web/public/tools/leetcode-export.user.js'});
@@ -48,6 +52,7 @@ test('exporter paginates and downloads metadata without credentials or source co
  const file=await download;const stream=await file.createReadStream();const chunks:Buffer[]=[];for await(const c of stream!)chunks.push(c);const result=JSON.parse(Buffer.concat(chunks).toString());
  expect(result.complete).toBe(true);expect(result.submissions).toHaveLength(2);expect(result.submissions[0]).not.toHaveProperty('code');expect(JSON.stringify(result)).not.toContain('SECRET');
  expect(result.completions.slugs).toEqual(['group-anagrams','two-sum']);
+ expect(Object.keys(result.calendars['2024'].days)).toHaveLength(2);
  await expect(page.getByRole('status')).toContainText('oldest record');
 });
 test('undated completions populate all-time coverage without filling diagnostic ratings or freshness',async({page})=>{
@@ -141,10 +146,24 @@ test('coverage leads the page, combines filter values, and outlines each parent 
 test('activity calendar opens dated LeetCode submissions without inventing dates for completion snapshots',async({page})=>{
  await page.goto('/#/progress');
  await page.getByLabel('LeetCode history file').setInputFiles({name:'history.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(fixture))});
- const activity=page.getByLabel('LeetCode activity');await expect(activity).toContainText('1accepted submissions');
- const today=page.getByRole('button',{name:new RegExp(`${new Date().toDateString()}: 2 submissions`)});
+ const activity=page.getByLabel('LeetCode activity');await expect(activity).toContainText('1accepted in imported details');
+ const today=page.getByRole('button',{name:new RegExp(`${new Date().toISOString().slice(0,10)}: 2 submissions`)});
  await today.click();await expect(activity.locator('.activity-detail')).toContainText('Two Sum');
  await expect(activity.locator('.activity-detail li')).toHaveCount(2);
- const olderYear=String(new Date(fixture.submissions[2].timestamp).getFullYear());
- await choose(page,'Activity year',olderYear);await expect(activity).toContainText(`1submissions in ${olderYear}`);
+ const olderYear=String(new Date(fixture.submissions[2].timestamp).getUTCFullYear());
+ await choose(page,'Activity year',olderYear);await expect(activity).toContainText(`1imported submissions in ${olderYear}`);
+});
+
+test('source calendar reconciles missing details and scopes streaks to the selected year',async({page})=>{
+ await page.goto('/#/progress');
+ const packet={...fixture,submissions:[{...fixture.submissions[0],timestamp:'2025-05-01T00:30:00Z'}],calendars:{'2025':{year:2025,observedAt:new Date().toISOString(),days:{'2025-05-01':10,'2025-05-02':20,'2025-12-03':2}}}};
+ await page.getByLabel('LeetCode history file').setInputFiles({name:'history.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(packet))});
+ await choose(page,'Activity year','2025');
+ const activity=page.getByLabel('LeetCode activity');
+ await expect(activity).toContainText('32submissions in 2025');await expect(activity).toContainText('3active days');await expect(activity).toContainText('2longest streak in 2025');
+ await expect(activity).not.toContainText('current streak');await expect(activity.locator('.activity-reconciliation')).toContainText('31 details are not available');
+ await page.getByRole('button',{name:/2025-12-03: 2 submissions/}).click();
+ await expect(activity.locator('.activity-detail')).toContainText('2 submission details have not been imported');
+ await expect(activity.locator('.activity-detail')).not.toContainText('No submissions');
+ await page.reload();await choose(page,'Activity year','2025');await expect(activity).toContainText('32submissions in 2025');
 });

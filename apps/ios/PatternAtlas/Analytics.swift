@@ -20,19 +20,25 @@ struct CompletionSnapshot: Codable {
     var valid: Bool { dateFromISO(observedAt) != nil && slugs.count <= 100_000 && slugs.allSatisfy { $0.count <= 300 && $0.range(of: #"^[a-z0-9]+(?:-[a-z0-9]+)*$"#, options: .regularExpression) != nil } }
 }
 struct LeetCodeHistory: Codable {
+    var calendars: [String: ActivityCalendar]? = nil
     var completions: CompletionSnapshot? = nil
     var through: String? = nil
     let account: String
     let exportedAt: String
     let complete: Bool
     var submissions: [String: LeetCodeSubmission]
-    var valid: Bool { (completions?.valid ?? true) && (through == nil || through!.range(of: #"^\d{4}-\d{2}-\d{2}$"#, options: .regularExpression) != nil) && !account.isEmpty && account.count <= 300 && !["__proto__", "constructor", "prototype"].contains(account) && dateFromISO(exportedAt) != nil && submissions.allSatisfy { $0.key == $0.value.id && $0.value.valid } }
+    var valid: Bool { (calendars == nil || calendars!.count <= 200 && calendars!.allSatisfy { $0.key == String($0.value.year) && $0.value.valid }) && (completions?.valid ?? true) && (through == nil || through!.range(of: #"^\d{4}-\d{2}-\d{2}$"#, options: .regularExpression) != nil) && !account.isEmpty && account.count <= 300 && !["__proto__", "constructor", "prototype"].contains(account) && dateFromISO(exportedAt) != nil && submissions.allSatisfy { $0.key == $0.value.id && $0.value.valid } }
     func merging(_ incoming: LeetCodeHistory) throws -> LeetCodeHistory {
         guard account.lowercased() == incoming.account.lowercased() else { throw HistoryError.differentAccount }
         let newer = (dateFromISO(incoming.exportedAt) ?? .distantPast) >= (dateFromISO(exportedAt) ?? .distantPast)
         var result = newer ? incoming : self
         result.submissions = submissions.merging(incoming.submissions) { newer ? $1 : $0 }
         result.completions = [completions, incoming.completions].compactMap { $0 }.max { (dateFromISO($0.observedAt) ?? .distantPast) < (dateFromISO($1.observedAt) ?? .distantPast) }
+        if calendars != nil || incoming.calendars != nil {
+            result.calendars = (calendars ?? [:]).merging(incoming.calendars ?? [:]) { a, b in
+                (dateFromISO(b.observedAt) ?? .distantPast) >= (dateFromISO(a.observedAt) ?? .distantPast) ? b : a
+            }
+        }
         return result
     }
     static func decodeExport(_ data: Data) throws -> LeetCodeHistory {
@@ -41,11 +47,12 @@ struct LeetCodeHistory: Codable {
         guard packet.format == "pattern-atlas-leetcode", packet.version == 1 else { throw HistoryError.invalidExport }
         var records: [String: LeetCodeSubmission] = [:]
         for submission in packet.submissions { guard submission.valid else { throw HistoryError.invalidExport }; records[submission.id] = submission }
-        let result = LeetCodeHistory(completions: packet.completions, through: packet.through, account: packet.account, exportedAt: packet.exportedAt, complete: packet.complete, submissions: records)
+        let result = LeetCodeHistory(calendars: packet.calendars, completions: packet.completions, through: packet.through, account: packet.account, exportedAt: packet.exportedAt, complete: packet.complete, submissions: records)
         guard result.valid else { throw HistoryError.invalidExport }; return result
     }
 }
 struct SubmissionExport: Codable {
+    var calendars: [String: ActivityCalendar]? = nil
     var completions: CompletionSnapshot? = nil
     var through: String? = nil
     let format: String

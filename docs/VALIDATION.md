@@ -14,6 +14,9 @@ Verified on 2026-09-27. These results describe observed checks, not a guarantee 
 | Deployed browser flows | The same 16 Playwright tests passed against the Azure production URL |
 | Native iOS | 7 tests passed on iPhone 17 Pro Simulator, iOS 26.1: 5 model/content/storage/scheduling tests and 2 UI tests exercising authored review and community search/reveal/attribution |
 | Azure content | HTTPS returned 200; hosted curriculum matched the repository content byte for byte |
+| Azure private history | Uploaded the authenticated export and read back all 637 completion snapshot slugs and 400 dated submissions from Table Storage |
+| Hosted account | GitHub sign-in in Comet loaded 637 completed problems and 400 dated submissions from Azure; a fresh headless browser retained the same data after reload |
+| Cloud API | Unauthenticated history GET returned 401; three history-store tests passed |
 
 Live deployment: [Pattern Atlas](https://blue-sea-0c03ac51e.3.azurestaticapps.net).
 
@@ -41,9 +44,16 @@ Use an available simulator name on your own machine. The GitHub iOS workflow sel
 
 - Authored examples and selected differential checks do not replace LeetCode's complete test suites. The application intentionally delegates code execution to LeetCode.
 - Native physical-device signing, TestFlight, and App Store submission have not been performed.
-- Progress is local to each device, with explicit JSON export/import; automatic cloud synchronization is not implemented.
+- LeetCode completion and submission history now synchronizes through the private Azure history API. Drafts, diagnostic ratings, recall reviews, and page visits remain device-local and can be moved with explicit JSON export/import.
 - The reference catalog is larger than the set of worked cards. The [coverage audit](COVERAGE.md) lists rare specialist extensions and non-algorithm topics outside the current worked curriculum.
 - GitHub Actions runs web validation before deployment. Individual workflow results are available in the repository's Actions tab.
+
+## Azure history sync · 2026-09-27
+
+- Deployed the managed API and private Azure Table Storage in the project's resource group. The API accepts only the authorized GitHub identity or the private sync key.
+- Uploaded the cumulative private export, then fetched it from Azure and verified every local submission ID and completion slug was present. An unauthenticated request was rejected.
+- Signed into the deployed site in Comet and observed 637 completed problems and 400 dated submissions in the progress dashboard. A separate fresh headless browser loaded the same figures before and after reload.
+- Production web build, 34 desktop/mobile browser flows, 21 shared core tests, 3 history-store tests, and 16 native simulator tests passed. The native app was rebuilt after the final staged-key import adjustment.
 
 ## Progress dashboard update · 2026-09-27
 

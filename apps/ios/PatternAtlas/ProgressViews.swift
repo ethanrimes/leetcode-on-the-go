@@ -14,8 +14,22 @@ struct ProgressViewScreen: View {
     @State private var importing = false
     @State private var exporting = false
     @State private var document = BackupDocument()
+    @State private var enteredSyncKey = ""
     var body: some View {
         List {
+            Section {
+                Text(store.cloudStatus).font(.caption).foregroundStyle(.secondary)
+                SecureField("Private sync key", text: $enteredSyncKey)
+                    .textInputAutocapitalization(.never).autocorrectionDisabled()
+                Button("Connect and load history") {
+                    let key = enteredSyncKey.trimmingCharacters(in: .whitespacesAndNewlines)
+                    guard !key.isEmpty else { return }
+                    store.configureCloudSync(key)
+                    enteredSyncKey = ""
+                    Task { await store.syncCloudHistory() }
+                }.disabled(enteredSyncKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                Button("Refresh from Azure") { Task { await store.syncCloudHistory() } }
+            } header: { Text("Azure history") } footer: { Text("Completions and submissions sync with your private Azure history. Drafts, ratings, and page visits stay on this device.") }
             if let history = store.progress.leetcode {
                 Section("Your LeetCode progress") {
                     let solved = Set((history.completions?.slugs ?? []) + history.submissions.values.filter(\.accepted).map(\.slug))
@@ -44,7 +58,7 @@ struct ProgressViewScreen: View {
             Section {
                 Button { do { document = BackupDocument(data: try store.exportData()); exporting = true } catch { store.message = error.localizedDescription } } label: { Label("Export progress & drafts", systemImage: "square.and.arrow.up") }
                 Button { importing = true } label: { Label("Import a backup", systemImage: "square.and.arrow.down") }
-            } header: { Text("Your work travels with you") } footer: { Text("Backups work in both apps. Import merges newer reviews and preserves existing local drafts. Automatic cloud sync is not enabled.") }
+            } header: { Text("Your work travels with you") } footer: { Text("Backups work in both apps. Import merges newer reviews and preserves existing local drafts.") }
             Section {
                 NavigationLink("Sources & curriculum notes") { CurriculumNotesView(data: data) }
             }

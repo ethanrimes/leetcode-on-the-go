@@ -190,11 +190,13 @@ struct ReviewCard: Identifiable {
     var curriculum: Curriculum?
     var loadError: String?
     var message: String?
+    var cloudStatus = "Enter your sync key to load LeetCode history from Azure."
     var progress = StudyProgress()
     let defaults: UserDefaults
     private let key = "pattern-atlas.progress.v1"
     init(defaults: UserDefaults = .standard, bundle: Bundle = .main) {
         self.defaults = defaults
+        installStagedCloudKey()
         if let data = defaults.data(forKey: key) {
             do { progress = try StudyProgress.decode(data) }
             catch { message = "Saved progress could not be read. A recovery copy was preserved."; defaults.set(data, forKey: key + ".recovery") }
@@ -246,5 +248,6 @@ struct ReviewCard: Identifiable {
         progress.leetcode = history
         progress.visits = mergeVisits(progress.visits ?? [:], incoming.visits ?? [:])
         save(); message = "Backup merged. Existing local drafts were kept."
+        if incoming.leetcode != nil { Task { await syncCloudHistory() } }
     }
 }

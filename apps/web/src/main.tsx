@@ -7,10 +7,17 @@ import {ProgressDashboard,LeetCodeSummary} from './ProgressDashboard';
 import {ProblemBrowser} from './ProblemBrowser';
 
 import {ArrowRight, ArrowUpRight, BookOpen, Bookmark, Check, CheckCheck, ChevronDown, ChevronRight, CircleHelp, Code2, Download, ExternalLink, Eye, Flame, GitBranch, GraduationCap, Layers3, LayoutDashboard, Leaf, ListFilter, Menu, Network, Play, RotateCcw, Search, Settings2, Shuffle, Sparkles, Target, Timer, TrendingUp, Upload, X} from 'lucide-react';
-import {mergeProgress, recordVisit, breadcrumbs, cardKey, dayKey, descendants, emptyProgress, isLearned, parseProgress, problemsFor, rateCard, studyQueue, type CatalogProblem, type Curriculum, type CurriculumNode, type Problem, type Progress, type Rating, libraryEntriesFor} from '@pattern-atlas/core';
+import {mergeHistory, mergeProgress, parseSubmissionExport, recordVisit, breadcrumbs, cardKey, dayKey, descendants, emptyProgress, isLearned, parseProgress, problemsFor, rateCard, studyQueue, type CatalogProblem, type Curriculum, type CurriculumNode, type Problem, type Progress, type Rating, libraryEntriesFor} from '@pattern-atlas/core';
 import './styles.css';
 
 const STORAGE='pattern-atlas.progress.v1';
+const SYNC_KEY='pattern-atlas.cloud-sync-key';
+type CloudState='loading'|'connected'|'sign-in'|'error'|'local';
+const cloudHeaders=(key:string):Record<string,string>=>key?{'x-pattern-atlas-sync-key':key}:{};
+function readSyncKey(){try{return localStorage.getItem(SYNC_KEY)??'';}catch{return '';}}
+function exportHistory(history:NonNullable<Progress['leetcode']>) {
+  return JSON.stringify({...history,format:'pattern-atlas-leetcode',version:1,submissions:Object.values(history.submissions)});
+}
 function readSavedProgress():Progress {
   let raw:string|null=null;
   try {raw=localStorage.getItem(STORAGE);return raw?parseProgress(raw):emptyProgress();}
@@ -31,6 +38,9 @@ function App(){
   const [data,setData]=useState<Curriculum>(); const [catalog,setCatalog]=useState<CatalogProblem[]>([]); const [loadError,setLoadError]=useState('');
   const [progress,setProgress]=useState<Progress>(readSavedProgress);
   const [toast,setToast]=useState(''); const [storageError,setStorageError]=useState(''); const [mobileNav,setMobileNav]=useState(false); const [search,setSearch]=useState('');
+  const [syncKey,setSyncKey]=useState(readSyncKey),[cloudState,setCloudState]=useState<CloudState>('loading');
+  const [cloudMessage,setCloudMessage]=useState(''); const [syncAttempt,setSyncAttempt]=useState(0);
+  const lastCloudHistory=useRef('');
   const route=useRoute(); const [path,query='']=route.split('?'); const params=new URLSearchParams(query); const parts=path.split('/').filter(Boolean);
   const lastPage=useRef('');
   useEffect(()=>{if(!data||lastPage.current===path)return;lastPage.current=path;
@@ -44,6 +54,39 @@ function App(){
     if(!cancelled){setData(content);setCatalog(content.catalog??content.problems);}
   }).catch(e=>!cancelled&&setLoadError(e.message));return()=>{cancelled=true;};},[]);
   useEffect(()=>{try{localStorage.setItem(STORAGE,JSON.stringify(progress));setStorageError('');}catch{setStorageError('Your browser could not save this change. Export a backup to keep your work.');}},[progress]);
+  useEffect(()=>{
+    if(['localhost','127.0.0.1'].includes(location.hostname)){setCloudState('local');return;}
+    let cancelled=false;
+    lastCloudHistory.current='';
+    setCloudState('loading');
+    fetch('/api/history',{headers:cloudHeaders(syncKey),cache:'no-store'}).then(async response=>{
+      if(cancelled)return;
+      if(response.status===401){setCloudState('sign-in');setCloudMessage('Sign in with the owner GitHub account or enter your sync key.');return;}
+      if(!response.ok&&response.status!==204)throw new Error(`Cloud history is unavailable (${response.status}).`);
+      if(response.status===200){const incoming=parseSubmissionExport(await response.text());
+        if(!cancelled){lastCloudHistory.current=exportHistory(incoming);setProgress(current=>({...current,leetcode:mergeHistory(current.leetcode,incoming)}));}}
+      if(!cancelled){setCloudState('connected');setCloudMessage('Your LeetCode history is stored in Azure.');}
+    }).catch(error=>{if(!cancelled){setCloudState('error');setCloudMessage(error instanceof Error?error.message:'Cloud history is unavailable.');}});
+    return()=>{cancelled=true;};
+  },[syncKey,syncAttempt]);
+  useEffect(()=>{
+    if(cloudState!=='connected'||!progress.leetcode)return;
+    const serialized=exportHistory(progress.leetcode);
+    if(serialized===lastCloudHistory.current)return;
+    const timer=setTimeout(()=>{
+      fetch('/api/history',{method:'POST',headers:{...cloudHeaders(syncKey),'Content-Type':'application/json'},
+        body:serialized}).then(async response=>{
+          if(!response.ok)throw new Error(`Cloud update failed (${response.status}).`);
+          lastCloudHistory.current=serialized;
+          setCloudMessage('Your LeetCode history is stored in Azure.');
+        }).catch(error=>{setCloudState('error');setCloudMessage(error instanceof Error?error.message:'Cloud update failed.');});
+    },900);
+    return()=>clearTimeout(timer);
+  },[progress.leetcode,cloudState,syncKey]);
+  function connectWithKey(key:string){
+    const value=key.trim();try{if(value)localStorage.setItem(SYNC_KEY,value);else localStorage.removeItem(SYNC_KEY);}catch{}
+    setSyncKey(value);setSyncAttempt(current=>current+1);
+  }
   useEffect(()=>{if(!toast)return; const timer=setTimeout(()=>setToast(''),4500);return()=>clearTimeout(timer);},[toast]);
   useEffect(()=>setMobileNav(false),[route]);
   function exportProgress(){const url=URL.createObjectURL(new Blob([JSON.stringify(progress,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`pattern-atlas-${dayKey(new Date())}.json`;a.click();URL.revokeObjectURL(url);setToast('Progress and drafts exported.');}
@@ -73,7 +116,7 @@ function App(){
     <div className="workspace">
       <header className="topbar"><div className="topbar-title"><button className="icon-button mobile-menu" aria-label="Open navigation" aria-controls="workspace-navigation" aria-expanded={mobileNav} onClick={()=>setMobileNav(true)}><Menu size={20}/></button><span>Learning workspace</span><ChevronRight size={14}/><strong>{navigation.find(n=>n[0]===active)?.[1]??(active==='problem'?'Problem study':'Curriculum notes')}</strong></div>
         <form className="global-search" onSubmit={e=>{e.preventDefault();navigate(`/catalog?q=${encodeURIComponent(search)}`);}}><button type="button" aria-label="Open problem search" className="search-trigger" onClick={()=>navigate('/catalog')}><Search size={17}/></button><input aria-label="Search all problems" placeholder="Find a problem or pattern…" value={search} onChange={e=>setSearch(e.target.value)}/><kbd>↵</kbd></form>
-        <span className="local-avatar" title="Your private, local study workspace">You</span>
+        <span className="local-avatar" title="Your study workspace">You</span>
       </header>
       {storageError&&<div className="storage-warning" role="alert">{storageError}<button onClick={exportProgress}>Export backup</button></div>}
       <main id="main" key={route}>
@@ -93,12 +136,13 @@ function App(){
         {active==='catalog'&&<Catalog {...common} catalog={catalog} initialQuery={params.get('q')??''}/>}
         {active==='progress'&&<>
           <p className="eyebrow">PRACTICE / COVERAGE / FRESHNESS</p><h1>Your progress</h1><p className="lead">Find the patterns to revisit and the gaps to work on next.</p>
+          <CloudHistoryPanel state={cloudState} message={cloudMessage} onRetry={()=>setSyncAttempt(current=>current+1)} onConnect={connectWithKey}/>
           <LeetCodeSummary progress={progress}/>
           <FamiliarityDashboard data={data} progress={progress}/>
           <ProgressDashboard {...common}/>
           <div className="section-heading"><h2>Recall practice</h2></div><section className="stats-row"><div><strong>{reviewed}</strong><span>cards reviewed</span></div><div><strong>{mastered}</strong><span>recalled twice</span></div><div><strong>{due}</strong><span>due for review</span></div></section>
           <div className="section-heading"><h2>Saved for later</h2></div><ProblemList {...common} problems={data.problems.filter(p=>progress.bookmarks.includes(p.id))}/>
-          <section className="backup-panel"><div><h3>Your work travels with you</h3><p>Progress and drafts are saved in this browser. Export a backup to transfer them to another browser or the iOS app. Import merges newer reviews and keeps existing local drafts.</p></div><div className="button-row"><button className="button secondary" onClick={exportProgress}><Download size={16}/> Export backup</button><button className="button secondary" onClick={()=>importRef.current?.click()}><Upload size={16}/> Import backup</button></div></section>
+          <section className="backup-panel"><div><h3>Your work travels with you</h3><p>LeetCode completions and submissions sync from Azure when connected. Drafts, ratings, and page visits are saved in this browser; export a backup to transfer them. Import preserves existing local drafts.</p></div><div className="button-row"><button className="button secondary" onClick={exportProgress}><Download size={16}/> Export backup</button><button className="button secondary" onClick={()=>importRef.current?.click()}><Upload size={16}/> Import backup</button></div></section>
         </>}
         {active==='about'&&<About data={data} catalogCount={catalog.length}/>}
         {!['overview','library','problem','review','diagnostic','catalog','progress','about'].includes(active)&&<Empty title="That page is off the map." description="Return to the library to pick your next pattern."/>}
@@ -108,6 +152,16 @@ function App(){
     <input className="sr-only" type="file" aria-label="Progress backup file" accept="application/json,.json" ref={importRef} onChange={e=>void importProgress(e.target.files?.[0])}/>
     {toast&&<div className="toast" role="status"><Check size={17}/>{toast}<button className="icon-button" aria-label="Dismiss message" onClick={()=>setToast('')}><X size={14}/></button></div>}
   </div>;
+}
+
+function CloudHistoryPanel({state,message,onRetry,onConnect}:{state:CloudState;message:string;onRetry:()=>void;onConnect:(key:string)=>void}){
+  const [key,setKey]=useState('');
+  if(state==='local')return null;
+  return <section className={`cloud-history-status ${state}`} aria-label="Cloud history status">
+    <div><p className="eyebrow">AZURE HISTORY</p><strong>{state==='connected'?'Connected to your history':state==='loading'?'Loading your history':state==='sign-in'?'Connect to your history':'Cloud history needs attention'}</strong><p>{message||'Checking the private history database…'}</p></div>
+    {state==='sign-in'&&<div className="cloud-history-actions"><a className="button primary" href={`/.auth/login/github?post_login_redirect_uri=${encodeURIComponent(location.origin+'/#/progress')}`}>Sign in with GitHub</a><form onSubmit={event=>{event.preventDefault();onConnect(key);setKey('');}}><label htmlFor="cloud-sync-key">Or enter your sync key</label><input id="cloud-sync-key" type="password" autoComplete="off" value={key} onChange={event=>setKey(event.target.value)} placeholder="Sync key" required/><button className="button secondary" type="submit">Connect</button></form></div>}
+    {state==='error'&&<button className="button secondary" onClick={onRetry}>Retry cloud sync</button>}
+  </section>;
 }
 
 type Shared={data:Curriculum;progress:Progress;setProgress:React.Dispatch<React.SetStateAction<Progress>>;setToast:(text:string)=>void};

@@ -14,6 +14,7 @@ Features include recursive topic navigation, pattern and problem difficulty labe
 
 - `apps/web`: React + TypeScript, responsive browser study workspace.
 - `apps/ios`: native SwiftUI iPhone/iPad app, with an offline curriculum.
+- `api`: private Azure Functions history API backed by Azure Table Storage.
 - `packages/content`: versioned curriculum shared by both apps.
 - `packages/core`: typed curriculum queries and review scheduling.
 - `scripts`: content authoring, validation, and resource generation.
@@ -35,9 +36,9 @@ open apps/ios/PatternAtlas.xcodeproj
 
 Select the `PatternAtlas` scheme and an iPhone simulator. To install on a physical device, select your Apple development team in Xcode’s Signing & Capabilities settings. No developer signing credentials are checked into this repo.
 
-For Azure deployment, run `npm run deploy` after authenticating the Azure CLI to the configured subscription. The dedicated resource group is `leetcode-on-the-go-rg`; hosting uses Azure Static Web Apps Free. GitHub Actions validates web/content changes before deploying `main`. The deployment token is held in a GitHub secret. See [architecture](docs/ARCHITECTURE.md), [source methodology](docs/SOURCES.md), and [verification evidence](docs/VALIDATION.md).
+For Azure deployment, run `npm run deploy` after authenticating the Azure CLI to the configured subscription. The dedicated resource group is `leetcode-on-the-go-rg`; the web app and managed API use Azure Static Web Apps Free, with a private Azure Storage table for LeetCode history. GitHub Actions validates web/content changes before deploying `main`. The deployment token is held in a GitHub secret. See [architecture](docs/ARCHITECTURE.md), [source methodology](docs/SOURCES.md), and [verification evidence](docs/VALIDATION.md).
 
-Study progress and code drafts stay on the current device. Export/import is provided for backups and moving progress between devices. Running code and submitting solutions happen on LeetCode.
+LeetCode completions and submissions sync through the private Azure API after owner authentication. Drafts, ratings, and page visits stay on the current device; export/import remains available for backups. Running code and submitting solutions happen on LeetCode.
 
 ## Diagnose concept and pattern familiarity
 
@@ -57,7 +58,7 @@ Third-party licenses and dependency attribution are in [THIRD_PARTY.md](docs/THI
 
 ## Import your LeetCode history
 
-Run `npm run history:login` once to sign in in an isolated browser (it closes after saving the session), then `npm run history:update -- --days 0` for the initial import. Repeat `npm run history:update` for headless 30-day updates. Run `npm run history:open` to import automatically into a dedicated persistent study browser that stays open, or use `npm run history:open -- --headless` for an unattended import. The cumulative file is `.local/leetcode-history.json`; you can also import it from Your progress in your regular web browser or open it in the iOS app. `--simulator UDID` also delivers it to an installed native simulator app. Both apps merge repeated imports without duplicates. `--through YYYY-MM-DD` sets a submission cutoff.
+Run `npm run history:login` once to sign in in an isolated browser, then `npm run history:update -- --days 0` for the initial import. Repeat `npm run history:update` for headless 30-day updates. After Azure provisioning, each update uploads the cumulative file to the private table and verifies it through the API. `npm run history:sync` retries an upload without scraping. In the hosted web app, sign in with the owner GitHub account or enter the private sync key. On iOS, enter the sync key in Progress → Azure history. The key is generated in git-ignored `.local/cloud-sync-key` during deployment; never commit or share it publicly. `--simulator UDID` delivers the history and key to an installed native simulator app. Both apps merge repeated imports without duplicates. `--through YYYY-MM-DD` sets a submission cutoff.
 
 The exporter captures both available dated submissions and a current completed-problem snapshot. This lets accepted coverage include older completions even when LeetCode limits detailed history. Missing dates remain unknown and do not inflate freshness or diagnostic ratings. Personal exports and sessions are never bundled into the public app.
 

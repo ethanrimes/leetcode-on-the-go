@@ -94,6 +94,7 @@ extension StudyStore {
         let source: URL
         if url.isFileURL { source = url }
         else if url.scheme == "patternatlas", url.host == "import-history", url.query == nil, url.path.isEmpty {
+            installStagedCloudKey()
             let folder = try documents ?? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             source = folder.appendingPathComponent("LeetCode History.json")
         } else { throw HistoryError.invalidExport }
@@ -107,6 +108,7 @@ extension StudyStore {
         let incoming = try LeetCodeHistory.decodeExport(data)
         progress.leetcode = try progress.leetcode?.merging(incoming) ?? incoming
         save(); message = "Merged \(incoming.submissions.count) submissions. Duplicate IDs were kept once."
+        Task { await syncCloudHistory() }
     }
     func visit(_ page: String, now: Date = .now) {
         let key = "pattern-atlas.device"

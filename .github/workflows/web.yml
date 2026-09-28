@@ -40,6 +40,7 @@ jobs:
     needs: validate
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: web-dist
@@ -51,3 +52,4 @@ jobs:
           app_location: dist
           output_location: ''
           skip_app_build: true
+          api_location: api

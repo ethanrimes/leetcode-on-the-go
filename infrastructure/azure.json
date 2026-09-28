@@ -2,6 +2,9 @@
   "subscriptionId": "9a04b64b-af19-4519-be50-56ec2acbd855",
   "resourceGroup": "leetcode-on-the-go-rg",
   "siteName": "leetcode-on-the-go",
+  "siteHostname": "blue-sea-0c03ac51e.3.azurestaticapps.net",
+  "ownerGithub": "ethanrimes",
+  "leetcodeAccount": "EtEd20bQAJ",
   "location": "westus2",
   "sku": "Free"
 }

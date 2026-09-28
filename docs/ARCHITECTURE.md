@@ -13,6 +13,9 @@ flowchart TD
   F --> H[Browser localStorage]
   G --> I[Device UserDefaults]
   H <-->|JSON export / merge import| I
+  F <-->|Owner auth + HTTPS history API| K[Azure managed Functions]
+  G <-->|Sync key + HTTPS history API| K
+  K <--> L[Azure Table Storage: private LeetCode history]
   F --> J[LeetCode official execution environment]
   G --> J
 ```
@@ -32,13 +35,13 @@ Drafts and bookmarks are per problem. Recall state is per `problemId:patternId`.
 
 The transparent scheduler uses 10 minutes for Again, at least 1 day for Hard, at least 3 days for Good, and at least 7 days for Easy. Subsequent intervals scale from the prior interval. It is not presented as FSRS or as a scientifically calibrated memory model. Already-reviewed due cards precede unseen cards; sessions contain at most 10 cards.
 
-Both apps read/write the same JSON backup shape (`version`, `cards`, `drafts`, `bookmarks`, `activity`). Imports validate before merging, keep existing local drafts, choose newer reviews, union bookmarks, and take the maximum daily count instead of double-counting imports. Invalid stored data has a recovery copy. There is no account, automatic synchronization, or backend storage of personal code.
+Both apps read/write the same JSON backup shape (`version`, `cards`, `drafts`, `bookmarks`, `activity`). Imports validate before merging, keep existing local drafts, choose newer reviews, union bookmarks, and take the maximum daily count instead of double-counting imports. Invalid stored data has a recovery copy. LeetCode completion and submission history syncs through an owner-only API. Drafts, review records, diagnostic ratings, and page visits stay local; no personal code is stored in Azure.
 
 ## Execution and infrastructure
 
 User code is never executed by this application. Python solution tests execute only checked-in authored code during development/CI. LeetCode links handle official statements, testing, and submissions.
 
-Azure Static Web Apps serves the web build and read-only content files over HTTPS. The chosen tier is Free. No database, functions, virtual machine, or always-on server is needed. Both apps include the full catalog and source collection memberships. iOS embeds the same curriculum and can study fully offline; content updates ship with app builds. Device signing and App Store/TestFlight distribution require an Apple developer team and are separate from simulator verification.
+Azure Static Web Apps serves the web build and read-only content files over HTTPS. The chosen tier is Free. A managed Node 22 Function handles private history GET/POST; Azure Table Storage stores compressed, versioned snapshots. The API accepts the configured owner GitHub identity or a private sync key, and uses conditional table updates to merge concurrent uploads. Both apps include the full catalog and source collection memberships. iOS embeds the same curriculum and can study fully offline; content updates ship with app builds. Device signing and App Store/TestFlight distribution require an Apple developer team and are separate from simulator verification.
 
 The initial web bundle loads the editor only when a study card is opened. The Graphite theme uses system fonts. All state-changing controls use native HTML/SwiftUI elements. The app provides visible load/storage errors, invalid-backup errors, search empty states, and review completion states.
 

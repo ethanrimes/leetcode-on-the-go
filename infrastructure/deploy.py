@@ -13,6 +13,6 @@ token = json.loads(az('staticwebapp', 'secrets', 'list', '--name', config['siteN
 env = os.environ.copy()
 env['SWA_CLI_DEPLOYMENT_TOKEN'] = token
 env['SWA_CLI_TELEMETRY'] = 'false'
-subprocess.run(['npx', '--yes', '@azure/static-web-apps-cli@2.0.10', 'deploy', 'apps/web/dist', '--env', 'production', '--no-use-keychain'], cwd=ROOT, env=env, check=True)
+subprocess.run(['npx', '--yes', '@azure/static-web-apps-cli@2.0.10', 'deploy', 'apps/web/dist', '--api-location', 'api', '--env', 'production', '--no-use-keychain'], cwd=ROOT, env=env, check=True)
 site = json.loads(az('staticwebapp', 'show', '--name', config['siteName'], '--resource-group', config['resourceGroup']))
 print('Deployed site: https://' + site['defaultHostname'])

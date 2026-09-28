@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Private cumulative export. Nothing is copied into the public web/iOS bundles.
 import {spawnSync} from 'node:child_process';
-import {mkdir,readFile,writeFile,copyFile,chmod,rename} from 'node:fs/promises';
+import {mkdir,readFile,writeFile,copyFile,chmod,rename,access} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {mergeHistory,parseSubmissionExport} from '../packages/core/src/index';
@@ -42,7 +42,17 @@ if(simulator) {
  if(result.status!==0)throw new Error('Pattern Atlas must already be installed on the selected simulator.');
  const documents=path.join(result.stdout.trim(),'Documents');await mkdir(documents,{recursive:true});
  const destination=path.join(documents,'LeetCode History.json');await copyFile(output,destination);await chmod(destination,0o600);
+ try {const key=path.join(directory,'cloud-sync-key');await access(key);const staged=path.join(documents,'Cloud Sync Key.txt');await copyFile(key,staged);await chmod(staged,0o600);} catch(error) {if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error;}
  const opened=spawnSync('xcrun',['simctl','openurl',simulator,'patternatlas://import-history'],{encoding:'utf8'});
  if(opened.status!==0)throw new Error('Could not open the import link. Install the latest native app, then retry.');
  console.log('Opened the native import. Verify its confirmation and account counts in Progress.');
+}
+// A configured private cloud store receives each cumulative update automatically.
+try {
+ await access(path.join(directory,'cloud-sync-key'));
+ const uploaded=spawnSync(process.execPath,[path.join(root,'scripts/sync-cloud.mjs')],{cwd:root,stdio:'inherit'});
+ if(uploaded.error)throw uploaded.error;
+ if(uploaded.status!==0)throw new Error('The local history was saved, but the Azure update failed. Retry with npm run history:sync.');
+} catch(error) {
+ if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error;
 }

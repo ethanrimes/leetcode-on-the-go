@@ -36,6 +36,7 @@ struct AppRootView: View {
                 selectedTab = 3
             } catch { store.message = error.localizedDescription }
         }
+        .task { await store.syncCloudHistory() }
         .alert("Pattern Atlas", isPresented: Binding(get: { store.message != nil }, set: { if !$0 { store.message = nil } })) {
             Button("OK") { store.message = nil }
         } message: { Text(store.message ?? "") }
